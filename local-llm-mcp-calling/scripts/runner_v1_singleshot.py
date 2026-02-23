@@ -760,7 +760,7 @@ def save_result(model_id: str, level: int, level_result: dict, tool_trained: boo
 def git_commit(model_id: str, level: int):
     try:
         subprocess.run(
-            ["git", "add", "benchmark/results/"],
+            ["git", "add", "local-llm-mcp-calling/results/"],
             cwd=str(PROJECT_ROOT), check=True, capture_output=True
         )
         result = subprocess.run(
@@ -890,7 +890,7 @@ def main():
         # Commit any remaining aggregated report changes
         try:
             subprocess.run(
-                ["git", "add", "benchmark/results/"],
+                ["git", "add", "local-llm-mcp-calling/results/"],
                 cwd=str(PROJECT_ROOT), check=True, capture_output=True
             )
             result = subprocess.run(
