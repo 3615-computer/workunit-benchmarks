@@ -160,7 +160,7 @@ ax.set_xticklabels(["L0\nExplicit", "L1\nNatural\nlanguage", "L2\nReasoning"],
 ax.set_ylabel("Average Pass Rate (%)", fontsize=9, color="#8b949e", labelpad=6)
 ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=12, not tool-trained n=5)",
              fontsize=10, color="#e6edf3", fontweight="bold", pad=10)
-ax.set_ylim(0, 120)
+ax.set_ylim(0, 110)
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x)}%"))
 ax.tick_params(colors="#8b949e", labelsize=9)
 for spine in ax.spines.values():
