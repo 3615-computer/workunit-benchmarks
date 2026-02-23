@@ -116,15 +116,15 @@ My 4080 16GB tops out around 32-36B at Q4. I'd love results for:
 ### Reproduce it
 
 ```bash
-git clone https://github.com/3615-computer/workunit
-cd workunit/benchmark
+git clone https://github.com/3615-computer/workunit-benchmarks
+cd workunit-benchmarks/local-llm-mcp-calling
 pip install openai rich
 
 # Single model
-python scripts/runner.py --model mistralai/ministral-3-3b
+python scripts/runner_v1_singleshot.py --model mistralai/ministral-3-3b
 
 # All models in models.txt
-python scripts/runner.py --models models.txt
+python scripts/runner_v1_singleshot.py --models models.txt
 ```
 
 Requires LM Studio running locally with your models loaded. The runner handles model switching automatically — it just changes the `model` field in the API request and LM Studio unloads/loads accordingly.

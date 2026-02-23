@@ -106,15 +106,15 @@ My 4080 16GB tops out around 32-36B at Q4. Would love results for:
 ### Reproduce it
 
 ```bash
-git clone https://github.com/3615-computer/workunit
-cd workunit/benchmark
+git clone https://github.com/3615-computer/workunit-benchmarks
+cd workunit-benchmarks/local-llm-mcp-calling
 pip install openai rich
 
 # Single model
-python scripts/runner.py --model mistralai/ministral-3-3b --token <your-mcp-token>
+python scripts/runner_v2_agentic.py --model mistralai/ministral-3-3b --token <your-mcp-token>
 
 # All models in a file
-python scripts/runner.py --models models.txt --token <your-token> --refresh-token <refresh>
+python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --refresh-token <refresh>
 ```
 
 Requires LM Studio running locally. The runner:

@@ -165,16 +165,18 @@ Single-shot L0 and L1 results are directionally consistent with the agentic run,
 Everything is open source:
 
 ```bash
-git clone https://github.com/3615-computer/workunit
-cd workunit/benchmark
-pip install openai rich
+git clone https://github.com/3615-computer/workunit-benchmarks
+cd workunit-benchmarks/local-llm-mcp-calling
+pip install openai rich requests
 
-python scripts/runner.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
+python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
 ```
 
-Task definitions: `benchmark/tasks/*.json` (plain JSON, every prompt and validation criterion)
-Results: `benchmark/results/*.json` (per-model, per-level)
-Aggregated report: `benchmark/results/aggregated_report.md`
+Requires LM Studio with the target models available locally and a Workunit MCP token (free account at [workunit.app](https://workunit.app)).
+
+Task definitions: `tasks/*.json` (plain JSON, every prompt and validation criterion)
+Results: `results/v2_agentic/*.json` (per-model, per-level)
+Aggregated report: `results/v2_agentic/aggregated_report.md`
 
 Requires LM Studio with the target models available locally and a Workunit MCP token (free account at [workunit.app](https://workunit.app)).
 

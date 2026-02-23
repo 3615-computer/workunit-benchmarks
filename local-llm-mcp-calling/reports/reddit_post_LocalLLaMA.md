@@ -108,18 +108,18 @@ My 4080 16GB tops out around 32-36B at Q4. Would love community results for:
 ### Reproduce it
 
 ```bash
-git clone https://github.com/3615-computer/workunit
-cd workunit/benchmark
-pip install openai rich
+git clone https://github.com/3615-computer/workunit-benchmarks
+cd workunit-benchmarks/local-llm-mcp-calling
+pip install openai rich requests
 
 # Single model
-python scripts/runner.py --model mistralai/ministral-3-3b --token <your-mcp-token>
+python scripts/runner_v2_agentic.py --model mistralai/ministral-3-3b --token <your-mcp-token>
 
 # Full suite
-python scripts/runner.py --models models.txt --token <your-token> --refresh-token <refresh>
+python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --refresh-token <refresh>
 ```
 
-Requires LM Studio running locally. The agentic runner:
+Requires LM Studio running locally and a Workunit MCP token — free account at [workunit.app](https://workunit.app). The agentic runner:
 - Unloads all models at start (clean VRAM)
 - Loads each model at 8192 context via the management API
 - Resets the test database between models
