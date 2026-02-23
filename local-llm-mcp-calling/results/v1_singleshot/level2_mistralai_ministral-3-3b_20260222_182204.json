@@ -1,0 +1,345 @@
+{
+  "level": 2,
+  "model": "mistralai/ministral-3-3b",
+  "tool_trained": true,
+  "timestamp": "2026-02-22T18:22:04.576010",
+  "summary": {
+    "total": 7,
+    "passed": 4,
+    "pass_rate": 0.571,
+    "avg_score": 0.75
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity..."
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode across the app to improve user experience and accessibility.",
+            "status": "planning",
+            "tags": [
+              "ui/ux",
+              "accessibility"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Dark Mode Implementation",
+            "problem_statement": "Develop and integrate a dark mode theme into the app to enhance user experience by reducing eye strain, improving readability in low-light environments, and ensuring compliance with accessibility standards.",
+            "success_criteria": "1. Dark mode theme is fully functional across all app screens.\n2. Theme respects user preference settings (light/dark mode toggle).\n3. All UI elements are properly styled to support dark mode visuals.\n4. Accessibility features like high contrast modes and text scaling work correctly in dark mode.\n5. Dark mode implementation is tested on multiple device types and OS versions.",
+            "project_id": "56754038b55a446f84f28f6817715528",
+            "priority": "high",
+            "status": "draft"
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 2.42,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Develop and deploy a system for sending notifications to users when workunits are updated (e.g., status changes, comments added, or deadlines approaching). This includes determining the best notification channels (email, in-app alerts, push notifications), setting up real-time event tracking, and ensuring compliance with privacy regulations like GDPR. The goal is to improve user engagement by keeping them informed about relevant updates without overwhelming them with unnecessary alerts.",
+            "success_criteria": "1. **Notification Channels**: Implement support for at least three notification channels (email, in-app alerts, push notifications) that users can customize via preferences.\n\n2. **Real-Time Updates**: Ensure notifications are triggered in real-time for workunit status changes, comments, and task assignments\u2014delivered within 5 minutes of the event occurring.\n\n3. **User Preferences**: Allow users to manage their notification settings (e.g., frequency, channels) via a dedicated preferences panel, with persistence across sessions.\n\n4. **Compliance & Privacy**: Integrate GDPR-compliant opt-in/opt-out mechanisms for notifications and maintain logs of user consent choices.\n\n5. **Testing & Rollout**: Conduct thorough testing (e.g., A/B testing notification delivery, mocking real-time events) before a controlled rollout to a subset of users, with analytics to measure engagement and effectiveness.\n\n6. **Scalability**: Design the system to handle thousands of concurrent notifications without performance degradation under load.\n\n7. **Feedback Loop**: Implement a mechanism for users to report misdelivered or unwanted notifications, allowing for immediate correction.\n\n8. **Documentation & Training**: Provide clear documentation for developers (e.g., API endpoints for triggering notifications) and end-users (e.g., how to customize preferences).\n\n9. **Integration with Existing Systems**: Ensure seamless integration with the current workunit management platform (e.g., MCP tools), including APIs for event tracking and user data retrieval.\n\n10. **Monitoring & Analytics**: Deploy monitoring dashboards to track notification delivery success rates, open/click-through rates, and user feedback trends.",
+            "project_id": "{{project_id}}",
+            "priority": "urgent"
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Is the provided {{project_id}} a valid UUID?"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Develop and deploy a system for sending notifications to users when workunits are updated (e.g., status changes, comments added, or deadlines approaching). This includes determining the best notification channels (email, in-app alerts, push notifications), setting up real-time event tracking, and ensuring compliance with privacy regulations like GDPR. The goal is to improve user engagement by keeping them informed about relevant updates without overwhelming them with unnecessary alerts.",
+            "success_criteria": "1. **Notification Channels**: Implement support for at least three notification channels (email, in-app alerts, push notifications) that users can customize via preferences.\n\n2. **Real-Time Updates**: Ensure notifications are triggered in real-time for workunit status changes, comments, and task assignments\u2014delivered within 5 minutes of the event occurring.\n\n3. **User Preferences**: Allow users to manage their notification settings (e.g., frequency, channels) via a dedicated preferences panel, with persistence across sessions.\n\n4. **Compliance & Privacy**: Integrate GDPR-compliant opt-in/opt-out mechanisms for notifications and maintain logs of user consent choices.\n\n5. **Testing & Rollout**: Conduct thorough testing (e.g., A/B testing notification delivery, mocking real-time events) before a controlled rollout to a subset of users, with analytics to measure engagement and effectiveness.\n\n6. **Scalability**: Design the system to handle thousands of concurrent notifications without performance degradation under load.\n\n7. **Feedback Loop**: Implement a mechanism for users to report misdelivered or unwanted notifications, allowing for immediate correction.\n\n8. **Documentation & Training**: Provide clear documentation for developers (e.g., API endpoints for triggering notifications) and end-users (e.g., how to customize preferences).\n\n9. **Integration with Existing Systems**: Ensure seamless integration with the current workunit management platform (e.g., MCP tools), including APIs for event tracking and user data retrieval.\n\n10. **Monitoring & Analytics**: Deploy monitoring dashboards to track notification delivery success rates, open/click-through rates, and user feedback trends.",
+            "project_id": "{{project_id}}",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 6.03,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "00000000000000000000000000000000",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as active.",
+            "importance": "high"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "546833b1edcc4f0f8eabe47c7ceed11d",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as active.",
+            "importance": "high"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "454da248b6864837aa1aa76a6ae4a61c",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as active.",
+            "importance": "high"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "00000000000000000000000000000000",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as **draft**.",
+            "importance": "high"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "e4c0231eb8eb4058829f4dd3aec749f8",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as **draft**.",
+            "importance": "high"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "b3f6d3bf41cb46919fabb785878142e5",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review - Authentication Workunit",
+            "content": "Reviewed during the quarterly audit. Current status confirmed as **archived**.",
+            "importance": "high"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 5.74,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "",
+            "atom_type": "decision",
+            "title": "Switch from Polling to WebSockets for Real-Time Notifications",
+            "content": "The team has decided to implement WebSockets instead of polling for real-time notifications. This change is driven by the need for lower latency and more efficient communication between clients and servers. Below are the key tradeoffs considered:\n\n1. **Performance:**\n   - WebSockets provide bidirectional, low-latency communication compared to HTTP polling, which involves repeated round-trips.\n   - Reduced overhead from frequent connection checks improves responsiveness for critical notifications.\n\n2. **Scalability:**\n   - Polling scales poorly as the number of clients grows due to increased server load.\n   - WebSockets allow real-time scaling with connection pooling and efficient resource management.\n\n3. **Resource Usage:**\n   - WebSocket connections remain open, reducing server overhead compared to polling, which requires constant connection checks.\n\n4. **Complexity:**\n   - Implementing WebSockets introduces additional complexity in terms of connection management, error handling, and state maintenance.\n   - However, this is outweighed by the benefits for real-time applications.\n\n5. **Compatibility:**\n   - While WebSockets are widely supported in modern browsers and client libraries, there may be edge cases with older systems that require fallbacks.\n\nThe decision was made to prioritize user experience and system efficiency over immediate simplicity.",
+            "importance": "critical",
+            "tags": [
+              "architecture",
+              "real-time"
+            ]
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "",
+            "include_tasks": false,
+            "include_ai_context": true
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notification",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 1
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "b3f6d3bf41cb46919fabb785878142e5",
+            "atom_type": "decision",
+            "title": "Switch from Polling to WebSockets for Real-Time Notifications",
+            "content": "The team has decided to implement WebSockets instead of polling for real-time notifications. This change is driven by the need for lower latency and more efficient communication between clients and servers. Below are the key tradeoffs considered:\n\n1. **Performance:**\n   - WebSockets provide bidirectional, low-latency communication compared to HTTP polling, which involves repeated round-trips.\n   - Reduced overhead from frequent connection checks improves responsiveness for critical notifications.\n\n2. **Scalability:**\n   - Polling scales poorly as the number of clients grows due to increased server load.\n   - WebSockets allow real-time scaling with connection pooling and efficient resource management.\n\n3. **Resource Usage:**\n   - WebSocket connections remain open, reducing server overhead compared to polling, which requires constant connection checks.\n\n4. **Complexity:**\n   - Implementing WebSockets introduces additional complexity in terms of connection management, error handling, and state maintenance.\n   - However, this is outweighed by the benefits for real-time applications.\n\n5. **Compatibility:**\n   - While WebSockets are widely supported in modern browsers and client libraries, there may be edge cases with older systems that require fallbacks.\n\nThe decision was made to prioritize user experience and system efficiency over immediate simplicity.",
+            "importance": "critical",
+            "tags": [
+              "architecture",
+              "real-time"
+            ]
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 4.78,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work.",
+            "status": "planning",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design.",
+            "format": "document"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "af8a84b0b1bc497bb72005f8d0e125e6",
+            "asset_id": "d84b0273a1364c2f9328c860c379d598",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 1.5,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.72,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.7,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

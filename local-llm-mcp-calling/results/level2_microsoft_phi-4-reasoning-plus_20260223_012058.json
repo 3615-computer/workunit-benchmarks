@@ -1,0 +1,484 @@
+{
+  "level": 2,
+  "model": "microsoft/phi-4-reasoning-plus",
+  "tool_trained": false,
+  "timestamp": "2026-02-23T01:20:58.877640",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.669
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Project to implement dark mode support in the application.",
+            "status": "planning"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode",
+            "problem_statement": "The app currently only supports light mode, which can be straining in low-light environments. We need to implement dark mode support that automatically adjusts UI elements for optimal readability and energy efficiency on OLED screens.",
+            "success_criteria": "After implementation, users should be able to switch between light and dark modes seamlessly with a toggle in the settings menu. The dark mode should maintain consistent styling across all app components, reduce eye strain in low-light conditions, and pass accessibility tests.",
+            "description": "Implement dark mode feature for the application.",
+            "project_id": "5d6944d66dc64563b5116d22379a98fd",
+            "priority": "high",
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 30.39,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "tool_name",
+          "arguments": {}
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Design and implement an end-to-end user notification system that supports multiple channels (email, SMS, in-app) triggered by workunit updates. The system should allow users to subscribe/unsubscribe, manage preferences, and log notifications for auditing purposes.",
+            "success_criteria": "User can receive timely notifications via their preferred channel when a workunit is updated; notifications are logged and can be audited; the system supports subscription management with minimal latency.",
+            "description": "This workunit covers all aspects of implementing user notifications including requirements analysis, design, API development, frontend integration, testing, documentation, and deployment.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "user",
+              "updates"
+            ],
+            "due_date": "2023-12-31T23:59:59Z",
+            "organization_id": "org_default",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Design and implement an end-to-end user notification system that supports multiple channels (email, SMS, in-app) triggered by workunit updates. The system should allow users to subscribe/unsubscribe, manage preferences, and log notifications for auditing purposes.",
+            "success_criteria": "User can receive timely notifications via their preferred channel when a workunit is updated; notifications are logged and can be audited; the system supports subscription management with minimal latency.",
+            "description": "This workunit covers all aspects of implementing user notifications including requirements analysis, design, API development, frontend integration, testing, documentation, and deployment.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "user",
+              "updates"
+            ],
+            "due_date": "2023-12-31T23:59:59Z",
+            "organization_id": "00000000-0000-0000-0000-000000000001",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Design and implement an end-to-end user notification system that supports multiple channels (email, SMS, in-app) triggered by workunit updates. The system should allow users to subscribe/unsubscribe, manage preferences, and log notifications for auditing purposes.",
+            "success_criteria": "User can receive timely notifications via their preferred channel when a workunit is updated; notifications are logged and can be audited; the system supports subscription management with minimal latency.",
+            "description": "This workunit covers all aspects of implementing user notifications including requirements analysis, design, API development, frontend integration, testing, documentation, and deployment.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "user",
+              "updates"
+            ],
+            "due_date": "2023-12-31T23:59:59Z",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "...",
+            "success_criteria": "...",
+            "project_id": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        }
+      ],
+      "turns": 8,
+      "elapsed_s": 195.51,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "e47c79bb27f64ed3991db6376d66cbd9",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review",
+            "content": "This workunit was reviewed during the quarterly audit and its current status (active) was confirmed.",
+            "importance": "normal",
+            "strength": "soft",
+            "tags": [
+              "audit",
+              "review"
+            ]
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 71.78,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "real-time notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "default_project"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "123e4567-e89b-12d3-a456-426614174000",
+            "organization_id": "default_org",
+            "owner_id": "user_123"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "123e4567-e89b-12d3-a456-426614174000",
+            "organization_id": "987e6543-e21b-34c2-d321-876543210000",
+            "owner_id": "user_123"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "123e4567-e89b-12d3-a456-426614174000",
+            "owner_id": "user_123"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications - WebSocket vs Polling Decision",
+            "problem_statement": "We need to decide between using WebSockets and polling for our real-time notification feature. The team has decided to use WebSockets.",
+            "success_criteria": "Document the decision, including tradeoffs considered (e.g., scalability, resource usage, latency) in a critical architectural decision note.",
+            "description": "This workunit captures the critical architectural decision regarding the implementation of real-time notifications using WebSockets instead of polling. Tradeoffs include lower latency and reduced server load with WebSockets versus increased complexity in connection management and potential scaling challenges.",
+            "tags": [
+              "notifications",
+              "architecture",
+              "decision"
+            ],
+            "project_id": "123e4567-e89b-12d3-a456-426614174000",
+            "owner_id": "a1b2c3d4-e5f6-7890-abcd-ef0123456789"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Notifications",
+            "description": "Project for notification features",
+            "tags": [
+              "notifications"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notification Feature",
+            "problem_statement": "Implement a real-time notification system using WebSockets instead of polling.",
+            "success_criteria": "Notifications are delivered in real time with minimal latency and the system scales well under load.",
+            "description": "We decided to use WebSockets for our real-time notifications feature. This decision was made after evaluating tradeoffs between polling and WebSockets. Polling can be simpler but introduces unnecessary network overhead and delays, while WebSockets provide a persistent connection that reduces latency and improves scalability. However, WebSockets require more careful handling of connection management and error recovery. Overall, the benefits in responsiveness and efficiency outweighed the complexity.",
+            "project_id": "e1d1c7bca75e4eedbb64fb2dce9e714b",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 16,
+      "elapsed_s": 84.21,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "5acae5f5a3344d63973f3690510051f2",
+            "asset_id": "f21dac1ff03448b990421fc91846c200",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 12.1,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 23.98,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 28.77,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "level": 1,
+  "model": "baidu/ernie-4.5-21b-a3b",
+  "tool_trained": false,
+  "timestamp": "2026-02-22T10:46:30.550816",
+  "summary": {
+    "total": 10,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.0
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.05,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4586) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4615) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4602) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4552) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4560) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.05,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4589) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4586) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4561) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4568) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4581) >= n_ctx (4096)'}"
+    }
+  ]
+}

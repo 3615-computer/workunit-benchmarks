@@ -1,0 +1,1161 @@
+╭──────────────────────────────── Starting Run ────────────────────────────────╮
+│ Workunit MCP Benchmark — Agentic                                             │
+│                                                                              │
+│ Models: 17                                                                   │
+│ Levels: [0, 1, 2]                                                            │
+│ Task timeout: 300s                                                           │
+│ Force re-run: no (skipping completed levels)                                 │
+│ LM Studio: http://localhost:1234/v1                                      │
+│ MCP: http://localhost:9000/mcp                                               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Unloaded 1 pre-existing model instance(s) from LM Studio
+
+── Model 1/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ mistralai/ministral-3-3b                    │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: mistralai/ministral-3-3b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (0.67s)
+    ✅ L0-02 [100%] Get authenticated user (0.14s)
+    ✅ L0-03 [100%] Create a project (0.32s)
+    ✅ L0-04 [100%] Create a workunit (0.5s)
+    ✅ L0-05 [100%] Create a task in a workunit (0.41s)
+    ❌ L0-06 [0%] Get a workunit with tasks (0.18s)
+       No tool call emitted — model responded with text only
+    ✅ L0-07 [100%] Update a task status (0.3s)
+    ✅ L0-08 [100%] Save a context atom (0.48s)
+    ✅ L0-09 [100%] Search for workunits (0.29s)
+    ✅ L0-10 [100%] Create a knowledge asset (0.46s)
+    ✅ L0-11 [100%] Update a workunit status to completed (0.44s)
+  → Level 0: 10/11 passed (91% pass rate, 91% avg score)
+  Saved → level0_mistralai_ministral-3-3b_20260223_002524.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (0.43s)
+    ✅ L1-02 [100%] Create a workunit with full details (0.6s)
+    ✅ L1-03 [100%] Add three tasks to a workunit (0.93s)
+    ✅ L1-04 [100%] Update task to in-progress (0.3s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (0.68s 2t)
+       Step 1 (search): not called
+       Step 2 (get_workunit): ✓
+    ✅ L1-06 [85%] Save a decision context atom (0.63s)
+    ✅ L1-07 [85%] Create a product asset (0.46s)
+    ✅ L1-08 [100%] Get project details with stats (0.32s)
+    ✅ L1-09 [100%] Update workunit priority and tags (0.43s)
+    ✅ L1-10 [100%] Complete a workunit with notes (0.54s)
+  → Level 1: 9/10 passed (90% pass rate, 92% avg score)
+  Saved → level1_mistralai_ministral-3-3b_20260223_002530.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (6.19s 8t)
+    ❌ L2-02 [50%] Break down a feature into tasks (3.08s 4t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (0.56s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (7.85s 14t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [100%] Create a project with linked asset (1.82s 4t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (0.95s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (1.03s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 2/7 passed (29% pass rate, 61% avg score)
+  Saved → level2_mistralai_ministral-3-3b_20260223_002552.json
+  Committed to git
+  Model unloaded
+
+── Model 2/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ qwen/qwen3-4b-thinking-2507                 │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: qwen/qwen3-4b-thinking-2507, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (2.48s)
+    ✅ L0-02 [100%] Get authenticated user (1.58s)
+    ✅ L0-03 [100%] Create a project (3.23s)
+    ✅ L0-04 [100%] Create a workunit (4.17s)
+    ✅ L0-05 [100%] Create a task in a workunit (4.73s)
+    ✅ L0-06 [100%] Get a workunit with tasks (3.5s)
+    ✅ L0-07 [100%] Update a task status (2.23s)
+    ✅ L0-08 [100%] Save a context atom (4.44s)
+    ✅ L0-09 [100%] Search for workunits (3.77s)
+    ✅ L0-10 [100%] Create a knowledge asset (3.37s)
+    ✅ L0-11 [100%] Update a workunit status to completed (6.52s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_qwen_qwen3-4b-thinking-2507_20260223_002634.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (4.07s)
+    ✅ L1-02 [100%] Create a workunit with full details (11.34s)
+    ❌ L1-03 [17%] Add three tasks to a workunit (24.28s 2t)
+       Expected 3× create_task, got 1
+    ✅ L1-04 [100%] Update task to in-progress (5.9s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (20.71s 2t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [100%] Save a decision context atom (5.58s)
+    ✅ L1-07 [100%] Create a product asset (9.09s)
+    ✅ L1-08 [100%] Get project details with stats (3.9s)
+    ✅ L1-09 [100%] Update workunit priority and tags (11.07s)
+    ✅ L1-10 [100%] Complete a workunit with notes (9.91s)
+  → Level 1: 8/10 passed (80% pass rate, 87% avg score)
+  Saved → level1_qwen_qwen3-4b-thinking-2507_20260223_002820.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (21.18s 2t)
+    ✅ L2-02 [100%] Break down a feature into tasks (66.83s 4t)
+    ✅ L2-03 [100%] Find and update stale work (53.83s 3t)
+    ✅ L2-04 [100%] Document an architectural decision (20.59s 2t)
+    ❌ L2-05 [0%] Create a project with linked asset (30.96s)
+       No tool call emitted — model responded with text only
+    ❌ L2-06 [50%] Triage and prioritize tasks (25.5s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (47.09s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 4/7 passed (57% pass rate, 68% avg score)
+  Saved → level2_qwen_qwen3-4b-thinking-2507_20260223_003246.json
+  Committed to git
+  Model unloaded
+
+── Model 3/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ ibm/granite-4-h-tiny                        │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: ibm/granite-4-h-tiny, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (0.83s)
+    ✅ L0-02 [100%] Get authenticated user (0.26s)
+    ✅ L0-03 [100%] Create a project (0.38s)
+    ✅ L0-04 [100%] Create a workunit (0.54s)
+    ✅ L0-05 [100%] Create a task in a workunit (0.48s)
+    ✅ L0-06 [100%] Get a workunit with tasks (0.36s)
+    ✅ L0-07 [100%] Update a task status (0.38s)
+    ✅ L0-08 [100%] Save a context atom (0.51s)
+    ✅ L0-09 [100%] Search for workunits (0.38s)
+    ✅ L0-10 [100%] Create a knowledge asset (0.46s)
+    ✅ L0-11 [100%] Update a workunit status to completed (0.46s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_ibm_granite-4-h-tiny_20260223_003255.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (0.46s)
+    ✅ L1-02 [100%] Create a workunit with full details (0.87s)
+    ✅ L1-03 [85%] Add three tasks to a workunit (1.38s 4t)
+    ✅ L1-04 [100%] Update task to in-progress (0.34s)
+    ✅ L1-05 [90%] Search and retrieve a workunit (1.57s 5t)
+    ✅ L1-06 [85%] Save a decision context atom (0.59s)
+    ✅ L1-07 [85%] Create a product asset (0.49s)
+    ✅ L1-08 [100%] Get project details with stats (0.28s)
+    ✅ L1-09 [100%] Update workunit priority and tags (0.45s)
+    ✅ L1-10 [100%] Complete a workunit with notes (0.54s)
+  → Level 1: 10/10 passed (100% pass rate, 94% avg score)
+  Saved → level1_ibm_granite-4-h-tiny_20260223_003302.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (1.21s 2t)
+    ❌ L2-02 [38%] Break down a feature into tasks (6.67s 6t)
+       Step 1 (create_workunit): missing 'problem_statement'
+       Step 2 (create_task): not called
+    ✅ L2-03 [100%] Find and update stale work (1.63s 4t)
+    ✅ L2-04 [100%] Document an architectural decision (2.15s 2t)
+    ✅ L2-05 [93%] Create a project with linked asset (2.1s 5t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (18.28s 50t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [20%] End-of-sprint workunit closeout (1.4s 2t)
+       Step 1 (get_workunit): 'include_tasks'=None (want True)
+       Step 1 (get_workunit): ✓
+  → Level 2: 4/7 passed (57% pass rate, 72% avg score)
+  Saved → level2_ibm_granite-4-h-tiny_20260223_003336.json
+  Committed to git
+  Model unloaded
+
+── Model 4/17 ──────────────────────────────
+╭────────────────────────────────────────────────────────────╮
+│ deepseek/deepseek-r1-0528-qwen3-8b                         │
+│ Tool-trained: no (control group)  Levels to run: [0, 1, 2] │
+╰────────────────────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: deepseek/deepseek-r1-0528-qwen3-8b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ❌ L0-01 [0%] Ping the MCP server (45.67s 11t)
+       Wrong tool: called '...', expected 'ping'
+    ✅ L0-02 [100%] Get authenticated user (1.55s)
+    ✅ L0-03 [100%] Create a project (1.53s)
+    ❌ L0-04 [0%] Create a workunit (114.19s 12t)
+       Wrong tool: called 'tool_name', expected 'create_workunit'
+    ❌ L0-05 [0%] Create a task in a workunit (47.59s)
+       No tool call emitted — model responded with text only
+    ❌ L0-06 [0%] Get a workunit with tasks (47.7s)
+       No tool call emitted — model responded with text only
+    ❌ L0-07 [0%] Update a task status (37.47s)
+       No tool call emitted — model responded with text only
+    ❌ L0-08 [0%] Save a context atom (47.45s)
+       No tool call emitted — model responded with text only
+    ❌ L0-09 [0%] Search for workunits (47.73s)
+       No tool call emitted — model responded with text only
+    ❌ L0-10 [0%] Create a knowledge asset (47.72s)
+       No tool call emitted — model responded with text only
+    ❌ L0-11 [0%] Update a workunit status to completed (47.59s)
+       No tool call emitted — model responded with text only
+  → Level 0: 2/11 passed (18% pass rate, 18% avg score)
+  Saved → level0_deepseek_deepseek-r1-0528-qwen3-8b_20260223_004146.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ❌ L1-01 [0%] Create a project from natural language (45.4s)
+       No tool call emitted — model responded with text only
+    ❌ L1-02 [0%] Create a workunit with full details (45.53s)
+       No tool call emitted — model responded with text only
+    ❌ L1-03 [0%] Add three tasks to a workunit (46.39s)
+       No tool call emitted — model responded with text only
+    ❌ L1-04 [0%] Update task to in-progress (46.11s)
+       No tool call emitted — model responded with text only
+    ❌ L1-05 [0%] Search and retrieve a workunit (45.09s)
+       No tool call emitted — model responded with text only
+    ❌ L1-06 [0%] Save a decision context atom (47.52s)
+       No tool call emitted — model responded with text only
+    ❌ L1-07 [0%] Create a product asset (47.62s)
+       No tool call emitted — model responded with text only
+    ❌ L1-08 [0%] Get project details with stats (45.57s)
+       No tool call emitted — model responded with text only
+    ❌ L1-09 [0%] Update workunit priority and tags (44.18s)
+       No tool call emitted — model responded with text only
+    ❌ L1-10 [0%] Complete a workunit with notes (44.52s)
+       No tool call emitted — model responded with text only
+  → Level 1: 0/10 passed (0% pass rate, 0% avg score)
+  Saved → level1_deepseek_deepseek-r1-0528-qwen3-8b_20260223_004925.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [0%] Bootstrap a new feature project (44.38s)
+       No tool call emitted — model responded with text only
+    ❌ L2-02 [0%] Break down a feature into tasks (43.99s)
+       No tool call emitted — model responded with text only
+    ❌ L2-03 [0%] Find and update stale work (44.62s)
+       No tool call emitted — model responded with text only
+    ❌ L2-04 [0%] Document an architectural decision (45.67s)
+       No tool call emitted — model responded with text only
+    ❌ L2-05 [0%] Create a project with linked asset (44.08s)
+       No tool call emitted — model responded with text only
+    ❌ L2-06 [0%] Triage and prioritize tasks (43.14s)
+       No tool call emitted — model responded with text only
+    ❌ L2-07 [0%] End-of-sprint workunit closeout (43.4s)
+       No tool call emitted — model responded with text only
+  → Level 2: 0/7 passed (0% pass rate, 0% avg score)
+  Saved → level2_deepseek_deepseek-r1-0528-qwen3-8b_20260223_005434.json
+  Committed to git
+  Model unloaded
+
+── Model 5/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ essentialai/rnj-1                           │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: essentialai/rnj-1, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (1.93s)
+    ✅ L0-02 [100%] Get authenticated user (0.96s)
+    ✅ L0-03 [100%] Create a project (1.27s)
+    ✅ L0-04 [100%] Create a workunit (1.76s)
+    ✅ L0-05 [100%] Create a task in a workunit (2.61s)
+    ✅ L0-06 [100%] Get a workunit with tasks (1.25s)
+    ✅ L0-07 [100%] Update a task status (1.38s)
+    ✅ L0-08 [100%] Save a context atom (2.05s)
+    ✅ L0-09 [100%] Search for workunits (1.61s)
+    ✅ L0-10 [100%] Create a knowledge asset (2.01s)
+    ✅ L0-11 [100%] Update a workunit status to completed (2.18s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_essentialai_rnj-1_20260223_005457.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (2.11s)
+    ✅ L1-02 [100%] Create a workunit with full details (2.32s)
+    ❌ L1-03 [17%] Add three tasks to a workunit (3.64s 2t)
+       Expected 3× create_task, got 1
+    ✅ L1-04 [100%] Update task to in-progress (1.72s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (3.05s 2t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [100%] Save a decision context atom (2.37s)
+    ✅ L1-07 [100%] Create a product asset (2.37s)
+    ✅ L1-08 [100%] Get project details with stats (1.35s)
+    ✅ L1-09 [100%] Update workunit priority and tags (2.15s)
+    ✅ L1-10 [100%] Complete a workunit with notes (2.18s)
+  → Level 1: 8/10 passed (80% pass rate, 87% avg score)
+  Saved → level1_essentialai_rnj-1_20260223_005521.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [50%] Bootstrap a new feature project (8.43s 4t)
+       Step 1 (create_project): ✓
+       Step 2 (create_workunit): not called
+    ❌ L2-02 [50%] Break down a feature into tasks (6.49s 2t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (3.16s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (4.33s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-05 [33%] Create a project with linked asset (4.84s 2t)
+       Step 1 (create_project): ✓
+       Step 2 (create_asset): not called
+    ❌ L2-06 [50%] Triage and prioritize tasks (3.3s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [20%] End-of-sprint workunit closeout (3.27s 2t)
+       Step 1 (get_workunit): 'include_tasks'=None (want True)
+       Step 1 (get_workunit): ✓
+  → Level 2: 0/7 passed (0% pass rate, 43% avg score)
+  Saved → level2_essentialai_rnj-1_20260223_005555.json
+  Committed to git
+  Model unloaded
+
+── Model 6/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ zai-org/glm-4.6v-flash                      │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: zai-org/glm-4.6v-flash, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (2.04s)
+    ❌ L0-02 [0%] Get authenticated user (5.51s)
+       No tool call emitted — model responded with text only
+    ✅ L0-03 [100%] Create a project (1.71s)
+    ✅ L0-04 [100%] Create a workunit (2.59s)
+    ✅ L0-05 [100%] Create a task in a workunit (2.79s)
+    ✅ L0-06 [100%] Get a workunit with tasks (1.76s)
+    ✅ L0-07 [100%] Update a task status (3.28s)
+    ✅ L0-08 [100%] Save a context atom (2.57s)
+    ✅ L0-09 [100%] Search for workunits (1.59s)
+    ✅ L0-10 [100%] Create a knowledge asset (2.18s)
+    ✅ L0-11 [100%] Update a workunit status to completed (3.2s)
+  → Level 0: 10/11 passed (91% pass rate, 91% avg score)
+  Saved → level0_zai-org_glm-4.6v-flash_20260223_005632.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (2.31s)
+    ❌ L1-02 [0%] Create a workunit with full details (3.93s)
+       No tool call emitted — model responded with text only
+    ✅ L1-03 [100%] Add three tasks to a workunit (4.1s)
+    ❌ L1-04 [65%] Update task to in-progress (53.47s 6t)
+       Missing required param: 'update_mask'
+       'update_mask' should be present but is missing/empty
+    ❌ L1-05 [50%] Search and retrieve a workunit (29.44s 13t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [85%] Save a decision context atom (4.03s)
+    ✅ L1-07 [100%] Create a product asset (3.07s)
+    ✅ L1-08 [100%] Get project details with stats (2.61s)
+    ❌ L1-09 [55%] Update workunit priority and tags (50.42s 5t)
+       Missing required param: 'update_mask'
+       update_mask.paths missing 'priority'
+    ✅ L1-10 [80%] Complete a workunit with notes (4.72s)
+  → Level 1: 6/10 passed (60% pass rate, 74% avg score)
+  Saved → level1_zai-org_glm-4.6v-flash_20260223_005910.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [50%] Bootstrap a new feature project (7.22s 2t)
+       Step 1 (create_project): ✓
+       Step 2 (create_workunit): not called
+    ❌ L2-02 [0%] Break down a feature into tasks (10.0s)
+       No tool call emitted — model responded with text only
+    ❌ L2-03 [0%] Find and update stale work (1.82s)
+       No tool call emitted — model responded with text only
+    ❌ L2-04 [50%] Document an architectural decision (77.43s 24t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [100%] Create a project with linked asset (12.28s 4t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (83.22s 17t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (35.88s 12t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 1/7 passed (14% pass rate, 39% avg score)
+  Saved → level2_zai-org_glm-4.6v-flash_20260223_010258.json
+  Committed to git
+  Model unloaded
+
+── Model 7/17 ──────────────────────────────
+╭────────────────────────────────────────────────────────────╮
+│ google/gemma-3-12b                                         │
+│ Tool-trained: no (control group)  Levels to run: [0, 1, 2] │
+╰────────────────────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: google/gemma-3-12b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (2.76s)
+    ✅ L0-02 [100%] Get authenticated user (0.89s)
+    ✅ L0-03 [100%] Create a project (1.45s)
+    ✅ L0-04 [100%] Create a workunit (2.16s)
+    ✅ L0-05 [100%] Create a task in a workunit (1.81s)
+    ❌ L0-06 [0%] Get a workunit with tasks (0.77s)
+       No tool call emitted — model responded with text only
+    ✅ L0-07 [100%] Update a task status (1.39s)
+    ✅ L0-08 [100%] Save a context atom (2.08s)
+    ✅ L0-09 [100%] Search for workunits (1.34s)
+    ✅ L0-10 [100%] Create a knowledge asset (1.79s)
+    ✅ L0-11 [100%] Update a workunit status to completed (1.64s)
+  → Level 0: 10/11 passed (91% pass rate, 91% avg score)
+  Saved → level0_google_gemma-3-12b_20260223_010327.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (1.94s)
+    ✅ L1-02 [100%] Create a workunit with full details (1.99s)
+    ❌ L1-03 [17%] Add three tasks to a workunit (2.36s 2t)
+       Expected 3× create_task, got 1
+    ✅ L1-04 [100%] Update task to in-progress (1.16s)
+    ❌ L1-05 [40%] Search and retrieve a workunit (2.03s 2t)
+       Step 1 (search): not called
+       Step 2 (get_workunit): 'include_tasks'=None (want True)
+    ✅ L1-06 [85%] Save a decision context atom (2.03s)
+    ✅ L1-07 [85%] Create a product asset (1.62s)
+    ✅ L1-08 [100%] Get project details with stats (1.38s)
+    ✅ L1-09 [100%] Update workunit priority and tags (1.39s)
+    ✅ L1-10 [100%] Complete a workunit with notes (1.93s)
+  → Level 1: 8/10 passed (80% pass rate, 83% avg score)
+  Saved → level1_google_gemma-3-12b_20260223_010345.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (5.68s 2t)
+    ❌ L2-02 [50%] Break down a feature into tasks (9.42s 5t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (1.88s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (2.26s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [100%] Create a project with linked asset (8.46s 4t)
+    ❌ L2-06 [40%] Triage and prioritize tasks (1.97s 2t)
+       Step 1 (get_workunit): 'include_tasks'=None (want True)
+       Step 1 (get_workunit): ✓
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (5.24s 2t)
+       Step 1 (get_workunit): not called
+       Step 2 (update_task): not called
+  → Level 2: 2/7 passed (29% pass rate, 59% avg score)
+  Saved → level2_google_gemma-3-12b_20260223_010420.json
+  Committed to git
+  Model unloaded
+
+── Model 8/17 ──────────────────────────────
+╭────────────────────────────────────────────────────────────╮
+│ microsoft/phi-4-reasoning-plus                             │
+│ Tool-trained: no (control group)  Levels to run: [0, 1, 2] │
+╰────────────────────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: microsoft/phi-4-reasoning-plus, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ❌ L0-01 [0%] Ping the MCP server (4.98s 3t)
+       Wrong tool: called 'tool_name', expected 'ping'
+    ✅ L0-02 [100%] Get authenticated user (1.49s)
+    ❌ L0-03 [0%] Create a project (8.19s 3t)
+       Wrong tool: called 'tool_name', expected 'create_project'
+    ❌ L0-04 [0%] Create a workunit (10.19s 3t)
+       Wrong tool: called 'tool_name', expected 'create_workunit'
+    ✅ L0-05 [100%] Create a task in a workunit (9.68s)
+    ❌ L0-06 [0%] Get a workunit with tasks (4.91s 3t)
+       Wrong tool: called 'tool_name', expected 'get_workunit'
+    ❌ L0-07 [0%] Update a task status (300.17s 182t ⏱)
+       Task timed out after 300s (182 turns completed)
+       Wrong tool: called 'tool_name', expected 'update_task'
+    ✅ L0-08 [100%] Save a context atom (4.65s)
+    ❌ L0-09 [0%] Search for workunits (3.33s 3t)
+       Wrong tool: called 'tool_name', expected 'search'
+    ✅ L0-10 [100%] Create a knowledge asset (9.96s)
+    ✅ L0-11 [100%] Update a workunit status to completed (9.14s)
+  → Level 0: 5/11 passed (46% pass rate, 46% avg score)
+  Saved → level0_microsoft_phi-4-reasoning-plus_20260223_011032.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ❌ L1-01 [45%] Create a project from natural language (6.1s 3t)
+       Missing required param: 'name'
+       'name': expected 'Mobile App Redesign', got None
+    ✅ L1-02 [100%] Create a workunit with full details (17.37s)
+    ✅ L1-03 [80%] Add three tasks to a workunit (48.79s 10t)
+    ✅ L1-04 [100%] Update task to in-progress (7.92s)
+    ✅ L1-05 [100%] Search and retrieve a workunit (13.92s 3t)
+    ✅ L1-06 [100%] Save a decision context atom (22.05s)
+    ✅ L1-07 [85%] Create a product asset (16.3s)
+    ✅ L1-08 [100%] Get project details with stats (12.5s)
+    ❌ L1-09 [0%] Update workunit priority and tags (18.56s 3t)
+       Wrong tool: called 'tool_name', expected 'update_workunit'
+    ✅ L1-10 [100%] Complete a workunit with notes (15.12s)
+  → Level 1: 8/10 passed (80% pass rate, 81% avg score)
+  Saved → level1_microsoft_phi-4-reasoning-plus_20260223_011331.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (30.39s 2t)
+    ❌ L2-02 [50%] Break down a feature into tasks (195.51s 8t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ✅ L2-03 [100%] Find and update stale work (71.78s 3t)
+    ❌ L2-04 [50%] Document an architectural decision (84.21s 16t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [93%] Create a project with linked asset (12.1s 3t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (23.98s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (28.77s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 3/7 passed (43% pass rate, 67% avg score)
+  Saved → level2_microsoft_phi-4-reasoning-plus_20260223_012058.json
+  Committed to git
+  Model unloaded
+
+── Model 9/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ mistralai/ministral-3-14b-reasoning         │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: mistralai/ministral-3-14b-reasoning, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (1.3s)
+    ✅ L0-02 [100%] Get authenticated user (0.22s)
+    ✅ L0-03 [100%] Create a project (0.57s)
+    ✅ L0-04 [100%] Create a workunit (1.1s)
+    ✅ L0-05 [100%] Create a task in a workunit (0.87s)
+    ✅ L0-06 [100%] Get a workunit with tasks (0.55s)
+    ✅ L0-07 [100%] Update a task status (0.58s)
+    ✅ L0-08 [100%] Save a context atom (0.98s)
+    ✅ L0-09 [100%] Search for workunits (0.52s)
+    ✅ L0-10 [100%] Create a knowledge asset (0.93s)
+    ✅ L0-11 [100%] Update a workunit status to completed (0.94s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_mistralai_ministral-3-14b-reasoning_20260223_012114.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (0.94s)
+    ✅ L1-02 [100%] Create a workunit with full details (1.91s)
+    ✅ L1-03 [100%] Add three tasks to a workunit (1.94s)
+    ✅ L1-04 [100%] Update task to in-progress (0.6s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (0.96s 2t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [85%] Save a decision context atom (1.66s)
+    ✅ L1-07 [100%] Create a product asset (1.06s)
+    ✅ L1-08 [100%] Get project details with stats (0.81s)
+    ✅ L1-09 [100%] Update workunit priority and tags (0.86s)
+    ✅ L1-10 [100%] Complete a workunit with notes (1.36s)
+  → Level 1: 9/10 passed (90% pass rate, 94% avg score)
+  Saved → level1_mistralai_ministral-3-14b-reasoning_20260223_012126.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (8.57s 2t)
+    ❌ L2-02 [50%] Break down a feature into tasks (14.46s 3t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (3.99s 4t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (1.65s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [100%] Create a project with linked asset (3.39s 3t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (1.23s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [0%] End-of-sprint workunit closeout (1.66s)
+       No tool call emitted — model responded with text only
+  → Level 2: 2/7 passed (29% pass rate, 57% avg score)
+  Saved → level2_mistralai_ministral-3-14b-reasoning_20260223_012202.json
+  Committed to git
+  Model unloaded
+
+── Model 10/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ openai/gpt-oss-20b                          │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: openai/gpt-oss-20b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (1.11s)
+    ✅ L0-02 [100%] Get authenticated user (0.44s)
+    ✅ L0-03 [100%] Create a project (0.55s)
+    ✅ L0-04 [100%] Create a workunit (0.87s)
+    ✅ L0-05 [100%] Create a task in a workunit (0.72s)
+    ✅ L0-06 [100%] Get a workunit with tasks (0.61s)
+    ✅ L0-07 [100%] Update a task status (0.56s)
+    ✅ L0-08 [100%] Save a context atom (0.76s)
+    ✅ L0-09 [100%] Search for workunits (0.54s)
+    ✅ L0-10 [100%] Create a knowledge asset (0.66s)
+    ✅ L0-11 [100%] Update a workunit status to completed (0.71s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_openai_gpt-oss-20b_20260223_012216.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (0.69s)
+    ✅ L1-02 [100%] Create a workunit with full details (1.04s)
+    ❌ L1-03 [17%] Add three tasks to a workunit (1.58s 2t)
+       Expected 3× create_task, got 1
+    ✅ L1-04 [100%] Update task to in-progress (0.77s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (2.3s 3t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [100%] Save a decision context atom (0.88s)
+    ✅ L1-07 [100%] Create a product asset (0.8s)
+    ✅ L1-08 [100%] Get project details with stats (0.93s)
+    ✅ L1-09 [100%] Update workunit priority and tags (0.87s)
+    ✅ L1-10 [100%] Complete a workunit with notes (0.89s)
+  → Level 1: 8/10 passed (80% pass rate, 87% avg score)
+  Saved → level1_openai_gpt-oss-20b_20260223_012227.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (2.34s 2t)
+    ❌ L2-02 [50%] Break down a feature into tasks (2.58s 2t)
+       Step 1 (create_workunit): ✓
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (2.13s 3t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-04 [100%] Document an architectural decision (5.23s 5t)
+    ✅ L2-05 [93%] Create a project with linked asset (3.02s 3t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (1.55s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (1.59s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 3/7 passed (43% pass rate, 67% avg score)
+  Saved → level2_openai_gpt-oss-20b_20260223_012246.json
+  Committed to git
+  Model unloaded
+
+── Model 11/17 ──────────────────────────────
+╭────────────────────────────────────────────────────────────╮
+│ baidu/ernie-4.5-21b-a3b                                    │
+│ Tool-trained: no (control group)  Levels to run: [0, 1, 2] │
+╰────────────────────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: baidu/ernie-4.5-21b-a3b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (3.59s)
+    ✅ L0-02 [100%] Get authenticated user (0.86s)
+    ✅ L0-03 [100%] Create a project (1.12s)
+    ✅ L0-04 [100%] Create a workunit (1.86s)
+    ✅ L0-05 [100%] Create a task in a workunit (1.6s)
+    ✅ L0-06 [100%] Get a workunit with tasks (1.23s)
+    ✅ L0-07 [100%] Update a task status (1.28s)
+    ✅ L0-08 [100%] Save a context atom (1.77s)
+    ✅ L0-09 [100%] Search for workunits (1.37s)
+    ✅ L0-10 [100%] Create a knowledge asset (1.59s)
+    ✅ L0-11 [100%] Update a workunit status to completed (1.66s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_baidu_ernie-4.5-21b-a3b_20260223_012312.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (1.6s)
+    ✅ L1-02 [100%] Create a workunit with full details (2.66s)
+    ✅ L1-03 [70%] Add three tasks to a workunit (20.78s 7t)
+    ✅ L1-04 [100%] Update task to in-progress (3.88s)
+    ✅ L1-05 [100%] Search and retrieve a workunit (2.79s 2t)
+    ✅ L1-06 [100%] Save a decision context atom (2.26s)
+    ✅ L1-07 [100%] Create a product asset (1.99s)
+    ✅ L1-08 [100%] Get project details with stats (1.21s)
+    ✅ L1-09 [100%] Update workunit priority and tags (1.64s)
+    ✅ L1-10 [100%] Complete a workunit with notes (1.97s)
+  → Level 1: 10/10 passed (100% pass rate, 97% avg score)
+  Saved → level1_baidu_ernie-4.5-21b-a3b_20260223_012353.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [50%] Bootstrap a new feature project (2.81s 2t)
+       Step 1 (create_project): ✓
+       Step 2 (create_workunit): not called
+    ❌ L2-02 [0%] Break down a feature into tasks (4.1s 2t)
+       Step 1 (create_workunit): not called
+       Step 2 (create_task): not called
+    ❌ L2-03 [50%] Find and update stale work (14.24s 5t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (17.92s 4t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [93%] Create a project with linked asset (7.85s 3t)
+    ✅ L2-06 [90%] Triage and prioritize tasks (30.52s 10t)
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (13.21s 4t)
+       Step 1 (get_workunit): not called
+       Step 2 (update_task): ✓
+  → Level 2: 2/7 passed (29% pass rate, 51% avg score)
+  Saved → level2_baidu_ernie-4.5-21b-a3b_20260223_012524.json
+  Committed to git
+  Model unloaded
+
+── Model 12/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ mistralai/magistral-small-2509              │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: mistralai/magistral-small-2509, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (4.39s)
+    ✅ L0-02 [100%] Get authenticated user (1.36s)
+    ✅ L0-03 [100%] Create a project (4.26s)
+    ✅ L0-04 [100%] Create a workunit (7.27s)
+    ✅ L0-05 [100%] Create a task in a workunit (5.4s)
+    ✅ L0-06 [100%] Get a workunit with tasks (4.17s)
+    ✅ L0-07 [100%] Update a task status (4.53s)
+    ✅ L0-08 [100%] Save a context atom (6.6s)
+    ✅ L0-09 [100%] Search for workunits (3.88s)
+    ✅ L0-10 [100%] Create a knowledge asset (5.62s)
+    ✅ L0-11 [100%] Update a workunit status to completed (5.83s)
+  → Level 0: 11/11 passed (100% pass rate, 100% avg score)
+  Saved → level0_mistralai_magistral-small-2509_20260223_012629.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (5.75s)
+    ✅ L1-02 [100%] Create a workunit with full details (7.48s)
+    ✅ L1-03 [100%] Add three tasks to a workunit (12.77s)
+    ✅ L1-04 [100%] Update task to in-progress (4.0s)
+    ✅ L1-05 [100%] Search and retrieve a workunit (11.1s 2t)
+    ✅ L1-06 [85%] Save a decision context atom (7.2s)
+    ✅ L1-07 [100%] Create a product asset (6.62s)
+    ✅ L1-08 [100%] Get project details with stats (4.54s)
+    ✅ L1-09 [100%] Update workunit priority and tags (6.96s)
+    ✅ L1-10 [100%] Complete a workunit with notes (7.24s)
+  → Level 1: 10/10 passed (100% pass rate, 98% avg score)
+  Saved → level1_mistralai_magistral-small-2509_20260223_012742.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (26.07s 2t)
+    ❌ L2-02 [0%] Break down a feature into tasks (22.0s 2t)
+       Step 1 (create_workunit): not called
+       Step 2 (create_task): not called
+    ✅ L2-03 [100%] Find and update stale work (11.3s 2t)
+    ❌ L2-04 [50%] Document an architectural decision (7.49s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-05 [93%] Create a project with linked asset (17.98s 3t)
+    ❌ L2-06 [50%] Triage and prioritize tasks (9.45s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+    ❌ L2-07 [0%] End-of-sprint workunit closeout (11.72s)
+       No tool call emitted — model responded with text only
+  → Level 2: 3/7 passed (43% pass rate, 56% avg score)
+  Saved → level2_mistralai_magistral-small-2509_20260223_012929.json
+  Committed to git
+  Model unloaded
+
+── Model 13/17 ──────────────────────────────
+╭────────────────────────────────────────────────────────────╮
+│ qwen/qwen2.5-coder-32b                                     │
+│ Tool-trained: no (control group)  Levels to run: [0, 1, 2] │
+╰────────────────────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: qwen/qwen2.5-coder-32b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (15.36s)
+    ✅ L0-02 [100%] Get authenticated user (8.6s)
+    ✅ L0-03 [100%] Create a project (10.59s)
+    ✅ L0-04 [100%] Create a workunit (18.63s)
+    ✅ L0-05 [100%] Create a task in a workunit (15.54s)
+    ✅ L0-06 [100%] Get a workunit with tasks (13.66s)
+    ✅ L0-07 [100%] Update a task status (14.32s)
+    ✅ L0-08 [100%] Save a context atom (17.47s)
+    ✅ L0-09 [100%] Search for workunits (12.48s)
+    ✅ L0-10 [100%] Create a knowledge asset (14.47s)
+    ❌ L0-11 [0%] Update a workunit status to completed (338.95s 9t ⏱)
+       Task timed out after 300s (9 turns completed)
+       Wrong tool: called 'create_project', expected 'update_workunit'
+  → Level 0: 10/11 passed (91% pass rate, 91% avg score)
+  Saved → level0_qwen_qwen2.5-coder-32b_20260223_013741.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (55.25s)
+    ✅ L1-02 [100%] Create a workunit with full details (39.86s)
+    ❌ L1-03 [0%] Add three tasks to a workunit (20.01s)
+       No tool call emitted — model responded with text only
+    ❌ L1-04 [65%] Update task to in-progress (310.19s 27t ⏱)
+       Task timed out after 300s (27 turns completed)
+       Missing required param: 'update_mask'
+    ❌ L1-05 [50%] Search and retrieve a workunit (305.95s 30t ⏱)
+       Task timed out after 300s (30 turns completed)
+       Step 1 (search): ✓
+    ✅ L1-06 [100%] Save a decision context atom (20.16s)
+    ✅ L1-07 [100%] Create a product asset (20.78s)
+    ❌ L1-08 [0%] Get project details with stats (327.44s 2t)
+       Wrong tool: called 'create_workunit', expected 'get_project'
+    ✅ L1-09 [100%] Update workunit priority and tags (14.83s)
+    ❌ L1-10 [0%] Complete a workunit with notes (303.23s 4t ⏱)
+       Task timed out after 300s (4 turns completed)
+       Wrong tool: called 'create_project', expected 'update_workunit'
+  → Level 1: 5/10 passed (50% pass rate, 62% avg score)
+  Saved → level1_qwen_qwen2.5-coder-32b_20260223_020119.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (84.85s 2t)
+    ❌ L2-02 [50%] Break down a feature into tasks (318.84s 7t ⏱)
+       Task timed out after 300s (7 turns completed)
+       Step 1 (create_workunit): ✓
+    ❌ L2-03 [0%] Find and update stale work (901.63s)
+       No tool call emitted — model responded with text only
+    ❌ L2-04 [0%] Document an architectural decision (901.52s)
+       No tool call emitted — model responded with text only
+    ❌ L2-05 [0%] Create a project with linked asset (901.5s)
+       No tool call emitted — model responded with text only
+    ❌ L2-06 [0%] Triage and prioritize tasks (901.75s)
+       No tool call emitted — model responded with text only
+    ❌ L2-07 [0%] End-of-sprint workunit closeout (307.5s 8t ⏱)
+       Task timed out after 300s (8 turns completed)
+       Step 1 (get_workunit): not called
+  → Level 2: 1/7 passed (14% pass rate, 21% avg score)
+  Saved → level2_qwen_qwen2.5-coder-32b_20260223_031317.json
+  Committed to git
+  Model unloaded
+
+── Model 14/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ zai-org/glm-4.7-flash                       │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: zai-org/glm-4.7-flash, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (6.55s)
+    ✅ L0-02 [100%] Get authenticated user (3.06s)
+    ✅ L0-03 [100%] Create a project (24.25s)
+    ✅ L0-04 [100%] Create a workunit (12.83s)
+    ❌ L0-05 [0%] Create a task in a workunit (16.14s)
+       No tool call emitted — model responded with text only
+    ❌ L0-06 [0%] Get a workunit with tasks (9.51s)
+       No tool call emitted — model responded with text only
+    ❌ L0-07 [0%] Update a task status (14.63s)
+       No tool call emitted — model responded with text only
+    ❌ L0-08 [0%] Save a context atom (18.17s)
+       No tool call emitted — model responded with text only
+    ✅ L0-09 [100%] Search for workunits (8.21s)
+    ✅ L0-10 [100%] Create a knowledge asset (9.65s)
+    ❌ L0-11 [0%] Update a workunit status to completed (10.78s)
+       No tool call emitted — model responded with text only
+  → Level 0: 6/11 passed (55% pass rate, 55% avg score)
+  Saved → level0_zai-org_glm-4.7-flash_20260223_031542.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (13.05s)
+    ✅ L1-02 [100%] Create a workunit with full details (19.89s)
+    ❌ L1-03 [0%] Add three tasks to a workunit (19.15s)
+       No tool call emitted — model responded with text only
+    ❌ L1-04 [0%] Update task to in-progress (13.93s)
+       No tool call emitted — model responded with text only
+    ❌ L1-05 [50%] Search and retrieve a workunit (281.05s 63t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ❌ L1-06 [0%] Save a decision context atom (18.06s)
+       No tool call emitted — model responded with text only
+    ✅ L1-07 [85%] Create a product asset (13.73s)
+    ❌ L1-08 [0%] Get project details with stats (10.51s)
+       No tool call emitted — model responded with text only
+    ✅ L1-09 [100%] Update workunit priority and tags (12.91s)
+    ✅ L1-10 [100%] Complete a workunit with notes (12.63s)
+  → Level 1: 5/10 passed (50% pass rate, 54% avg score)
+  Saved → level1_zai-org_glm-4.7-flash_20260223_032237.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (38.13s 2t)
+    ✅ L2-02 [100%] Break down a feature into tasks (156.32s 7t)
+    ✅ L2-03 [100%] Find and update stale work (27.89s 3t)
+    ✅ L2-04 [100%] Document an architectural decision (46.76s 2t)
+    ✅ L2-05 [100%] Create a project with linked asset (36.57s 3t)
+    ❌ L2-06 [0%] Triage and prioritize tasks (16.34s)
+       No tool call emitted — model responded with text only
+    ❌ L2-07 [25%] End-of-sprint workunit closeout (19.39s 2t)
+       Step 1 (get_workunit): ✓
+       Step 2 (update_task): not called
+  → Level 2: 5/7 passed (71% pass rate, 75% avg score)
+  Saved → level2_zai-org_glm-4.7-flash_20260223_032819.json
+  Committed to git
+  Model unloaded
+
+── Model 15/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ qwen/qwen3-coder-30b                        │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: qwen/qwen3-coder-30b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (7.07s)
+    ✅ L0-02 [100%] Get authenticated user (1.42s)
+    ✅ L0-03 [100%] Create a project (3.08s)
+    ✅ L0-04 [100%] Create a workunit (5.77s)
+    ✅ L0-05 [100%] Create a task in a workunit (5.27s)
+    ✅ L0-06 [70%] Get a workunit with tasks (3.76s)
+    ✅ L0-07 [100%] Update a task status (4.32s)
+    ✅ L0-08 [100%] Save a context atom (5.16s)
+    ✅ L0-09 [100%] Search for workunits (4.04s)
+    ✅ L0-10 [100%] Create a knowledge asset (4.72s)
+    ✅ L0-11 [100%] Update a workunit status to completed (4.82s)
+  → Level 0: 11/11 passed (100% pass rate, 97% avg score)
+  Saved → level0_qwen_qwen3-coder-30b_20260223_032920.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (4.27s)
+    ✅ L1-02 [100%] Create a workunit with full details (6.07s)
+    ✅ L1-03 [100%] Add three tasks to a workunit (12.22s)
+    ✅ L1-04 [100%] Update task to in-progress (4.25s)
+    ❌ L1-05 [50%] Search and retrieve a workunit (9.67s 2t)
+       Step 1 (search): ✓
+       Step 2 (get_workunit): not called
+    ✅ L1-06 [100%] Save a decision context atom (7.8s)
+    ✅ L1-07 [100%] Create a product asset (5.12s)
+    ✅ L1-08 [85%] Get project details with stats (3.25s)
+    ✅ L1-09 [100%] Update workunit priority and tags (5.11s)
+    ✅ L1-10 [100%] Complete a workunit with notes (5.29s)
+  → Level 1: 9/10 passed (90% pass rate, 94% avg score)
+  Saved → level1_qwen_qwen3-coder-30b_20260223_033023.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ✅ L2-01 [100%] Bootstrap a new feature project (23.99s 2t)
+    ✅ L2-02 [100%] Break down a feature into tasks (44.78s 6t)
+    ❌ L2-03 [50%] Find and update stale work (33.18s 5t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ✅ L2-04 [100%] Document an architectural decision (43.69s 6t)
+    ✅ L2-05 [100%] Create a project with linked asset (14.73s 3t)
+    ❌ L2-06 [40%] Triage and prioritize tasks (47.54s 7t)
+       Step 1 (get_workunit): 'include_tasks'='True' (want True)
+       Step 1 (get_workunit): ✓
+    ❌ L2-07 [20%] End-of-sprint workunit closeout (7.14s 3t)
+       Step 1 (get_workunit): 'include_tasks'='True' (want True)
+       Step 1 (get_workunit): ✓
+  → Level 2: 4/7 passed (57% pass rate, 73% avg score)
+  Saved → level2_qwen_qwen3-coder-30b_20260223_033358.json
+  Committed to git
+  Model unloaded
+
+── Model 16/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ nvidia/nemotron-3-nano                      │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: nvidia/nemotron-3-nano, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ✅ L0-01 [100%] Ping the MCP server (14.99s)
+    ✅ L0-02 [100%] Get authenticated user (5.69s)
+    ✅ L0-03 [100%] Create a project (9.3s)
+    ✅ L0-04 [100%] Create a workunit (22.72s)
+    ✅ L0-05 [100%] Create a task in a workunit (24.59s)
+    ✅ L0-06 [70%] Get a workunit with tasks (18.76s)
+    ✅ L0-07 [100%] Update a task status (44.7s)
+    ✅ L0-08 [100%] Save a context atom (35.98s)
+    ✅ L0-09 [100%] Search for workunits (14.87s)
+    ✅ L0-10 [100%] Create a knowledge asset (10.92s)
+    ✅ L0-11 [100%] Update a workunit status to completed (27.15s)
+  → Level 0: 11/11 passed (100% pass rate, 97% avg score)
+  Saved → level0_nvidia_nemotron-3-nano_20260223_033803.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ✅ L1-01 [100%] Create a project from natural language (16.91s)
+    ✅ L1-02 [100%] Create a workunit with full details (54.51s)
+    ❌ L1-03 [17%] Add three tasks to a workunit (139.33s 2t)
+       Expected 3× create_task, got 1
+    ❌ L1-04 [0%] Update task to in-progress (84.88s)
+       No tool call emitted — model responded with text only
+    ✅ L1-05 [90%] Search and retrieve a workunit (418.61s 6t)
+    ❌ L1-06 [60%] Save a decision context atom (228.91s 3t)
+       Missing required param: 'atom_type'
+       'atom_type': expected 'decision', got None
+    ✅ L1-07 [100%] Create a product asset (34.45s)
+    ✅ L1-08 [85%] Get project details with stats (89.48s)
+    ✅ L1-09 [100%] Update workunit priority and tags (65.33s)
+    ❌ L1-10 [0%] Complete a workunit with notes (117.16s)
+       No tool call emitted — model responded with text only
+  → Level 1: 6/10 passed (60% pass rate, 65% avg score)
+  Saved → level1_nvidia_nemotron-3-nano_20260223_035853.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [50%] Bootstrap a new feature project (222.31s 2t)
+       Step 1 (create_project): ✓
+       Step 2 (create_workunit): not called
+    ❌ L2-02 [50%] Break down a feature into tasks (383.58s 5t ⏱)
+       Task timed out after 300s (5 turns completed)
+       Step 1 (create_workunit): ✓
+    ❌ L2-03 [50%] Find and update stale work (88.35s 2t)
+       Step 1 (search): ✓
+       Step 2 (save_context): not called
+    ❌ L2-04 [50%] Document an architectural decision (325.88s 8t ⏱)
+       Task timed out after 300s (8 turns completed)
+       Step 1 (search): ✓
+    ✅ L2-05 [93%] Create a project with linked asset (74.27s 3t)
+    ❌ L2-06 [40%] Triage and prioritize tasks (327.01s 2t)
+       Step 1 (get_workunit): 'include_tasks'='True' (want True)
+       Step 1 (get_workunit): ✓
+    ❌ L2-07 [20%] End-of-sprint workunit closeout (286.27s 2t)
+       Step 1 (get_workunit): 'include_tasks'='True' (want True)
+       Step 1 (get_workunit): ✓
+  → Level 2: 1/7 passed (14% pass rate, 50% avg score)
+  Saved → level2_nvidia_nemotron-3-nano_20260223_042721.json
+  Committed to git
+  Model unloaded
+
+── Model 17/17 ──────────────────────────────
+╭─────────────────────────────────────────────╮
+│ bytedance/seed-oss-36b                      │
+│ Tool-trained: yes  Levels to run: [0, 1, 2] │
+╰─────────────────────────────────────────────╯
+  DB reset complete
+  Loading model (ctx=8192)...
+  Model loaded — instance: bytedance/seed-oss-36b, ctx=8192
+
+  Level 0 — Explicit (11 tasks)
+    ❌ L0-01 [0%] Ping the MCP server (0.07s)
+       No tool call emitted — model responded with text only
+    ❌ L0-02 [0%] Get authenticated user (0.03s)
+       No tool call emitted — model responded with text only
+    ❌ L0-03 [0%] Create a project (0.03s)
+       No tool call emitted — model responded with text only
+    ❌ L0-04 [0%] Create a workunit (0.03s)
+       No tool call emitted — model responded with text only
+    ❌ L0-05 [0%] Create a task in a workunit (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-06 [0%] Get a workunit with tasks (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-07 [0%] Update a task status (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-08 [0%] Save a context atom (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-09 [0%] Search for workunits (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-10 [0%] Create a knowledge asset (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L0-11 [0%] Update a workunit status to completed (0.02s)
+       No tool call emitted — model responded with text only
+  → Level 0: 0/11 passed (0% pass rate, 0% avg score)
+  Saved → level0_bytedance_seed-oss-36b_20260223_042735.json
+  Committed to git
+
+  Level 1 — Natural Language (10 tasks)
+    ❌ L1-01 [0%] Create a project from natural language (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-02 [0%] Create a workunit with full details (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-03 [0%] Add three tasks to a workunit (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-04 [0%] Update task to in-progress (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-05 [0%] Search and retrieve a workunit (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-06 [0%] Save a decision context atom (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-07 [0%] Create a product asset (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-08 [0%] Get project details with stats (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-09 [0%] Update workunit priority and tags (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L1-10 [0%] Complete a workunit with notes (0.02s)
+       No tool call emitted — model responded with text only
+  → Level 1: 0/10 passed (0% pass rate, 0% avg score)
+  Saved → level1_bytedance_seed-oss-36b_20260223_042736.json
+  Committed to git
+
+  Level 2 — Reasoning (7 tasks)
+    ❌ L2-01 [0%] Bootstrap a new feature project (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-02 [0%] Break down a feature into tasks (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-03 [0%] Find and update stale work (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-04 [0%] Document an architectural decision (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-05 [0%] Create a project with linked asset (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-06 [0%] Triage and prioritize tasks (0.02s)
+       No tool call emitted — model responded with text only
+    ❌ L2-07 [0%] End-of-sprint workunit closeout (0.02s)
+       No tool call emitted — model responded with text only
+  → Level 2: 0/7 passed (0% pass rate, 0% avg score)
+  Saved → level2_bytedance_seed-oss-36b_20260223_042736.json
+  Committed to git
+  Model unloaded
+
+Run complete! 242.3 minutes total
+
+To generate the aggregated report:
+  python /home/alyx/code/3615-computer/workunit/benchmark/scripts/aggregate_results.py

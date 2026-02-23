@@ -1,0 +1,98 @@
+{
+  "level": 2,
+  "model": "baidu/ernie-4.5-21b-a3b",
+  "tool_trained": false,
+  "timestamp": "2026-02-22T10:46:32.167116",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.0
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.05,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4603) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4609) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.06,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4586) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 1.11,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4588) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4615) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.04,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4595) >= n_ctx (4096)'}"
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 0.05,
+      "error": "Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (4591) >= n_ctx (4096)'}"
+    }
+  ]
+}

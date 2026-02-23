@@ -1,0 +1,33 @@
+# Workunit MCP Benchmark — Model List
+# LM Studio model keys (exact `key` field from /api/v1/models)
+# Sourced from: curl http://localhost:1234/api/v1/models
+#
+# * = NOT trained for tool use (trained_for_tool_use: false in LM Studio)
+#     Included as control group — interesting to see if reasoning helps regardless
+
+# === Tiny (3-4B) ===
+mistralai/ministral-3-3b
+qwen/qwen3-4b-thinking-2507
+
+# === Small (7-10B) ===
+ibm/granite-4-h-tiny
+deepseek/deepseek-r1-0528-qwen3-8b          # * no tool training
+essentialai/rnj-1
+zai-org/glm-4.6v-flash
+
+# === Medium (12-15B) ===
+google/gemma-3-12b                           # * no tool training
+microsoft/phi-4-reasoning-plus               # * no tool training
+mistralai/ministral-3-14b-reasoning
+
+# === Large (20-24B) ===
+openai/gpt-oss-20b
+baidu/ernie-4.5-21b-a3b                      # * no tool training
+mistralai/magistral-small-2509
+
+# === XL (30-36B) ===
+qwen/qwen2.5-coder-32b                       # * no tool training
+zai-org/glm-4.7-flash
+qwen/qwen3-coder-30b
+nvidia/nemotron-3-nano
+bytedance/seed-oss-36b

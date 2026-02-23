@@ -1,0 +1,243 @@
+{
+  "level": 1,
+  "model": "bytedance/seed-oss-36b",
+  "tool_trained": true,
+  "timestamp": "2026-02-22T16:42:52.098353",
+  "summary": {
+    "total": 10,
+    "passed": 8,
+    "pass_rate": 0.8,
+    "avg_score": 0.765
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "status": "active",
+            "tags": "['mobile', 'redesign', 'ux']"
+          }
+        }
+      ],
+      "elapsed_s": 94.66,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "problem_statement": "users can't log in when they have special characters in their password",
+            "success_criteria": "all character types are supported and there are regression tests",
+            "project_id": "{{project_id}}",
+            "priority": "high"
+          }
+        }
+      ],
+      "elapsed_s": 95.1,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Expected 3\u00d7 create_task, got 0"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "elapsed_s": 97.97,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'status': expected 'in_progress', got 'In Progress'"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{task_id}}",
+            "update_mask": "status",
+            "status": "In Progress"
+          }
+        }
+      ],
+      "elapsed_s": 101.29,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug",
+            "result_types": "['workunit']"
+          }
+        }
+      ],
+      "elapsed_s": 136.57,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "decision",
+            "title": "Password Validation Placement Decision",
+            "content": "we chose to fix the password validation on the backend rather than the frontend, because it's more secure.",
+            "importance": "high",
+            "tags": "['architecture', 'security', 'password_validation']"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "decision",
+            "title": "Password Validation Security Decision",
+            "content": "we chose to fix the password validation on the backend rather than the frontend, because it's more secure.",
+            "importance": "high",
+            "tags": "['architecture', 'security', 'password-validation']"
+          }
+        }
+      ],
+      "elapsed_s": 279.29,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'category': expected 'software', got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "status": "draft",
+            "lifecycle_stage": "development"
+          }
+        }
+      ],
+      "elapsed_s": 138.34,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'include_stats': expected True, got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "{{project_id}}",
+            "include_workunits": "True",
+            "include_assets": "True"
+          }
+        }
+      ],
+      "elapsed_s": 186.74,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "passed": true,
+      "score": 0.8,
+      "details": [
+        "update_mask.paths missing 'priority'",
+        "update_mask.paths missing 'tags'"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": "['priority', 'tags']",
+            "priority": "urgent",
+            "tags": "['bug', 'authentication', 'critical']"
+          }
+        }
+      ],
+      "elapsed_s": 126.33,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "passed": true,
+      "score": 0.8,
+      "details": [
+        "update_mask.paths missing 'status'",
+        "update_mask.paths missing 'completion_notes'"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": "status,completion_notes",
+            "status": "completed",
+            "completion_notes": "The password validation was moved to the backend, all special characters now work, and 12 regression tests were added."
+          }
+        }
+      ],
+      "elapsed_s": 93.62,
+      "error": null
+    }
+  ]
+}

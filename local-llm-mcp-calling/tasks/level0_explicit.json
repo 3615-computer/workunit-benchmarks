@@ -1,0 +1,232 @@
+{
+  "level": 0,
+  "description": "Level 0: Explicit tool calling. The prompt names the exact tool and provides all parameters. The model only needs to format and emit a valid tool call. Tests: can the model follow explicit instructions and produce a well-formed function call?",
+  "tasks": [
+    {
+      "id": "L0-01",
+      "name": "Ping the MCP server",
+      "tool": "ping",
+      "prompt": "Call the `ping` tool with the message \"hello from benchmark\".",
+      "expected_tool": "ping",
+      "expected_params": {
+        "message": "hello from benchmark"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["message"],
+        "param_exact": { "message": "hello from benchmark" }
+      },
+      "notes": "Sanity check. Tests basic tool invocation."
+    },
+    {
+      "id": "L0-02",
+      "name": "Get authenticated user",
+      "tool": "get_authenticated_user",
+      "prompt": "Call the `get_authenticated_user` tool to retrieve the current user's details.",
+      "expected_tool": "get_authenticated_user",
+      "expected_params": {},
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": [],
+        "success_signal": "response contains user id"
+      },
+      "notes": "No parameters needed. Tests zero-parameter tool invocation."
+    },
+    {
+      "id": "L0-03",
+      "name": "Create a project",
+      "tool": "create_project",
+      "prompt": "Call the `create_project` tool with these exact parameters: name=\"Benchmark Test Project\", description=\"Created during MCP benchmark testing\", status=\"active\".",
+      "expected_tool": "create_project",
+      "expected_params": {
+        "name": "Benchmark Test Project",
+        "description": "Created during MCP benchmark testing",
+        "status": "active"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["name"],
+        "param_exact": {
+          "name": "Benchmark Test Project",
+          "status": "active"
+        }
+      },
+      "notes": "Tests string parameter passing. Records returned project_id for downstream tasks."
+    },
+    {
+      "id": "L0-04",
+      "name": "Create a workunit",
+      "tool": "create_workunit",
+      "prompt": "Call the `create_workunit` tool with these exact parameters: name=\"Hello World\", problem_statement=\"This is a test workunit created during the MCP benchmark.\", success_criteria=\"The workunit exists and has the correct name.\", project_id=\"{{project_id}}\", priority=\"normal\".",
+      "expected_tool": "create_workunit",
+      "expected_params": {
+        "name": "Hello World",
+        "problem_statement": "This is a test workunit created during the MCP benchmark.",
+        "success_criteria": "The workunit exists and has the correct name.",
+        "priority": "normal"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["name", "problem_statement", "success_criteria"],
+        "param_exact": {
+          "name": "Hello World",
+          "priority": "normal"
+        }
+      },
+      "notes": "Tests required + optional params. project_id injected from L0-03 result."
+    },
+    {
+      "id": "L0-05",
+      "name": "Create a task in a workunit",
+      "tool": "create_task",
+      "prompt": "Call the `create_task` tool with these exact parameters: workunit_id=\"{{workunit_id}}\", title=\"Write unit tests\", description=\"Add comprehensive unit tests for the authentication module.\", priority=\"high\", status=\"todo\".",
+      "expected_tool": "create_task",
+      "expected_params": {
+        "title": "Write unit tests",
+        "description": "Add comprehensive unit tests for the authentication module.",
+        "priority": "high",
+        "status": "todo"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["workunit_id", "title"],
+        "param_exact": {
+          "title": "Write unit tests",
+          "priority": "high",
+          "status": "todo"
+        }
+      },
+      "notes": "workunit_id injected from L0-04 result."
+    },
+    {
+      "id": "L0-06",
+      "name": "Get a workunit with tasks",
+      "tool": "get_workunit",
+      "prompt": "Call the `get_workunit` tool with id=\"{{workunit_id}}\", include_tasks=true, and include_ai_context=true.",
+      "expected_tool": "get_workunit",
+      "expected_params": {
+        "include_tasks": true,
+        "include_ai_context": true
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id"],
+        "param_exact": {
+          "include_tasks": true,
+          "include_ai_context": true
+        }
+      },
+      "notes": "Tests boolean parameter handling."
+    },
+    {
+      "id": "L0-07",
+      "name": "Update a task status",
+      "tool": "update_task",
+      "prompt": "Call the `update_task` tool with id=\"{{task_id}}\", status=\"in_progress\", and update_mask={\"paths\":[\"status\"]}.",
+      "expected_tool": "update_task",
+      "expected_params": {
+        "status": "in_progress",
+        "update_mask": { "paths": ["status"] }
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id", "update_mask"],
+        "param_exact": {
+          "status": "in_progress",
+          "update_mask": { "paths": ["status"] }
+        }
+      },
+      "notes": "Tests nested object parameter (update_mask). This is the hardest L0 task."
+    },
+    {
+      "id": "L0-08",
+      "name": "Save a context atom",
+      "tool": "save_context",
+      "prompt": "Call the `save_context` tool with these exact parameters: workunit_id=\"{{workunit_id}}\", atom_type=\"progress\", title=\"Benchmark test completed\", content=\"This context atom was saved as part of the MCP benchmark test suite.\", importance=\"normal\".",
+      "expected_tool": "save_context",
+      "expected_params": {
+        "atom_type": "progress",
+        "title": "Benchmark test completed",
+        "content": "This context atom was saved as part of the MCP benchmark test suite.",
+        "importance": "normal"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["workunit_id", "atom_type", "title", "content"],
+        "param_exact": {
+          "atom_type": "progress",
+          "importance": "normal"
+        }
+      },
+      "notes": "Tests enum parameters (atom_type, importance)."
+    },
+    {
+      "id": "L0-09",
+      "name": "Search for workunits",
+      "tool": "search",
+      "prompt": "Call the `search` tool with query=\"Hello World\", result_types=[\"workunit\"], and page_size=10.",
+      "expected_tool": "search",
+      "expected_params": {
+        "query": "Hello World",
+        "result_types": ["workunit"],
+        "page_size": 10
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["query"],
+        "param_exact": {
+          "query": "Hello World",
+          "result_types": ["workunit"],
+          "page_size": 10
+        }
+      },
+      "notes": "Tests array parameter (result_types) and integer parameter."
+    },
+    {
+      "id": "L0-10",
+      "name": "Create a knowledge asset",
+      "tool": "create_asset",
+      "prompt": "Call the `create_asset` tool with these exact parameters: asset_type=\"knowledge\", name=\"API Documentation\", description=\"Reference documentation for the REST API.\", category=\"documentation\", format=\"document\", status=\"draft\".",
+      "expected_tool": "create_asset",
+      "expected_params": {
+        "asset_type": "knowledge",
+        "name": "API Documentation",
+        "description": "Reference documentation for the REST API.",
+        "category": "documentation",
+        "format": "document",
+        "status": "draft"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["asset_type", "name"],
+        "param_exact": {
+          "asset_type": "knowledge",
+          "category": "documentation",
+          "format": "document"
+        }
+      },
+      "notes": "Tests type-conditional parameters (format is knowledge-only)."
+    },
+    {
+      "id": "L0-11",
+      "name": "Update a workunit status to completed",
+      "tool": "update_workunit",
+      "prompt": "Call the `update_workunit` tool with id=\"{{workunit_id}}\", status=\"completed\", completion_notes=\"Benchmark test workunit successfully completed.\", and update_mask={\"paths\":[\"status\",\"completion_notes\"]}.",
+      "expected_tool": "update_workunit",
+      "expected_params": {
+        "status": "completed",
+        "completion_notes": "Benchmark test workunit successfully completed.",
+        "update_mask": { "paths": ["status", "completion_notes"] }
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id", "update_mask"],
+        "param_exact": {
+          "status": "completed",
+          "update_mask": { "paths": ["status", "completion_notes"] }
+        }
+      },
+      "notes": "Tests update_mask with multiple paths and status-conditional field."
+    }
+  ]
+}

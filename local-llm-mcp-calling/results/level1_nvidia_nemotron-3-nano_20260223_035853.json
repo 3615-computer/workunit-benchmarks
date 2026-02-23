@@ -1,0 +1,314 @@
+{
+  "level": 1,
+  "model": "nvidia/nemotron-3-nano",
+  "tool_trained": true,
+  "timestamp": "2026-02-23T03:58:53.821433",
+  "summary": {
+    "total": 10,
+    "passed": 6,
+    "pass_rate": 0.6,
+    "avg_score": 0.652
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "status": "active",
+            "tags": [
+              "mobile",
+              "redesign",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 16.91,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "problem_statement": "Users can't log in when they have special characters in their password.",
+            "name": "Fix Login Page Bug",
+            "success_criteria": "All character types are supported and there are regression tests.",
+            "project_id": "{{project_id}}",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 54.51,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "passed": false,
+      "score": 0.16666666666666666,
+      "details": [
+        "Expected 3\u00d7 create_task, got 1"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Reproduce the bug locally",
+            "priority": "high",
+            "status": "todo"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 139.33,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 84.88,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "passed": true,
+      "score": 0.9,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): 'include_tasks'='True' (want True)",
+        "Step 2 (get_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Fix Login Page Bug"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Login Page Bug"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "page_size": 10,
+            "query": "login page bug",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Login Page Bug"
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          }
+        }
+      ],
+      "turns": 6,
+      "elapsed_s": 418.61,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "passed": false,
+      "score": 0.6,
+      "details": [
+        "Missing required param: 'atom_type'",
+        "'atom_type': expected 'decision', got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Backend password validation fix",
+            "content": "We chose to fix the password validation on the backend rather than the frontend because it is more secure. This is a high-importance architectural decision.",
+            "importance": "high",
+            "tags": [
+              "security",
+              "password-validation",
+              "architecture"
+            ],
+            "strength": "soft"
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "decision",
+            "title": "Backend password validation fix",
+            "content": "We chose to fix the password validation on the backend rather than the frontend because it is more secure. This is a high-importance architectural decision.",
+            "importance": "high",
+            "tags": [
+              "security",
+              "password-validation",
+              "architecture"
+            ],
+            "strength": "soft"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 228.91,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "lifecycle_stage": "development",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "category": "software",
+            "asset_type": "product",
+            "status": "draft",
+            "name": "Workunit Mobile SDK"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 34.45,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'include_stats': expected True, got 'True'"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "{{project_id}}",
+            "include_stats": "True"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 89.48,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "tags"
+              ]
+            },
+            "priority": "urgent",
+            "tags": [
+              "bug",
+              "authentication",
+              "critical"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 65.33,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 117.16,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

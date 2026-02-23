@@ -1,0 +1,215 @@
+{
+  "level": 2,
+  "model": "mistralai/magistral-small-2509",
+  "tool_trained": true,
+  "timestamp": "2026-02-23T01:29:29.263553",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.562
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode for our app to improve user experience during low-light conditions.",
+            "status": "active",
+            "tags": [
+              "ui",
+              "ux",
+              "dark-mode"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode",
+            "problem_statement": "The app currently lacks a dark mode, which is important for users who prefer using the app in low-light conditions or at night. This can lead to eye strain and reduced usability for these users.",
+            "success_criteria": "Dark mode should be fully implemented with all UI components properly themed. Users should be able to toggle between light and dark modes easily. The feature should not break existing functionality and should pass all visual tests.",
+            "description": "This workunit covers the implementation of a system-wide dark mode for our app, including theming for all screens and components.",
+            "project_id": "5556ff1f2458425e919048e8fe658836",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 26.07,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 22.0,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": ""
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "06045424befe4ba488aabaa257ffe94c",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review",
+            "content": "This workunit was reviewed during the quarterly audit. Its current status was confirmed as active."
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 11.3,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 7.49,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design",
+            "category": "documentation"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "d8d2e7b38ebc42bf9a24f69aede3e5f0",
+            "asset_id": "97bb7afda2514df88f0fd850e884e083",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 17.98,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 9.45,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 11.72,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "level": 2,
+  "model": "nvidia/nemotron-3-nano",
+  "tool_trained": true,
+  "timestamp": "2026-02-23T04:27:21.761914",
+  "summary": {
+    "total": 7,
+    "passed": 1,
+    "pass_rate": 0.143,
+    "avg_score": 0.505
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Implementation of dark mode UI toggle and theming system.",
+            "tags": [
+              "dark-mode",
+              "ui",
+              "theme"
+            ],
+            "name": "Dark Mode Feature"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 222.31,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out after 300s (5 turns completed)",
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "status": "draft",
+            "problem_statement": "Users are not notified when workunits they are following or have subscribed to are updated. This leads to missed updates and reduced collaboration. We need to implement a notification system that sends email and in-app notifications to relevant users when workunit status changes, comments are added, or related assets are updated.",
+            "success_criteria": "1. Notifications are sent within 5 seconds of workunit status change. 2. All subscribed users receive notifications via their preferred channel(s). 3. Notification delivery reliability is 99% over a 30-day period. 4. Users can configure notification preferences. 5. Documentation and admin UI for managing notifications are delivered.",
+            "name": "Implement User Notifications",
+            "description": "The feature will involve: (a) designing a notification service that listens to workunit update events; (b) implementing email and in-app notification channels; (c) adding subscription management for users to follow workunits; (d) integrating with existing workunit update pipeline; (e) testing with unit, integration, and end-to-end tests; (f) releasing to production with monitoring and alerting; (g) documenting the API and user configuration steps.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "tags": [
+              "notifications",
+              "user-experience",
+              "backend"
+            ]
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Implementation of user notifications for workunit updates",
+            "name": "User Notifications Implementation",
+            "status": "planning",
+            "tags": [
+              "notifications",
+              "feature"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "status": "draft",
+            "tags": [
+              "notifications",
+              "feature"
+            ],
+            "problem_statement": "The platform lacks a system to notify users about updates to workunits they are following or assigned to. Users need real-time notifications via email and in-app channels to stay informed about status changes, comments, and task completions.",
+            "success_criteria": "1. Users receive email notifications when a workunit they are assigned to or watching changes status. 2. In-app notification center updates in real-time. 3. Users can configure notification preferences. 4. Notification delivery reliability of 99.9% SLA. 5. All notification code is tested with unit and integration tests.",
+            "name": "Implement User Notifications",
+            "project_id": "{{project_id}}",
+            "description": "Implement a comprehensive notification system for workunit updates, including email and in-app notifications, user preference settings, and a notification service backend.",
+            "priority": "high"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Project to implement user notifications for workunit updates, including backend service, frontend UI, and delivery mechanisms.",
+            "tags": [
+              "notifications",
+              "user-management",
+              "workflow"
+            ],
+            "name": "User Notifications Implementation"
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 383.58,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 88.35,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out after 300s (8 turns completed)",
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "notifications"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit",
+              "task",
+              "asset"
+            ],
+            "query": "notification"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "notif"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "websocket"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "notifications"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "architectural"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "turns": 8,
+      "elapsed_s": 325.88,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "REST API redesign work",
+            "name": "API v2",
+            "repo_url": "https://github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "category": "documentation",
+            "description": "Document describing the new API design for the REST API redesign.",
+            "name": "API v2 Design Spec",
+            "organization_id": "00000000000000000000000000000000",
+            "asset_type": "knowledge"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "asset_id": "486240f21ed6459d8bdfd1fc27994e93",
+            "project_id": "2bd5b55e3cbf4e3a8a8ef3c848685b40",
+            "notes": "Link knowledge asset describing the new API design to the API v2 project.",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 74.27,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.4,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'='True' (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 327.01,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.2,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'='True' (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 286.27,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

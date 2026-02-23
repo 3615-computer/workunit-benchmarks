@@ -1,0 +1,180 @@
+{
+  "level": 2,
+  "model": "mistralai/ministral-3-3b",
+  "tool_trained": true,
+  "timestamp": "2026-02-22T10:06:21.971913",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.369
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_project): not called",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity..."
+          }
+        }
+      ],
+      "elapsed_s": 0.13,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Develop and deploy a system for sending notifications to users when workunits are updated (e.g., status changes, comments added, or deadlines approaching). This includes determining the best notification channels (email, in-app alerts, push notifications), setting up real-time event tracking, and ensuring compliance with privacy regulations like GDPR. The goal is to improve user engagement by keeping them informed about relevant updates without overwhelming them with unnecessary notifications.",
+            "success_criteria": "1. A functional notification system is integrated into the Workunit platform that supports multiple channels (email, in-app alerts).\n2. Users receive timely and contextually relevant notifications for workunit status changes, comments, or deadlines.\n3. Notification frequency and content are optimized to balance user engagement with privacy compliance.\n4. The system logs all sent notifications for auditability and analytics purposes.\n5. User preferences for notification types (e.g., email vs. in-app) can be customized via the platform interface.",
+            "project_id": "{{project_id}}",
+            "priority": "urgent",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 1.45,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        }
+      ],
+      "elapsed_s": 0.21,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): not called",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "",
+            "atom_type": "decision",
+            "title": "Switch from Polling to WebSockets for Real-Time Notifications",
+            "content": "The team has decided to implement WebSockets instead of polling for real-time notifications. This change is driven by the need for lower latency and more efficient communication between clients and servers. Key tradeoffs considered include:\n\n1. **Performance:** WebSockets provide bidirectional, low-latency communication compared to HTTP polling, which can be inefficient due to repeated round-trips.\n2. **Scalability:** WebSocket-based systems are generally more scalable as they allow multiple connections to a single server.\n3. **Complexity:** Implementing WebSockets introduces additional complexity in terms of connection management, state handling, and potential overhead compared to simpler polling mechanisms.\n4. **Compatibility:** Ensuring backward compatibility with existing clients and servers will require careful planning.\n\nThis architectural decision aims to enhance the real-time notification feature's responsiveness and reliability.",
+            "importance": "critical",
+            "tags": [
+              "architecture",
+              "real-time"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 1.39,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": false,
+      "score": 0.3333333333333333,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): not called",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work.",
+            "status": "planning",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        }
+      ],
+      "elapsed_s": 0.32,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 0.19,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 0.17,
+      "error": null
+    }
+  ]
+}

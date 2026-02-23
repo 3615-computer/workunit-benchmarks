@@ -1,0 +1,451 @@
+{
+  "level": 2,
+  "model": "baidu/ernie-4.5-21b-a3b",
+  "tool_trained": false,
+  "timestamp": "2026-02-23T01:25:24.808396",
+  "summary": {
+    "total": 7,
+    "passed": 2,
+    "pass_rate": 0.286,
+    "avg_score": 0.512
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Implementation",
+            "description": "Project to track dark mode feature development",
+            "status": "planning",
+            "organization_id": "default"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 2.81,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Implement User Notifications Project",
+            "description": "Project for user notification feature implementation",
+            "status": "planning",
+            "organization_id": "{{organization_id}}",
+            "owner_id": "{{user_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 4.1,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "",
+            "page_size": 50,
+            "page_number": 1
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Authentication Review",
+            "problem_statement": "Review current authentication system and processes",
+            "success_criteria": "Identify vulnerabilities and confirm compliance with security standards",
+            "project_id": "",
+            "status": "draft",
+            "priority": "normal"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Authentication Audit Project",
+            "description": "Project for quarterly authentication review",
+            "status": "planning",
+            "tags": [
+              "security",
+              "audit"
+            ],
+            "repo_url": "",
+            "default_branch": "main",
+            "organization_id": "",
+            "owner_id": ""
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Authentication Review",
+            "problem_statement": "Review current authentication system and processes",
+            "success_criteria": "Identify vulnerabilities and confirm compliance with security standards",
+            "project_id": "2c77e0a0e1eb48f688b6650c8b6a903e",
+            "status": "draft",
+            "priority": "normal"
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 14.24,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "",
+            "page_size": 50,
+            "page_number": 1
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "494837f74c7e480cb968ce7d1602a984",
+            "include_tasks": false,
+            "include_ai_context": false,
+            "include_assets": false,
+            "include_task_comments": false,
+            "include_task_context": false,
+            "include_task_dependencies": false,
+            "include_task_time_logs": false
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "494837f74c7e480cb968ce7d1602a984",
+            "title": "WebSockets vs Polling Tradeoffs Analysis",
+            "description": "Analyze the tradeoffs between WebSockets and polling for real-time notifications. Include performance, scalability, latency, resource usage, complexity, and security implications. Document key findings and recommendations.",
+            "status": "todo",
+            "priority": "normal"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 17.92,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "Project for REST API redesign work.",
+            "status": "planning",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design.",
+            "category": "documentation"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "95f03831dbbd418493fd1e006823fbdc",
+            "asset_id": "afc2954bb9544bcbbdcf6f3837cb61d1",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 7.85,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": true,
+      "score": 0.9,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'=None (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "priority"
+              ]
+            },
+            "title": null,
+            "description": null,
+            "status": null,
+            "problem_statement": null,
+            "success_criteria": null,
+            "tags": null,
+            "due_date": null,
+            "estimated_hours": null,
+            "position": null
+          }
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "priority"
+              ]
+            },
+            "title": {
+              "operator": "in",
+              "values": [
+                "test",
+                "testing"
+              ]
+            },
+            "description": null,
+            "status": null,
+            "problem_statement": null,
+            "success_criteria": null,
+            "tags": null,
+            "due_date": null,
+            "estimated_hours": null,
+            "position": null
+          }
+        },
+        {
+          "name": "get_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_comments": false,
+            "include_dependencies": false,
+            "include_time_logs": false
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Test Project",
+            "description": "Project for testing workflows",
+            "status": "planning",
+            "tags": [],
+            "repo_url": null,
+            "default_branch": "main",
+            "organization_id": null,
+            "owner_id": null
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Test Project",
+            "description": "Project for testing workflows",
+            "status": "planning",
+            "tags": [],
+            "repo_url": null,
+            "default_branch": "main",
+            "organization_id": "your_org_id",
+            "owner_id": "your_user_id"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Testing Workflows",
+            "description": "Project for organizing test cases and bug tracking",
+            "status": "planning",
+            "tags": [
+              "testing",
+              "quality-assurance"
+            ],
+            "repo_url": "https://github.com/alyx/test-cases",
+            "default_branch": "main",
+            "organization_id": "your_org_id",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Testing Workflows",
+            "description": "Project for organizing test cases and bug tracking",
+            "status": "planning",
+            "tags": [
+              "testing",
+              "quality-assurance"
+            ],
+            "repo_url": "https://github.com/alyx/test-cases",
+            "default_branch": "main",
+            "organization_id": "your_correct_org_id",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Testing Workflows",
+            "description": "Project for organizing test cases and bug tracking",
+            "status": "planning",
+            "tags": [
+              "testing",
+              "quality-assurance"
+            ],
+            "repo_url": "https://github.com/alyx/test-cases",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 10,
+      "elapsed_s": 30.52,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): \u2713",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "title": "",
+            "description": "",
+            "problem_statement": "",
+            "success_criteria": "",
+            "priority": "",
+            "tags": [],
+            "assigned_to": "",
+            "due_date": "",
+            "estimated_hours": null,
+            "position": null,
+            "status": "done"
+          }
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "title": "",
+            "description": "",
+            "priority": "",
+            "tags": [],
+            "assigned_to": "",
+            "due_date": "",
+            "estimated_hours": null,
+            "position": null
+          }
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            }
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 13.21,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

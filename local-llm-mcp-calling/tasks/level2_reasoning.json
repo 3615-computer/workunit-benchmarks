@@ -1,0 +1,195 @@
+{
+  "level": 2,
+  "description": "Level 2: High-level intent requiring multi-step reasoning. The prompt describes a goal in human terms — the model must determine which tools to call, in what order, with what parameters, and how to use results from previous calls. Tests: can the model act as a capable AI agent for real project management tasks?",
+  "tasks": [
+    {
+      "id": "L2-01",
+      "name": "Bootstrap a new feature project",
+      "prompt": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "expected_tool_sequence": ["create_project", "create_workunit"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "create_project",
+            "must_have_params": ["name"],
+            "name_must_relate_to": "dark mode"
+          },
+          {
+            "tool": "create_workunit",
+            "must_have_params": ["name", "problem_statement", "success_criteria", "project_id"],
+            "project_id_must_match": "previous_create_project_result"
+          }
+        ],
+        "success_criteria": "project_id from step 1 used as project_id in step 2"
+      },
+      "notes": "Tests ID chaining: model must use project ID from create_project in create_workunit."
+    },
+    {
+      "id": "L2-02",
+      "name": "Break down a feature into tasks",
+      "prompt": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" in project {{project_id}} and add all the implementation tasks to it. Be thorough — this is a real feature, not a toy example.",
+      "expected_tool_sequence": ["create_workunit", "create_task (multiple)"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "create_workunit",
+            "must_have_params": ["name", "problem_statement", "success_criteria"],
+            "param_exact": { "name": "Implement User Notifications" }
+          },
+          {
+            "tool": "create_task",
+            "call_count_min": 3,
+            "each_must_have": ["workunit_id", "title"],
+            "workunit_id_must_match": "previous_create_workunit_result"
+          }
+        ],
+        "success_criteria": "≥3 meaningful tasks created using workunit_id from step 1"
+      },
+      "notes": "Tests reasoning quality: are the tasks actually meaningful for building notifications? Are dependencies considered?"
+    },
+    {
+      "id": "L2-03",
+      "name": "Find and update stale work",
+      "prompt": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add a context note recording that it was reviewed during the quarterly audit and its current status was confirmed.",
+      "expected_tool_sequence": ["search", "get_workunit (for each)", "save_context (for each)"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "search",
+            "must_have_params": ["query"],
+            "query_must_contain": "auth"
+          },
+          {
+            "tool": "save_context",
+            "call_count_min": 1,
+            "each_must_have": ["workunit_id", "atom_type", "title", "content"],
+            "atom_type_must_be": "insight"
+          }
+        ],
+        "success_criteria": "save_context called for each relevant workunit found by search"
+      },
+      "notes": "Tests: search → iterate results → conditional action. Multi-step with branching."
+    },
+    {
+      "id": "L2-04",
+      "name": "Document an architectural decision",
+      "prompt": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "expected_tool_sequence": ["search", "save_context"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "search",
+            "must_have_params": ["query"],
+            "query_must_relate_to": "notifications"
+          },
+          {
+            "tool": "save_context",
+            "must_have_params": ["workunit_id", "atom_type", "title", "content"],
+            "param_exact": {
+              "atom_type": "decision",
+              "importance": "critical"
+            },
+            "content_must_mention": ["WebSocket", "polling"],
+            "workunit_id_must_match": "search_result"
+          }
+        ],
+        "success_criteria": "decision atom with importance=critical saved to correct workunit"
+      },
+      "notes": "Tests: critical importance inference, content quality (tradeoffs), correct atom_type."
+    },
+    {
+      "id": "L2-05",
+      "name": "Create a project with linked asset",
+      "prompt": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project — it's a document describing the new API design.",
+      "expected_tool_sequence": ["create_project", "create_asset", "project_asset_link"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "create_project",
+            "must_have_params": ["name"],
+            "param_present": ["repo_url", "default_branch"],
+            "param_exact": { "name": "API v2" }
+          },
+          {
+            "tool": "create_asset",
+            "must_have_params": ["asset_type", "name"],
+            "param_exact": {
+              "asset_type": "knowledge",
+              "format": "document"
+            }
+          },
+          {
+            "tool": "project_asset_link",
+            "must_have_params": ["project_id", "asset_id", "action"],
+            "param_exact": { "action": "link" },
+            "project_id_must_match": "step1_result",
+            "asset_id_must_match": "step2_result"
+          }
+        ],
+        "success_criteria": "all three tools called with correct IDs chained from previous results"
+      },
+      "notes": "Tests three-step ID chaining. Most complex parameter passing in benchmark."
+    },
+    {
+      "id": "L2-06",
+      "name": "Triage and prioritize tasks",
+      "prompt": "Look at the tasks in workunit {{workunit_id}}. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "expected_tool_sequence": ["get_workunit", "update_task (conditional, multiple)"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "get_workunit",
+            "must_have_params": ["id"],
+            "param_exact": { "include_tasks": true }
+          },
+          {
+            "tool": "update_task",
+            "call_count_min": 1,
+            "each_must_have": ["id", "update_mask"],
+            "update_mask_must_contain": ["priority"]
+          }
+        ],
+        "success_criteria": "update_task called for tasks matching rules with correct priority values"
+      },
+      "notes": "Tests: read → apply conditional logic → update. Requires understanding task content."
+    },
+    {
+      "id": "L2-07",
+      "name": "End-of-sprint workunit closeout",
+      "prompt": "It's the end of the sprint. For workunit {{workunit_id}}: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "expected_tool_sequence": ["get_workunit", "update_task (multiple)", "save_context", "update_workunit"],
+      "validation": {
+        "type": "reasoning_chain",
+        "steps": [
+          {
+            "tool": "get_workunit",
+            "param_exact": { "include_tasks": true }
+          },
+          {
+            "tool": "update_task",
+            "call_count_min": 1,
+            "param_exact": { "status": "done" }
+          },
+          {
+            "tool": "save_context",
+            "param_exact": { "atom_type": "progress" }
+          },
+          {
+            "tool": "update_workunit",
+            "param_exact": { "status": "completed" },
+            "param_present": ["completion_notes"]
+          }
+        ],
+        "success_criteria": "correct ordering: get → update tasks → save context → complete workunit",
+        "ordering_matters": true
+      },
+      "notes": "Tests four-step chain with correct ordering. Most complex Level 2 task."
+    }
+  ]
+}

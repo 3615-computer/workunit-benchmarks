@@ -1,0 +1,295 @@
+{
+  "level": 0,
+  "model": "deepseek/deepseek-r1-0528-qwen3-8b",
+  "tool_trained": false,
+  "timestamp": "2026-02-23T00:41:46.854424",
+  "summary": {
+    "total": 11,
+    "passed": 2,
+    "pass_rate": 0.182,
+    "avg_score": 0.182
+  },
+  "results": [
+    {
+      "task_id": "L0-01",
+      "task_name": "Ping the MCP server",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Wrong tool: called '...', expected 'ping'"
+      ],
+      "tool_calls": [
+        {
+          "name": "...",
+          "arguments": {}
+        },
+        {
+          "name": "...",
+          "arguments": {}
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          }
+        }
+      ],
+      "turns": 11,
+      "elapsed_s": 45.67,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-02",
+      "task_name": "Get authenticated user",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.55,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-03",
+      "task_name": "Create a project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Benchmark Test Project",
+            "description": "",
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.53,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-04",
+      "task_name": "Create a workunit",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Wrong tool: called 'tool_name', expected 'create_workunit'"
+      ],
+      "tool_calls": [
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "workunit_id": "workunit"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "workunit",
+            "problem_statement": "max 1000 chars"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "test"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "turns": 12,
+      "elapsed_s": 114.19,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-05",
+      "task_name": "Create a task in a workunit",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.59,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-06",
+      "task_name": "Get a workunit with tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.7,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-07",
+      "task_name": "Update a task status",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 37.47,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-08",
+      "task_name": "Save a context atom",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.45,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-09",
+      "task_name": "Search for workunits",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.73,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-10",
+      "task_name": "Create a knowledge asset",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.72,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-11",
+      "task_name": "Update a workunit status to completed",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 47.59,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

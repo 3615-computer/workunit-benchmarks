@@ -1,0 +1,260 @@
+{
+  "level": 0,
+  "model": "mistralai/magistral-small-2509",
+  "tool_trained": true,
+  "timestamp": "2026-02-22T10:47:28.428226",
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "pass_rate": 1.0,
+    "avg_score": 1.0
+  },
+  "results": [
+    {
+      "task_id": "L0-01",
+      "task_name": "Ping the MCP server",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          }
+        }
+      ],
+      "elapsed_s": 2.82,
+      "error": null
+    },
+    {
+      "task_id": "L0-02",
+      "task_name": "Get authenticated user",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "elapsed_s": 1.07,
+      "error": null
+    },
+    {
+      "task_id": "L0-03",
+      "task_name": "Create a project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Benchmark Test Project",
+            "description": "Created during MCP benchmark testing",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 3.8,
+      "error": null
+    },
+    {
+      "task_id": "L0-04",
+      "task_name": "Create a workunit",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Hello World",
+            "problem_statement": "This is a test workunit created during the MCP benchmark.",
+            "success_criteria": "The workunit exists and has the correct name.",
+            "project_id": "{{project_id}}",
+            "priority": "normal"
+          }
+        }
+      ],
+      "elapsed_s": 6.07,
+      "error": null
+    },
+    {
+      "task_id": "L0-05",
+      "task_name": "Create a task in a workunit",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Write unit tests",
+            "description": "Add comprehensive unit tests for the authentication module.",
+            "priority": "high",
+            "status": "todo"
+          }
+        }
+      ],
+      "elapsed_s": 4.53,
+      "error": null
+    },
+    {
+      "task_id": "L0-06",
+      "task_name": "Get a workunit with tasks",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true,
+            "include_ai_context": true
+          }
+        }
+      ],
+      "elapsed_s": 4.4,
+      "error": null
+    },
+    {
+      "task_id": "L0-07",
+      "task_name": "Update a task status",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{task_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          }
+        }
+      ],
+      "elapsed_s": 4.09,
+      "error": null
+    },
+    {
+      "task_id": "L0-08",
+      "task_name": "Save a context atom",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "progress",
+            "title": "Benchmark test completed",
+            "content": "This context atom was saved as part of the MCP benchmark test suite.",
+            "importance": "normal"
+          }
+        }
+      ],
+      "elapsed_s": 5.55,
+      "error": null
+    },
+    {
+      "task_id": "L0-09",
+      "task_name": "Search for workunits",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Hello World",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        }
+      ],
+      "elapsed_s": 3.17,
+      "error": null
+    },
+    {
+      "task_id": "L0-10",
+      "task_name": "Create a knowledge asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API Documentation",
+            "description": "Reference documentation for the REST API.",
+            "category": "documentation",
+            "format": "document",
+            "status": "draft"
+          }
+        }
+      ],
+      "elapsed_s": 4.87,
+      "error": null
+    },
+    {
+      "task_id": "L0-11",
+      "task_name": "Update a workunit status to completed",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Benchmark test workunit successfully completed."
+          }
+        }
+      ],
+      "elapsed_s": 5.08,
+      "error": null
+    }
+  ]
+}

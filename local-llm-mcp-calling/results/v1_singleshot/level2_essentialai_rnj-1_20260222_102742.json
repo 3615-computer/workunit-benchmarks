@@ -1,0 +1,187 @@
+{
+  "level": 2,
+  "model": "essentialai/rnj-1",
+  "tool_trained": true,
+  "timestamp": "2026-02-22T10:27:42.721778",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.369
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "status": "active",
+            "description": "Track implementation of dark mode feature including UI/UX design, component styling, and user testing.",
+            "tags": [
+              "dark-mode",
+              "ui-ux"
+            ],
+            "name": "Dark Mode Feature"
+          }
+        }
+      ],
+      "elapsed_s": 2.28,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "status": "active",
+            "description": "Project for implementing user notifications system",
+            "tags": [
+              "notifications",
+              "workunits"
+            ],
+            "name": "User Notifications Implementation"
+          }
+        }
+      ],
+      "elapsed_s": 2.97,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "page_size": 10,
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 2.08,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "page_size": 10,
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 1.66,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": false,
+      "score": 0.3333333333333333,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): not called",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main",
+            "status": "active",
+            "description": "REST API redesign project",
+            "tags": [
+              "API",
+              "redesign"
+            ],
+            "name": "API v2"
+          }
+        }
+      ],
+      "elapsed_s": 1.93,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 3.26,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 1.89,
+      "error": null
+    }
+  ]
+}

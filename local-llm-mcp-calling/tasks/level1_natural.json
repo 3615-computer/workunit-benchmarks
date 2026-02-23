@@ -1,0 +1,208 @@
+{
+  "level": 1,
+  "description": "Level 1: Natural language with near-complete information. The prompt describes what to do in plain language and includes most parameter values explicitly. The model must identify the correct tool and map natural language to the right parameter names. Tests: can the model correctly translate a human request into a proper tool call without explicit function names?",
+  "tasks": [
+    {
+      "id": "L1-01",
+      "name": "Create a project from natural language",
+      "prompt": "Create a new project called \"Mobile App Redesign\". Set its status to active and add a description: \"Complete redesign of the mobile application with new UX patterns.\" Also add the tags: mobile, redesign, ux.",
+      "expected_tool": "create_project",
+      "expected_params": {
+        "name": "Mobile App Redesign",
+        "description": "Complete redesign of the mobile application with new UX patterns.",
+        "status": "active",
+        "tags": ["mobile", "redesign", "ux"]
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["name"],
+        "param_exact": {
+          "name": "Mobile App Redesign",
+          "status": "active"
+        },
+        "param_contains": {
+          "tags": ["mobile", "redesign", "ux"]
+        }
+      },
+      "notes": "Tests tag array and status enum from natural language."
+    },
+    {
+      "id": "L1-02",
+      "name": "Create a workunit with full details",
+      "prompt": "I need to track some work on fixing our login page. Create a workunit named \"Fix Login Page Bug\" in project {{project_id}}. The problem is that users can't log in when they have special characters in their password. We'll know it's done when all character types are supported and there are regression tests. Make it high priority.",
+      "expected_tool": "create_workunit",
+      "expected_params": {
+        "name": "Fix Login Page Bug",
+        "priority": "high"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["name", "problem_statement", "success_criteria"],
+        "param_exact": {
+          "name": "Fix Login Page Bug",
+          "priority": "high"
+        },
+        "param_present": ["problem_statement", "success_criteria", "project_id"]
+      },
+      "notes": "Model must derive problem_statement and success_criteria from narrative text."
+    },
+    {
+      "id": "L1-03",
+      "name": "Add three tasks to a workunit",
+      "prompt": "Add these three tasks to workunit {{workunit_id}}:\n1. \"Reproduce the bug locally\" - high priority\n2. \"Identify root cause\" - high priority  \n3. \"Write fix and add regression tests\" - normal priority\n\nAll should start as todo.",
+      "expected_tool": "create_task",
+      "expected_params_sequence": [
+        { "title": "Reproduce the bug locally", "priority": "high", "status": "todo" },
+        { "title": "Identify root cause", "priority": "high", "status": "todo" },
+        { "title": "Write fix and add regression tests", "priority": "normal", "status": "todo" }
+      ],
+      "validation": {
+        "type": "multi_tool_call",
+        "tool": "create_task",
+        "call_count": 3,
+        "each_must_have": ["workunit_id", "title"],
+        "titles_must_include": [
+          "Reproduce the bug locally",
+          "Identify root cause",
+          "Write fix and add regression tests"
+        ]
+      },
+      "notes": "Tests multi-call reasoning. Model must call create_task 3 times, not batch them."
+    },
+    {
+      "id": "L1-04",
+      "name": "Update task to in-progress",
+      "prompt": "Mark task {{task_id}} as currently in progress.",
+      "expected_tool": "update_task",
+      "expected_params": {
+        "status": "in_progress",
+        "update_mask": { "paths": ["status"] }
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id", "update_mask"],
+        "param_exact": { "status": "in_progress" },
+        "param_present": ["update_mask"]
+      },
+      "notes": "Tests update_mask inference. Model must figure out it needs update_mask."
+    },
+    {
+      "id": "L1-05",
+      "name": "Search and retrieve a workunit",
+      "prompt": "Find the workunit called \"Fix Login Page Bug\" and get its full details including all tasks.",
+      "expected_tool_sequence": ["search", "get_workunit"],
+      "validation": {
+        "type": "multi_tool_sequence",
+        "steps": [
+          {
+            "tool": "search",
+            "must_have_params": ["query"],
+            "query_must_contain": "Login"
+          },
+          {
+            "tool": "get_workunit",
+            "must_have_params": ["id"],
+            "param_exact": { "include_tasks": true }
+          }
+        ]
+      },
+      "notes": "Tests two-step reasoning: search first, then retrieve with the found ID."
+    },
+    {
+      "id": "L1-06",
+      "name": "Save a decision context atom",
+      "prompt": "Save a context note on workunit {{workunit_id}} recording this decision: we chose to fix the password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+      "expected_tool": "save_context",
+      "expected_params": {
+        "atom_type": "decision",
+        "importance": "high"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["workunit_id", "atom_type", "title", "content"],
+        "param_exact": {
+          "atom_type": "decision",
+          "importance": "high"
+        },
+        "param_present": ["title", "content"]
+      },
+      "notes": "Tests correct atom_type selection and importance inference from 'high-importance'."
+    },
+    {
+      "id": "L1-07",
+      "name": "Create a product asset",
+      "prompt": "Create a new product asset called \"Workunit Mobile SDK\" in draft status. It's a software product currently in the development lifecycle stage. Add a description: \"iOS and Android SDK for integrating Workunit into mobile applications.\"",
+      "expected_tool": "create_asset",
+      "expected_params": {
+        "asset_type": "product",
+        "name": "Workunit Mobile SDK",
+        "status": "draft",
+        "category": "software",
+        "lifecycle_stage": "development"
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["asset_type", "name"],
+        "param_exact": {
+          "asset_type": "product",
+          "name": "Workunit Mobile SDK",
+          "lifecycle_stage": "development",
+          "category": "software"
+        }
+      },
+      "notes": "Tests asset_type selection and lifecycle_stage enum inference."
+    },
+    {
+      "id": "L1-08",
+      "name": "Get project details with stats",
+      "prompt": "Show me the details of project {{project_id}}, including how many workunits and assets it has.",
+      "expected_tool": "get_project",
+      "expected_params": {
+        "include_stats": true
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id"],
+        "param_exact": { "include_stats": true }
+      },
+      "notes": "Tests correct optional flag inference from 'how many' phrasing."
+    },
+    {
+      "id": "L1-09",
+      "name": "Update workunit priority and tags",
+      "prompt": "Update workunit {{workunit_id}}: change its priority to urgent, and set its tags to: bug, authentication, critical.",
+      "expected_tool": "update_workunit",
+      "expected_params": {
+        "priority": "urgent",
+        "tags": ["bug", "authentication", "critical"],
+        "update_mask": { "paths": ["priority", "tags"] }
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id", "update_mask"],
+        "param_exact": { "priority": "urgent" },
+        "param_contains": { "tags": ["bug", "authentication", "critical"] },
+        "update_mask_must_contain": ["priority", "tags"]
+      },
+      "notes": "Tests multi-field update_mask generation."
+    },
+    {
+      "id": "L1-10",
+      "name": "Complete a workunit with notes",
+      "prompt": "Mark workunit {{workunit_id}} as completed. Add completion notes explaining that the password validation was moved to the backend, all special characters now work, and 12 regression tests were added.",
+      "expected_tool": "update_workunit",
+      "expected_params": {
+        "status": "completed",
+        "update_mask": { "paths": ["status", "completion_notes"] }
+      },
+      "validation": {
+        "type": "tool_call_match",
+        "required_params": ["id", "update_mask"],
+        "param_exact": { "status": "completed" },
+        "param_present": ["completion_notes"],
+        "update_mask_must_contain": ["status", "completion_notes"]
+      },
+      "notes": "Tests completion_notes as a status-conditional field the model must infer."
+    }
+  ]
+}
