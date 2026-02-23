@@ -5,7 +5,7 @@
 
 ## TITLE
 
-I benchmarked 17 local LLMs on real MCP tool calling — single-shot AND agentic loop. The difference is massive.
+I tested 17 local LLMs on real tool calling: direct, NLP, and multi-step reasoning (single-shot & agentic). A 7B model topped the leaderboard.
 
 ---
 

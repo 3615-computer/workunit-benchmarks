@@ -6,7 +6,7 @@
 
 ## TITLE
 
-Single-shot vs. agentic loop: benchmarking 17 local LLMs on real MCP tool calling (hardware, methodology, and full results)
+17 local LLMs on real MCP tool calling — 3 levels (explicit, natural language, reasoning), single-shot vs agentic. Same models, wildly different rankings.
 
 ---
 
