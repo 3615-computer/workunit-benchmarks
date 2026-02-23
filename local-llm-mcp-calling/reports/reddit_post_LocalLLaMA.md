@@ -131,6 +131,8 @@ python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --r
 
 Requires LM Studio running locally. The benchmark runs against Workunit's MCP server, so you need a free account at [workunit.app](https://workunit.app) to get an MCP token. The tasks exercise a real project management API — there's no way to run it without an account because the MCP server needs to authenticate your calls and maintain state between tool invocations.
 
+**⚠️ Use a dedicated account.** The agentic runner deletes **all projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, you **will lose all your data**. Create a separate free account just for benchmarking. The runner will prompt for confirmation before starting, but don't rely on that — use a throwaway account.
+
 **Disclosure:** I ran these benchmarks against my local dev stack with direct database access for resets between models. I've since refactored the runner to point to `workunit.app` by default (MCP-based cleanup instead of direct SQL), but I haven't re-run the full suite against the production endpoint yet. If you hit issues running against `workunit.app`, please open an issue on the repo.
 
 The runner:
