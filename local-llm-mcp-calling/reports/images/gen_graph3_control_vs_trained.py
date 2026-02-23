@@ -11,33 +11,33 @@ import numpy as np
 # Individual model data
 # (ss_overall, ag_overall, tool_trained, short_label)
 individual = [
-    (60,  89, True,  "granite\n7B"),
-    (60,  88, True,  "qwen3-coder\n30B"),
-    (63,  85, True,  "magistral\n24B"),
-    (60,  85, True,  "qwen3-4b\n4B"),
-    (57,  85, True,  "gpt-oss\n20B"),
-    (63,  84, True,  "ministral-14b\n14B"),
+    (73,  89, True,  "granite\n7B"),
+    (71,  88, True,  "qwen3-coder\n30B"),
+    (78,  85, True,  "magistral\n24B"),
+    (74,  85, True,  "qwen3-4b\n4B"),
+    (72,  85, True,  "gpt-oss\n20B"),
+    (78,  84, True,  "ministral-14b\n14B"),
     ( 0,  83, False, "ernie-4.5\n21B"),
-    (82,  81, True,  "ministral-3b\n3B"),
+    (89,  81, True,  "ministral-3b\n3B"),
     ( 0,  78, False, "gemma-3\n12B"),
-    (60,  77, True,  "rnj-1\n8.3B"),
-    (50,  71, True,  "nemotron\n30B"),
-    (54,  68, True,  "glm-4.6v\n9.4B"),
-    (42,  64, False, "phi-4-rplus\n15B"),
-    (35,  61, True,  "glm-4.7\n30B"),
-    (35,  58, False, "qwen2.5-coder\n32B"),
+    (74,  77, True,  "rnj-1\n8.3B"),
+    (59,  71, True,  "nemotron\n30B"),
+    (67,  68, True,  "glm-4.6v\n9.4B"),
+    (48,  64, False, "phi-4-rplus\n15B"),
+    (44,  61, True,  "glm-4.7\n30B"),
+    (38,  58, False, "qwen2.5-coder\n32B"),
     ( 3,   6, False, "deepseek-r1\n8B"),
-    (60,   0, True,  "seed-oss\n36B"),
+    (71,   0, True,  "seed-oss\n36B"),
 ]
 
 trained = [(d[0], d[1], d[3]) for d in individual if d[2]]
 control = [(d[0], d[1], d[3]) for d in individual if not d[2]]
 
-# Four clearly distinct colors
-C_SS_TOOL = "#4a9eff"   # steel blue
-C_AG_TOOL = "#f97316"   # orange
-C_SS_CTRL = "#e040fb"   # magenta
-C_AG_CTRL = "#69e06e"   # lime green
+# IBM Design Library colorblind-safe palette (consistent with Graph 1)
+C_SS_TOOL = "#648FFF"   # blue
+C_AG_TOOL = "#FE6100"   # orange
+C_SS_CTRL = "#785EF0"   # purple
+C_AG_CTRL = "#FFB000"   # yellow
 
 fig, axes = plt.subplots(1, 2, figsize=(15, 7))
 fig.patch.set_facecolor("#0d1117")
@@ -51,9 +51,30 @@ ax = axes[0]
 tx = [d[0] for d in trained]
 ty = [d[1] for d in trained]
 ax.scatter(tx, ty, s=90, color=C_AG_TOOL, zorder=5, alpha=0.9, label="Tool-trained (12)")
+
+# Manual label offsets to reduce overlap in the dense cluster (ss≈71-78, ag≈77-89)
+trained_offsets = {}
+# granite 7B: ss=73, ag=89 — push up-right
+trained_offsets[("granite", 73, 89)]       = (5, 5)
+# qwen3-coder 30B: ss=71, ag=88 — push left
+trained_offsets[("qwen3-coder", 71, 88)]   = (-45, -8)
+# magistral 24B: ss=78, ag=85 — push right
+trained_offsets[("magistral", 78, 85)]     = (5, 4)
+# qwen3-4b 4B: ss=74, ag=85 — push left-down
+trained_offsets[("qwen3-4b", 74, 85)]      = (-42, -10)
+# gpt-oss 20B: ss=72, ag=85 — push left-up
+trained_offsets[("gpt-oss", 72, 85)]       = (-40, 5)
+# ministral-14b 14B: ss=78, ag=84 — push right-down
+trained_offsets[("ministral-14b", 78, 84)] = (5, -10)
+# rnj-1 8.3B: ss=74, ag=77 — push left
+trained_offsets[("rnj-1", 74, 77)]         = (-38, -4)
+
 for (ss, ag, label) in trained:
+    # Extract short name (first part before newline) for offset lookup
+    short = label.split("\n")[0]
+    offset = trained_offsets.get((short, ss, ag), (3, 3))
     ax.annotate(label, (ss, ag), fontsize=5.5, color="#c9d1d9",
-                xytext=(3, 3), textcoords="offset points", zorder=6)
+                xytext=offset, textcoords="offset points", zorder=6)
 
 cx = [d[0] for d in control]
 cy = [d[1] for d in control]
@@ -118,13 +139,13 @@ ss_ctrl_means    = [avg(ctrl_ss_L0),    avg(ctrl_ss_L1),    avg(ctrl_ss_L2)]
 ag_ctrl_means    = [avg(ctrl_ag_L0),    avg(ctrl_ag_L1),    avg(ctrl_ag_L2)]
 
 b1 = ax.bar(xpos - 1.5*bw, ss_trained_means, bw, color=C_SS_TOOL, alpha=0.90,
-            label="SS · tool-trained")
+            label="SS · tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
 b2 = ax.bar(xpos - 0.5*bw, ag_trained_means, bw, color=C_AG_TOOL, alpha=0.95,
-            label="AG · tool-trained")
+            label="AG · tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
 b3 = ax.bar(xpos + 0.5*bw, ss_ctrl_means,    bw, color=C_SS_CTRL, alpha=0.90,
-            label="SS · not tool-trained")
+            label="SS · not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
 b4 = ax.bar(xpos + 1.5*bw, ag_ctrl_means,    bw, color=C_AG_CTRL, alpha=0.95,
-            label="AG · not tool-trained")
+            label="AG · not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
 
 for bars in [b1, b2, b3, b4]:
     for bar in bars:
@@ -147,21 +168,16 @@ for spine in ax.spines.values():
 ax.yaxis.grid(True, color="#21262d", linewidth=0.6, linestyle="--")
 ax.set_axisbelow(True)
 
-# Annotate L2 not-tool-trained AG bar
-l2_ctrl_ag_h = ag_ctrl_means[2]
-ax.annotate("Not tool-trained\ncompetitive at L2\nin agentic loop",
-            xy=(xpos[2] + 1.5*bw, l2_ctrl_ag_h),
-            xytext=(xpos[2] + 1.5*bw + 0.35, l2_ctrl_ag_h + 28),
-            fontsize=7.5, color="#a8f0a8",
-            arrowprops=dict(arrowstyle="->", color="#a8f0a8", lw=1),
-            ha="left")
-
 # Legend below both panels
 patches = [
-    mpatches.Patch(color=C_SS_TOOL, label="Single-shot · tool-trained"),
-    mpatches.Patch(color=C_AG_TOOL, label="Agentic loop · tool-trained"),
-    mpatches.Patch(color=C_SS_CTRL, label="Single-shot · not tool-trained"),
-    mpatches.Patch(color=C_AG_CTRL, label="Agentic loop · not tool-trained"),
+    mpatches.Patch(facecolor=C_SS_TOOL, label="Single-shot · tool-trained",
+                   edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=C_AG_TOOL, label="Agentic loop · tool-trained",
+                   edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=C_SS_CTRL, label="Single-shot · not tool-trained",
+                   hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=C_AG_CTRL, label="Agentic loop · not tool-trained",
+                   hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.5, 0.01),
            ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",

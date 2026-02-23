@@ -80,7 +80,7 @@ Example: *"Create a workunit called 'Fix Login Page Bug'. Problem: users can't l
 
 Example: *"End of sprint. Mark all todo tasks done, save a summary of what was accomplished, and complete the workunit."*
 
-**Scoring**: Pass/fail per task (binary pass rate) plus a partial credit score for multi-step tasks where the model completes some but not all required steps. Overall score is the average of all 28 task scores.
+**Scoring**: Each task is scored 0-100%. Tasks with multiple required steps award partial credit (e.g., completing 2 of 3 steps). A task "passes" only at 100%. The L0/L1/L2 columns in the results tables show **binary pass rates** — the percentage of tasks fully passed. The **Overall Score** averages each level's mean task score (including partial credit), then averages those three level scores. This means Overall can be higher than you'd expect from the pass rate columns alone. The repo's `aggregated_report.md` shows both pass rates and scores per level for full transparency.
 
 **Validation**: Automated — each task defines a required sequence of tool calls and argument constraints. The runner collects all calls made during the task and checks them against the criteria.
 
@@ -134,20 +134,20 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 
 | Model | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
 |-------|---------|---------|---------|--------------|
-| mistralai/ministral-3-3b | 100% | 90% | 57% | **82%** |
-| mistralai/magistral-small-2509 | 100% | 90% | 0% | **63%** |
-| mistralai/ministral-3-14b-reasoning | 100% | 90% | 0% | **63%** |
-| ibm/granite-4-h-tiny | 100% | 80% | 0% | **60%** |
-| qwen/qwen3-coder-30b | 100% | 80% | 0% | **60%** |
-| qwen/qwen3-4b-thinking-2507 | 100% | 80% | 0% | **60%** |
-| essentialai/rnj-1 | 100% | 80% | 0% | **60%** |
-| bytedance/seed-oss-36b | 100% | 80% | 0% | **60%** |
-| openai/gpt-oss-20b | 100% | 70% | 0% | **57%** |
-| zai-org/glm-4.6v-flash | 82% | 80% | 0% | **54%** |
-| nvidia/nemotron-3-nano | 91% | 60% | 0% | **50%** |
-| microsoft/phi-4-reasoning-plus ❌ | 55% | 70% | 0% | **42%** |
-| zai-org/glm-4.7-flash | 64% | 40% | 0% | **35%** |
-| qwen/qwen2.5-coder-32b ❌ | 64% | 40% | 0% | **35%** |
+| mistralai/ministral-3-3b | 100% | 90% | 57% | **89%** |
+| mistralai/magistral-small-2509 | 100% | 90% | 0% | **78%** |
+| mistralai/ministral-3-14b-reasoning | 100% | 90% | 0% | **78%** |
+| qwen/qwen3-4b-thinking-2507 | 100% | 80% | 0% | **74%** |
+| essentialai/rnj-1 | 100% | 80% | 0% | **74%** |
+| ibm/granite-4-h-tiny | 100% | 80% | 0% | **73%** |
+| openai/gpt-oss-20b | 100% | 70% | 0% | **72%** |
+| qwen/qwen3-coder-30b | 100% | 80% | 0% | **71%** |
+| bytedance/seed-oss-36b | 100% | 80% | 0% | **71%** |
+| zai-org/glm-4.6v-flash | 82% | 80% | 0% | **67%** |
+| nvidia/nemotron-3-nano | 91% | 60% | 0% | **59%** |
+| microsoft/phi-4-reasoning-plus ❌ | 55% | 70% | 0% | **48%** |
+| zai-org/glm-4.7-flash | 64% | 40% | 0% | **44%** |
+| qwen/qwen2.5-coder-32b ❌ | 64% | 40% | 0% | **38%** |
 | deepseek/deepseek-r1-0528-qwen3-8b ❌ | 9% | 0% | 0% | **3%** |
 | baidu/ernie-4.5-21b-a3b ❌ | 0% | 0% | 0% | **0%** |
 | google/gemma-3-12b ❌ | 0% | 0% | 0% | **0%** |
@@ -204,13 +204,11 @@ pip install openai rich requests
 python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
 ```
 
-Requires LM Studio with the target models available locally and a Workunit MCP token (free account at [workunit.app](https://workunit.app)).
+Requires LM Studio with the target models available locally. The benchmark runs against [Workunit](https://workunit.app)'s MCP server, so you need a free account to get an MCP token — the tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
 
 Task definitions: `tasks/*.json` (plain JSON, every prompt and validation criterion)
 Results: `results/v2_agentic/*.json` (per-model, per-level)
 Aggregated report: `results/v2_agentic/aggregated_report.md`
-
-Requires LM Studio with the target models available locally and a Workunit MCP token (free account at [workunit.app](https://workunit.app)).
 
 Happy to answer questions about methodology or share raw result files.
 

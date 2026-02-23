@@ -12,23 +12,23 @@ import numpy as np
 # Data: (label, ss_overall, ag_overall, tool_trained)
 # Sorted by AG Overall descending
 models = [
-    ("granite-4-h-tiny 7B",              60,  89, True),
-    ("qwen3-coder-30b 30B",              60,  88, True),
-    ("magistral-small 24B",              63,  85, True),
-    ("qwen3-4b-thinking 4B",             60,  85, True),
-    ("gpt-oss-20b 20B",                  57,  85, True),
-    ("ministral-14b-reasoning 14B",      63,  84, True),
+    ("granite-4-h-tiny 7B",              73,  89, True),
+    ("qwen3-coder-30b 30B",              71,  88, True),
+    ("magistral-small 24B",              78,  85, True),
+    ("qwen3-4b-thinking 4B",             74,  85, True),
+    ("gpt-oss-20b 20B",                  72,  85, True),
+    ("ministral-14b-reasoning 14B",      78,  84, True),
     ("ernie-4.5-21b 21B ✗",              0,   83, False),
-    ("ministral-3-3b 3B",                82,  81, True),
+    ("ministral-3-3b 3B",                89,  81, True),
     ("gemma-3-12b 12B ✗",                0,   78, False),
-    ("rnj-1 8.3B",                       60,  77, True),
-    ("nemotron-3-nano 30B",              50,  71, True),
-    ("glm-4.6v-flash 9.4B",             54,  68, True),
-    ("phi-4-reasoning-plus 15B ✗",       42,  64, False),
-    ("glm-4.7-flash 30B",               35,  61, True),
-    ("qwen2.5-coder-32b 32B ✗",          35,  58, False),
+    ("rnj-1 8.3B",                       74,  77, True),
+    ("nemotron-3-nano 30B",              59,  71, True),
+    ("glm-4.6v-flash 9.4B",             67,  68, True),
+    ("phi-4-reasoning-plus 15B ✗",       48,  64, False),
+    ("glm-4.7-flash 30B",               44,  61, True),
+    ("qwen2.5-coder-32b 32B ✗",          38,  58, False),
     ("deepseek-r1-qwen3-8b 8B ✗",        3,    6, False),
-    ("seed-oss-36b 36B",                 60,   0, True),
+    ("seed-oss-36b 36B",                 71,   0, True),
 ]
 
 labels      = [m[0] for m in models]
@@ -46,21 +46,28 @@ ax.set_facecolor("#161b22")
 # Extra bottom margin for legend, right margin for inline annotations
 plt.subplots_adjust(bottom=0.14, right=0.84)
 
-# Four clearly distinct colors
-# SS tool-trained:  steel blue
-# SS not-tool-trained: violet
-# AG tool-trained:  orange
-# AG not-tool-trained: red
-SS_TOOL = "#4a9eff"   # steel blue
-SS_CTRL = "#b57bee"   # violet
-AG_TOOL = "#f97316"   # orange
-AG_CTRL = "#ef4444"   # red
+# IBM Design Library colorblind-safe palette
+# Color + hatching for maximum accessibility (protanopia, deuteranopia, tritanopia)
+SS_TOOL = "#648FFF"   # blue
+SS_CTRL = "#785EF0"   # purple
+AG_TOOL = "#FE6100"   # orange
+AG_CTRL = "#FFB000"   # yellow
 
 ss_colors = [SS_TOOL if t else SS_CTRL for t in tool_flags]
 ag_colors = [AG_TOOL if t else AG_CTRL for t in tool_flags]
 
-bars_ss = ax.barh(y + bar_h/2, ss_vals, bar_h, color=ss_colors, alpha=0.85)
-bars_ag = ax.barh(y - bar_h/2, ag_vals, bar_h, color=ag_colors, alpha=0.95)
+bars_ss = ax.barh(y + bar_h/2, ss_vals, bar_h, color=ss_colors, alpha=0.85,
+                  edgecolor="#c9d1d9", linewidth=0.4)
+bars_ag = ax.barh(y - bar_h/2, ag_vals, bar_h, color=ag_colors, alpha=0.95,
+                  edgecolor="#c9d1d9", linewidth=0.4)
+
+# Apply hatching: tool-trained = no hatch, not-tool-trained = hatched
+for i, t in enumerate(tool_flags):
+    if not t:
+        bars_ss[i].set_hatch("//")
+        bars_ag[i].set_hatch("//")
+        bars_ss[i].set_edgecolor("#c9d1d9")
+        bars_ag[i].set_edgecolor("#c9d1d9")
 
 # Value labels — always shown, including 0%.
 # SS: regular weight, placed just right of bar (or at x=1.5 for zero)
@@ -85,7 +92,7 @@ gemma_idx = next(i for i, m in enumerate(models) if "gemma" in m[0])
 # These go in the right margin beyond x=100, no arrow needed — the row position
 # already links the text to the model
 for ypos, txt, col in [
-    (seed_idx,  "← 60% SS but 0% AG (paradox)",         "#ff6b6b"),
+    (seed_idx,  "← 71% SS but 0% AG (paradox)",         "#ff6b6b"),
     (ernie_idx, "← 0% SS but 83% AG (not tool-trained)", "#a8f0a8"),
     (gemma_idx, "← 0% SS but 78% AG (not tool-trained)", "#a8f0a8"),
 ]:
@@ -108,12 +115,16 @@ for spine in ax.spines.values():
 ax.xaxis.grid(True, color="#21262d", linewidth=0.8, linestyle="--")
 ax.set_axisbelow(True)
 
-# Legend below the chart, 4 columns
+# Legend below the chart, 4 columns (hatched patches for not-tool-trained)
 patches = [
-    mpatches.Patch(color=SS_TOOL, label="Single-shot · tool-trained"),
-    mpatches.Patch(color=SS_CTRL, label="Single-shot · not tool-trained"),
-    mpatches.Patch(color=AG_TOOL, label="Agentic loop · tool-trained"),
-    mpatches.Patch(color=AG_CTRL, label="Agentic loop · not tool-trained"),
+    mpatches.Patch(facecolor=SS_TOOL, label="Single-shot · tool-trained",
+                   edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=SS_CTRL, label="Single-shot · not tool-trained",
+                   hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=AG_TOOL, label="Agentic loop · tool-trained",
+                   edgecolor="#c9d1d9", linewidth=0.6),
+    mpatches.Patch(facecolor=AG_CTRL, label="Agentic loop · not tool-trained",
+                   hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.01),
            ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",

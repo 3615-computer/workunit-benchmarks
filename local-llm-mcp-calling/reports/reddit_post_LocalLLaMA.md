@@ -11,11 +11,9 @@ I benchmarked 17 local LLMs on real MCP tool calling — single-shot AND agentic
 
 ## POST BODY
 
-I've been building [Workunit](https://workunit.app), a project manager designed for AI agents. Connect any AI via MCP and it can actually do things — create tasks, save decisions, close out sprints. Not describe what it would do. Actually do it.
+I benchmarked 17 local LLMs on real MCP tool calling — not synthetic function-calling evals, but actual calls against a production API with 19 tools, real validation, and real results.
 
-The obvious question: *"Does it work with local models?"*
-
-I ran the benchmark twice. First single-shot (one API call, score the first response). Then proper agentic (model gets tool results back, keeps going until it passes or times out). Same 17 models, same 28 tasks, same real MCP server.
+I ran each model twice. First single-shot (one API call, score the first response). Then agentic (model gets tool results back, keeps going until it passes or times out). Same 17 models, same 28 tasks, same MCP server.
 
 The methodology difference changes everything.
 
@@ -23,7 +21,7 @@ The methodology difference changes everything.
 
 ### The setup
 
-**17 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to Workunit's real MCP server through a custom Python runner.
+**17 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to a real MCP server ([Workunit](https://workunit.app)'s project management API — 19 tools) through a custom Python runner.
 
 5 models are **not trained for tool calling** (per LM Studio metadata) — included to test whether raw reasoning ability compensates for missing fine-tuning.
 
@@ -48,25 +46,27 @@ The left column is single-shot (first response only). Right column is agentic (f
 
 | Model | Size | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
 |-------|------|-------------|-------|-------|-------|------------|---|-------|-------|-------|------------|
-| ibm/granite-4-h-tiny | 7B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 100% | 57% | **89%** |
-| qwen/qwen3-coder-30b | 30B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 90% | 57% | **88%** |
-| mistralai/magistral-small-2509 | 24B | ✅ | 100% | 90% | 0% | **63%** | → | 100% | 100% | 43% | **85%** |
-| qwen/qwen3-4b-thinking-2507 | 4B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 80% | 57% | **85%** |
-| openai/gpt-oss-20b | 20B | ✅ | 100% | 70% | 0% | **57%** | → | 100% | 80% | 43% | **85%** |
-| mistralai/ministral-3-14b-reasoning | 14B | ✅ | 100% | 90% | 0% | **63%** | → | 100% | 90% | 29% | **84%** |
+| ibm/granite-4-h-tiny | 7B | ✅ | 100% | 80% | 0% | **73%** | → | 100% | 100% | 57% | **89%** |
+| qwen/qwen3-coder-30b | 30B | ✅ | 100% | 80% | 0% | **71%** | → | 100% | 90% | 57% | **88%** |
+| mistralai/magistral-small-2509 | 24B | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 100% | 43% | **85%** |
+| qwen/qwen3-4b-thinking-2507 | 4B | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 57% | **85%** |
+| openai/gpt-oss-20b | 20B | ✅ | 100% | 70% | 0% | **72%** | → | 100% | 80% | 43% | **85%** |
+| mistralai/ministral-3-14b-reasoning | 14B | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 90% | 29% | **84%** |
 | baidu/ernie-4.5-21b-a3b | 21B | ❌* | 0% | 0% | 0% | **0%** | → | 100% | 100% | 29% | **83%** |
-| mistralai/ministral-3-3b | 3B | ✅ | 100% | 90% | 57% | **82%** | → | 91% | 90% | 29% | **81%** |
+| mistralai/ministral-3-3b | 3B | ✅ | 100% | 90% | 57% | **89%** | → | 91% | 90% | 29% | **81%** |
 | google/gemma-3-12b | 12B | ❌* | 0% | 0% | 0% | **0%** | → | 91% | 80% | 29% | **78%** |
-| essentialai/rnj-1 | 8.3B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 80% | 0% | **77%** |
-| nvidia/nemotron-3-nano | 30B | ✅ | 91% | 60% | 0% | **50%** | → | 100% | 60% | 14% | **71%** |
-| zai-org/glm-4.6v-flash | 9.4B | ✅ | 82% | 80% | 0% | **54%** | → | 91% | 60% | 14% | **68%** |
-| microsoft/phi-4-reasoning-plus | 15B | ❌* | 55% | 70% | 0% | **42%** | → | 46% | 80% | 43% | **64%** |
-| zai-org/glm-4.7-flash | 30B | ✅ | 64% | 40% | 0% | **35%** | → | 55% | 50% | 71% | **61%** |
-| qwen/qwen2.5-coder-32b | 32B | ❌* | 64% | 40% | 0% | **35%** | → | 91% | 50% | 14% | **58%** |
+| essentialai/rnj-1 | 8.3B | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 0% | **77%** |
+| nvidia/nemotron-3-nano | 30B | ✅ | 91% | 60% | 0% | **59%** | → | 100% | 60% | 14% | **71%** |
+| zai-org/glm-4.6v-flash | 9.4B | ✅ | 82% | 80% | 0% | **67%** | → | 91% | 60% | 14% | **68%** |
+| microsoft/phi-4-reasoning-plus | 15B | ❌* | 55% | 70% | 0% | **48%** | → | 46% | 80% | 43% | **64%** |
+| zai-org/glm-4.7-flash | 30B | ✅ | 64% | 40% | 0% | **44%** | → | 55% | 50% | 71% | **61%** |
+| qwen/qwen2.5-coder-32b | 32B | ❌* | 64% | 40% | 0% | **38%** | → | 91% | 50% | 14% | **58%** |
 | deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
-| bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | **60%** | → | 0% | 0% | 0% | **0%** |
+| bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | **71%** | → | 0% | 0% | 0% | **0%** |
 
 *\* = not trained for tool calling (per LM Studio metadata)*
+
+**How scoring works:** The L0/L1/L2 columns show **binary pass rates** — the percentage of tasks the model fully passed at each level. The **Overall** column is different: it averages each level's *score* (which includes partial credit for completing some steps of a multi-step task), then averages those three level scores. This is why Overall can be higher than you'd expect from the pass rate columns alone — a model that partially completes several tasks gets credit even if it doesn't fully pass them. The repo's `aggregated_report.md` shows both pass rates and scores per level.
 
 ---
 
@@ -98,7 +98,7 @@ In single-shot, 16 of 17 models scored 0% at L2. The one exception: ministral-3-
 
 **Two tasks are the universal wall.** L1-03 ("add three tasks to a workunit") — most models call `create_task` once and stop. L1-05 ("search for a workunit then retrieve its details") — models do the search but almost universally skip the follow-up `get_workunit`. Both require deciding to make multiple sequential calls from a single user message, which appears to be a reliably hard mental model. And L2-07 (end-of-sprint closeout: mark tasks done + save context + complete workunit) — 0/17 models fully pass it even in the agentic loop. Three sequential calls with state threading. Nobody nails all three.
 
-**seed-oss-36b is the most bizarre result.** In single-shot it scored 100% L0 and 80% L1 — among the better results in the single-shot run. In the agentic loop it scored 0% across all 28 tasks and never emitted a single tool call. The only thing different between runs is that the agentic runner feeds tool results back as context. Somehow receiving tool results caused the model to completely stop calling tools. If you've run this model in an agentic setup successfully, I'd genuinely like to know what setup you used.
+**seed-oss-36b is the most bizarre result.** In single-shot it scored 100% L0 and 80% L1 (71% overall) — among the better results in the single-shot run. In the agentic loop it scored 0% across all 28 tasks and never emitted a single tool call. The only thing different between runs is that the agentic runner feeds tool results back as context. Somehow receiving tool results caused the model to completely stop calling tools. If you've run this model in an agentic setup successfully, I'd genuinely like to know what setup you used.
 
 ---
 
@@ -115,7 +115,7 @@ My 4080 16GB tops out around 32-36B at Q4. Would love community results for:
 
 ---
 
-### Reproduce it
+### Run it yourself
 
 ```bash
 git clone https://github.com/3615-computer/workunit-benchmarks
@@ -129,7 +129,7 @@ python scripts/runner_v2_agentic.py --model mistralai/ministral-3-3b --token <yo
 python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --refresh-token <refresh>
 ```
 
-Requires LM Studio running locally and a Workunit MCP token — free account at [workunit.app](https://workunit.app). The agentic runner:
+Requires LM Studio running locally. The benchmark runs against Workunit's MCP server, so you need a free account at [workunit.app](https://workunit.app) to get an MCP token. The tasks exercise a real project management API — there's no way to run it without an account because the MCP server needs to authenticate your calls and maintain state between tool invocations. The runner:
 - Unloads all models at start (clean VRAM)
 - Loads each model at 8192 context via the management API
 - Resets the test database between models
@@ -142,15 +142,13 @@ Task definitions are plain JSON in `benchmark/tasks/` — every prompt and valid
 
 ### About Workunit
 
-Project manager built around AI context. Each workunit has a problem statement, tasks, and a trail-of-thought the AI writes back as it works — decisions made, approaches tried, progress checkpoints. Define the work once, any AI (Claude, GPT, Gemini, or local via MCP) picks it up with full context, does the work, leaves notes for the next session.
-
-Built it because I was tired of re-explaining my codebase every morning. Free at [workunit.app](https://workunit.app). The MCP server is what all these models were talking to.
+[Workunit](https://workunit.app) is the project manager these models were talking to. Each workunit has a problem statement, tasks, and a trail-of-thought the AI writes back as it works — decisions made, approaches tried, progress checkpoints. Define the work once, any AI (Claude, GPT, Gemini, or local via MCP) picks it up with full context, does the work, leaves notes for the next session. I built it because I was tired of re-explaining my codebase every morning.
 
 ---
 
 ### Questions for the community
 
-1. **seed-oss-36b paradox** — scored 100%/80%/0% in single-shot but 0% in the agentic loop. The only difference is getting tool results back. Anyone run this successfully in an agentic framework?
+1. **seed-oss-36b paradox** — scored 71% overall in single-shot but 0% in the agentic loop. The only difference is getting tool results back. Anyone run this successfully in an agentic framework?
 2. **L2-07 (sprint closeout)** — 0/17 pass in the agentic loop. Is a 3-step sequential task with state threading genuinely unsolvable in a single session, or is this a prompting issue?
 3. **What are you actually using for local MCP in production?** Especially curious about 70B+ results.
 

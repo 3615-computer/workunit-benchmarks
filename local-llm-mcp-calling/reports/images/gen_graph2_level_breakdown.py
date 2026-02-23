@@ -48,9 +48,10 @@ ax.set_facecolor("#161b22")
 # Right margin: enough for inline annotations
 plt.subplots_adjust(bottom=0.20, right=0.84)
 
-C_L0 = "#3fb950"   # green
-C_L1 = "#4a9eff"   # blue
-C_L2 = "#e8ab30"   # amber
+# IBM Design Library colorblind-safe palette
+C_L0 = "#648FFF"   # blue
+C_L1 = "#FE6100"   # orange
+C_L2 = "#FFB000"   # yellow
 
 bars_l0 = ax.barh(y + bar_h,  l0_vals, bar_h, color=C_L0, alpha=0.90)
 bars_l1 = ax.barh(y,          l1_vals, bar_h, color=C_L1, alpha=0.90)
