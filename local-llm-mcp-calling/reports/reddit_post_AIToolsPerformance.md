@@ -104,6 +104,8 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 
 ### Results
 
+![Agentic pass rate by difficulty level — 17 models](images/graph2_level_breakdown_agentic.png)
+
 **Agentic loop (primary results):**
 
 | Model | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
@@ -157,6 +159,14 @@ Single-shot L2 was 0% for 16 of 17 models. The one exception: mistralai/ministra
 Single-shot L0 and L1 results are directionally consistent with the agentic run, with two notable exceptions: ernie-4.5-21b and gemma-3-12b scored 0% in single-shot (never emitted tool calls at all) but score 83% and 78% respectively in the agentic run. The additional context from seeing tool results in the loop appears to help them emit tool calls on subsequent turns.
 
 ---
+
+### Single-shot vs agentic — overall delta
+
+![Single-shot vs Agentic Overall Score — 17 models](images/graph1_ss_vs_ag_overall.png)
+
+### Tool-trained vs control group
+
+![Tool-trained vs control group — SS and agentic performance](images/graph3_trained_vs_control.png)
 
 ### Key findings
 

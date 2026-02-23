@@ -42,6 +42,8 @@ The methodology difference changes everything.
 
 ### Results — Single-shot vs. Agentic
 
+![Single-shot vs Agentic Overall Score — 17 models](images/graph1_ss_vs_ag_overall.png)
+
 The left column is single-shot (first response only). Right column is agentic (full loop with tool results fed back).
 
 | Model | Size | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
@@ -67,6 +69,14 @@ The left column is single-shot (first response only). Right column is agentic (f
 *\* = control group, not trained for tool use*
 
 ---
+
+### Level breakdown (agentic)
+
+![Agentic pass rate by difficulty level](images/graph2_level_breakdown_agentic.png)
+
+### Tool-trained vs control group
+
+![Tool-trained vs control group — SS and agentic performance](images/graph3_trained_vs_control.png)
 
 ### What I found
 
