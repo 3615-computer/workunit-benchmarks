@@ -10,5 +10,5 @@ Benchmarks for local and cloud LLM performance on real MCP tool calling.
 
 ## About
 
-Benchmarks run against [Workunit](https://workunit.app)'s production MCP server.
+The published results were generated against a local Workunit dev stack. The runners default to [workunit.app](https://workunit.app) so you can reproduce them against the production MCP server with a free account.
 Each benchmark directory contains the runner scripts, task definitions, raw results, and reports.
