@@ -44,25 +44,25 @@ The methodology difference changes everything.
 
 The left column is single-shot (first response only). Right column is agentic (full loop with tool results fed back).
 
-| Model | Size | Tool-trained | SS L0 | SS L1 | SS L2 | → | AG L0 | AG L1 | AG L2 | AG Overall |
-|-------|------|-------------|-------|-------|-------|---|-------|-------|-------|------------|
-| ibm/granite-4-h-tiny | 7B | ✅ | 100% | 80% | 0% | → | 100% | 100% | 57% | **89%** |
-| qwen/qwen3-coder-30b | 30B | ✅ | 100% | 80% | 0% | → | 100% | 90% | 57% | **88%** |
-| mistralai/magistral-small-2509 | 24B | ✅ | 100% | 90% | 0% | → | 100% | 100% | 43% | **85%** |
-| qwen/qwen3-4b-thinking-2507 | 4B | ✅ | 100% | 80% | 0% | → | 100% | 80% | 57% | **85%** |
-| openai/gpt-oss-20b | 20B | ✅ | 100% | 70% | 0% | → | 100% | 80% | 43% | **85%** |
-| mistralai/ministral-3-14b-reasoning | 14B | ✅ | 100% | 90% | 0% | → | 100% | 90% | 29% | **84%** |
-| baidu/ernie-4.5-21b-a3b | 21B | ❌* | 0% | 0% | 0% | → | 100% | 100% | 29% | **83%** |
-| mistralai/ministral-3-3b | 3B | ✅ | 100% | 90% | 57% | → | 91% | 90% | 29% | **81%** |
-| google/gemma-3-12b | 12B | ❌* | 0% | 0% | 0% | → | 91% | 80% | 29% | **78%** |
-| essentialai/rnj-1 | 8.3B | ✅ | 100% | 80% | 0% | → | 100% | 80% | 0% | **77%** |
-| nvidia/nemotron-3-nano | 30B | ✅ | 91% | 60% | 0% | → | 100% | 60% | 14% | **71%** |
-| zai-org/glm-4.6v-flash | 9.4B | ✅ | 82% | 80% | 0% | → | 91% | 60% | 14% | **68%** |
-| microsoft/phi-4-reasoning-plus | 15B | ❌* | 55% | 70% | 0% | → | 46% | 80% | 43% | **64%** |
-| zai-org/glm-4.7-flash | 30B | ✅ | 64% | 40% | 0% | → | 55% | 50% | 71% | **61%** |
-| qwen/qwen2.5-coder-32b | 32B | ❌* | 64% | 40% | 0% | → | 91% | 50% | 14% | **58%** |
-| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌* | 9% | 0% | 0% | → | 18% | 0% | 0% | **6%** |
-| bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | → | 0% | 0% | 0% | **0%** |
+| Model | Size | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
+|-------|------|-------------|-------|-------|-------|------------|---|-------|-------|-------|------------|
+| ibm/granite-4-h-tiny | 7B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 100% | 57% | **89%** |
+| qwen/qwen3-coder-30b | 30B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 90% | 57% | **88%** |
+| mistralai/magistral-small-2509 | 24B | ✅ | 100% | 90% | 0% | **63%** | → | 100% | 100% | 43% | **85%** |
+| qwen/qwen3-4b-thinking-2507 | 4B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 80% | 57% | **85%** |
+| openai/gpt-oss-20b | 20B | ✅ | 100% | 70% | 0% | **57%** | → | 100% | 80% | 43% | **85%** |
+| mistralai/ministral-3-14b-reasoning | 14B | ✅ | 100% | 90% | 0% | **63%** | → | 100% | 90% | 29% | **84%** |
+| baidu/ernie-4.5-21b-a3b | 21B | ❌* | 0% | 0% | 0% | **0%** | → | 100% | 100% | 29% | **83%** |
+| mistralai/ministral-3-3b | 3B | ✅ | 100% | 90% | 57% | **82%** | → | 91% | 90% | 29% | **81%** |
+| google/gemma-3-12b | 12B | ❌* | 0% | 0% | 0% | **0%** | → | 91% | 80% | 29% | **78%** |
+| essentialai/rnj-1 | 8.3B | ✅ | 100% | 80% | 0% | **60%** | → | 100% | 80% | 0% | **77%** |
+| nvidia/nemotron-3-nano | 30B | ✅ | 91% | 60% | 0% | **50%** | → | 100% | 60% | 14% | **71%** |
+| zai-org/glm-4.6v-flash | 9.4B | ✅ | 82% | 80% | 0% | **54%** | → | 91% | 60% | 14% | **68%** |
+| microsoft/phi-4-reasoning-plus | 15B | ❌* | 55% | 70% | 0% | **42%** | → | 46% | 80% | 43% | **64%** |
+| zai-org/glm-4.7-flash | 30B | ✅ | 64% | 40% | 0% | **35%** | → | 55% | 50% | 71% | **61%** |
+| qwen/qwen2.5-coder-32b | 32B | ❌* | 64% | 40% | 0% | **35%** | → | 91% | 50% | 14% | **58%** |
+| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
+| bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | **60%** | → | 0% | 0% | 0% | **0%** |
 
 *\* = control group, not trained for tool use*
 

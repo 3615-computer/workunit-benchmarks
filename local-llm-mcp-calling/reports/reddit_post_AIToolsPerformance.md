@@ -128,7 +128,29 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 
 ❌ = control group (not tool-trained)
 
-**Single-shot L2 comparison:**
+**Single-shot (reference):**
+
+| Model | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
+|-------|---------|---------|---------|--------------|
+| mistralai/ministral-3-3b | 100% | 90% | 57% | **82%** |
+| mistralai/magistral-small-2509 | 100% | 90% | 0% | **63%** |
+| mistralai/ministral-3-14b-reasoning | 100% | 90% | 0% | **63%** |
+| ibm/granite-4-h-tiny | 100% | 80% | 0% | **60%** |
+| qwen/qwen3-coder-30b | 100% | 80% | 0% | **60%** |
+| qwen/qwen3-4b-thinking-2507 | 100% | 80% | 0% | **60%** |
+| essentialai/rnj-1 | 100% | 80% | 0% | **60%** |
+| bytedance/seed-oss-36b | 100% | 80% | 0% | **60%** |
+| openai/gpt-oss-20b | 100% | 70% | 0% | **57%** |
+| zai-org/glm-4.6v-flash | 82% | 80% | 0% | **54%** |
+| nvidia/nemotron-3-nano | 91% | 60% | 0% | **50%** |
+| microsoft/phi-4-reasoning-plus ❌ | 55% | 70% | 0% | **42%** |
+| zai-org/glm-4.7-flash | 64% | 40% | 0% | **35%** |
+| qwen/qwen2.5-coder-32b ❌ | 64% | 40% | 0% | **35%** |
+| deepseek/deepseek-r1-0528-qwen3-8b ❌ | 9% | 0% | 0% | **3%** |
+| baidu/ernie-4.5-21b-a3b ❌ | 0% | 0% | 0% | **0%** |
+| google/gemma-3-12b ❌ | 0% | 0% | 0% | **0%** |
+
+❌ = control group (not tool-trained)
 
 Single-shot L2 was 0% for 16 of 17 models. The one exception: mistralai/ministral-3-3b scored 57% (4/7 tasks). On inspection, the 4 tasks it passes don't require ID chaining — they're standalone calls (bootstrap project, find stale work, document a decision, create project with linked asset). The tasks that do require chaining an `id` from one call into the next were 0% across the board in single-shot, as expected: the model has no way to observe intermediate results in a single-response evaluation.
 
