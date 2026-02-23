@@ -32,29 +32,49 @@ High-level goal. No tool names. No parameter hints. The model must figure out th
 
 ## Reproducing Results
 
-### Quick Start (using workunit.app)
+The published results were generated against a local Workunit dev stack. You can reproduce them against the production `workunit.app` MCP server or your own local instance.
 
-1. Sign up at [workunit.app](https://workunit.app) (free)
+### Prerequisites
+
+1. [LM Studio](https://lmstudio.ai/) running with local server enabled (default: `http://localhost:1234`)
+2. Python 3.10+ with dependencies: `pip install openai rich requests`
+
+### Option A: Against workunit.app (recommended)
+
+This is the easiest way to run the benchmark — no backend setup required.
+
+1. Sign up at [workunit.app](https://workunit.app) (free). **Use a dedicated account** (see data warning below).
 2. Get your MCP tokens using the MCP Inspector:
    ```bash
    bunx @modelcontextprotocol/inspector@latest
    ```
    Connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the `access_token` and `refresh_token` from the inspector UI.
-3. Install dependencies: `pip install openai rich requests`
-4. Start [LM Studio](https://lmstudio.ai/) with local server enabled on port 1234
+3. Run:
+   ```bash
+   export WORKUNIT_TOKEN=your_access_token
+   export WORKUNIT_REFRESH_TOKEN=your_refresh_token
 
-**Agentic run** (real MCP tool execution):
+   # Agentic run (real MCP tool execution)
+   python scripts/runner_v2_agentic.py --models models.txt
+
+   # Single-shot run (no MCP needed, validates tool call format only)
+   python scripts/runner_v1_singleshot.py --models models.txt
+   ```
+
+### Option B: Against a local Workunit dev stack
+
+If you have the Workunit backend running locally (MCP at `localhost:9000`, OAuth at `localhost:3000`):
 
 ```bash
-export WORKUNIT_TOKEN=your_token
-python scripts/runner_v2_agentic.py --models models.txt
+export WORKUNIT_TOKEN=your_local_token
+python scripts/runner_v2_agentic.py --models models.txt --local
 ```
 
-**Single-shot run** (no MCP needed, validates tool call format only):
+The `--local` flag overrides `MCP_URL` to `http://localhost:9000/mcp` and `OAUTH_TOKEN_URL` to `http://localhost:3000/oauth/token`.
 
-```bash
-python scripts/runner_v1_singleshot.py --models models.txt
-```
+### Data Warning
+
+The agentic runner (v2) deletes **ALL projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, **you will lose all your data**. Create a separate free account just for benchmarking. The runner will prompt for confirmation before starting unless you pass `--yes`.
 
 ### Environment Variables
 
@@ -67,20 +87,6 @@ python scripts/runner_v1_singleshot.py --models models.txt
 | `LMSTUDIO_HOST` | `localhost:1234` | LM Studio host:port |
 | `TASK_TIMEOUT_S` | `300` | Per-task timeout in seconds |
 | `MCP_CALL_TIMEOUT` | `60` | MCP HTTP call timeout in seconds |
-
-### Data Warning
-
-The agentic runner (v2) deletes **ALL projects, workunits, assets, and directories** in your org between model runs. Use a dedicated Workunit account for benchmarking. The runner will prompt for confirmation before starting unless you pass `--yes`.
-
-### Local Development
-
-If you have the Workunit dev stack running locally:
-
-```bash
-python scripts/runner_v2_agentic.py --models models.txt --local
-```
-
-This overrides `MCP_URL` to `localhost:9000` and `OAUTH_TOKEN_URL` to `localhost:3000`.
 
 ---
 
