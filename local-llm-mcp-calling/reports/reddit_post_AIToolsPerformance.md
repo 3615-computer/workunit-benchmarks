@@ -40,7 +40,7 @@ All models were unloaded from VRAM before each run and reloaded at a fixed 8192 
 
 ### Models tested
 
-17 models total. 5 are a control group (not trained for tool use per LM Studio metadata), included to measure whether reasoning capability substitutes for tool-call fine-tuning.
+17 models total. 5 are not trained for tool calling (per LM Studio metadata), included to measure whether reasoning capability substitutes for tool-call fine-tuning.
 
 | Model | Size | Tool-trained |
 |-------|------|-------------|
@@ -56,11 +56,11 @@ All models were unloaded from VRAM before each run and reloaded at a fixed 8192 
 | zai-org/glm-4.6v-flash | 9.4B | ✅ |
 | zai-org/glm-4.7-flash | 30B | ✅ |
 | bytedance/seed-oss-36b | 36B | ✅ |
-| baidu/ernie-4.5-21b-a3b | 21B | ❌ (control) |
-| google/gemma-3-12b | 12B | ❌ (control) |
-| microsoft/phi-4-reasoning-plus | 15B | ❌ (control) |
-| qwen/qwen2.5-coder-32b | 32B | ❌ (control) |
-| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌ (control) |
+| baidu/ernie-4.5-21b-a3b | 21B | ❌ |
+| google/gemma-3-12b | 12B | ❌ |
+| microsoft/phi-4-reasoning-plus | 15B | ❌ |
+| qwen/qwen2.5-coder-32b | 32B | ❌ |
+| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌ |
 
 ---
 
@@ -128,7 +128,7 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 | deepseek/deepseek-r1-0528-qwen3-8b ❌ | 18% | 0% | 0% | **6%** |
 | bytedance/seed-oss-36b | 0% | 0% | 0% | **0%** |
 
-❌ = control group (not tool-trained)
+❌ = not trained for tool calling
 
 **Single-shot (reference):**
 
@@ -152,7 +152,7 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 | baidu/ernie-4.5-21b-a3b ❌ | 0% | 0% | 0% | **0%** |
 | google/gemma-3-12b ❌ | 0% | 0% | 0% | **0%** |
 
-❌ = control group (not tool-trained)
+❌ = not trained for tool calling
 
 Single-shot L2 was 0% for 16 of 17 models. The one exception: mistralai/ministral-3-3b scored 57% (4/7 tasks). On inspection, the 4 tasks it passes don't require ID chaining — they're standalone calls (bootstrap project, find stale work, document a decision, create project with linked asset). The tasks that do require chaining an `id` from one call into the next were 0% across the board in single-shot, as expected: the model has no way to observe intermediate results in a single-response evaluation.
 
@@ -164,9 +164,9 @@ Single-shot L0 and L1 results are directionally consistent with the agentic run,
 
 ![Single-shot vs Agentic Overall Score — 17 models](images/graph1_ss_vs_ag_overall.png)
 
-### Tool-trained vs control group
+### Tool-trained vs not tool-trained
 
-![Tool-trained vs control group — SS and agentic performance](images/graph3_trained_vs_control.png)
+![Tool-trained vs not tool-trained — SS and agentic performance](images/graph3_trained_vs_control.png)
 
 ### Key findings
 
@@ -174,7 +174,7 @@ Single-shot L0 and L1 results are directionally consistent with the agentic run,
 
 **Size does not predict performance.** The top overall performer is ibm/granite-4-h-tiny at 7B (89%). Several models in the 20-32B range score below it. Tool-call fine-tuning is a stronger predictor of L0/L1 performance than raw parameter count.
 
-**Tool training has variable impact depending on methodology.** In single-shot, the control group models that never emitted tool calls (gemma-3-12b, ernie-4.5-21b) score 0%. In the agentic loop, they score 78% and 83% respectively. The agentic loop provides enough additional context that capable base models can figure out the tool call format, partially narrowing the gap with explicitly tool-trained models — though the gap re-opens at L2.
+**Tool training has variable impact depending on methodology.** In single-shot, the models not trained for tool calling that never emitted tool calls (gemma-3-12b, ernie-4.5-21b) score 0%. In the agentic loop, they score 78% and 83% respectively. The agentic loop provides enough additional context that capable base models can figure out the tool call format, partially narrowing the gap with explicitly tool-trained models — though the gap re-opens at L2.
 
 **L2-07 (three-step sequential closeout) passes 0/17 models in the agentic loop.** The task requires: (1) update all tasks to done, (2) save a context atom, (3) mark the workunit completed. Each step depends on state from the previous. No model in this test completes all three reliably. This is either a fundamental limit of 8192-context 3-32B models on 3-step sequential tasks, or a prompting/task-design issue — the data doesn't distinguish.
 

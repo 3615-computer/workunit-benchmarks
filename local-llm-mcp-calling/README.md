@@ -149,23 +149,23 @@ The aggregated comparison table is written to `results/aggregated_report.md` at 
 
 ## Tested Models
 
-17 models across 4 tiers. 5 are included as a "control group" (`trained_for_tool_use: false` per LM Studio):
+17 models across 4 tiers. 5 are not trained for tool calling (`trained_for_tool_use: false` per LM Studio metadata):
 
 | Model | Size | Tool-trained |
 |-------|------|-------------|
 | `mistralai/ministral-3-3b` | 3B | ✅ |
 | `qwen/qwen3-4b-thinking-2507` | 4B | ✅ |
 | `ibm/granite-4-h-tiny` | 7B | ✅ |
-| `deepseek/deepseek-r1-0528-qwen3-8b` | 8B | ❌ control |
+| `deepseek/deepseek-r1-0528-qwen3-8b` | 8B | ❌ not tool-trained |
 | `essentialai/rnj-1` | 8.3B | ✅ |
 | `zai-org/glm-4.6v-flash` | 9.4B | ✅ |
-| `google/gemma-3-12b` | 12B | ❌ control |
+| `google/gemma-3-12b` | 12B | ❌ not tool-trained |
 | `mistralai/ministral-3-14b-reasoning` | 14B | ✅ |
-| `microsoft/phi-4-reasoning-plus` | 15B | ❌ control |
+| `microsoft/phi-4-reasoning-plus` | 15B | ❌ not tool-trained |
 | `openai/gpt-oss-20b` | 20B | ✅ |
-| `baidu/ernie-4.5-21b-a3b` | 21B | ❌ control |
+| `baidu/ernie-4.5-21b-a3b` | 21B | ❌ not tool-trained |
 | `mistralai/magistral-small-2509` | 24B | ✅ |
-| `qwen/qwen2.5-coder-32b` | 32B | ❌ control |
+| `qwen/qwen2.5-coder-32b` | 32B | ❌ not tool-trained |
 | `zai-org/glm-4.7-flash` | 30B | ✅ |
 | `qwen/qwen3-coder-30b` | 30B | ✅ |
 | `nvidia/nemotron-3-nano` | 30B | ✅ |

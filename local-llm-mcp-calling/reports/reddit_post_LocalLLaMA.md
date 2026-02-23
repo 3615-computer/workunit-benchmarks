@@ -25,7 +25,7 @@ The methodology difference changes everything.
 
 **17 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to Workunit's real MCP server through a custom Python runner.
 
-5 models are a **control group** — not trained for tool use — to test whether reasoning ability compensates for missing fine-tuning.
+5 models are **not trained for tool calling** (per LM Studio metadata) — included to test whether raw reasoning ability compensates for missing fine-tuning.
 
 **Three difficulty levels:**
 
@@ -66,7 +66,7 @@ The left column is single-shot (first response only). Right column is agentic (f
 | deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
 | bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | **60%** | → | 0% | 0% | 0% | **0%** |
 
-*\* = control group, not trained for tool use*
+*\* = not trained for tool calling (per LM Studio metadata)*
 
 ---
 
@@ -74,9 +74,9 @@ The left column is single-shot (first response only). Right column is agentic (f
 
 ![Agentic pass rate by difficulty level](images/graph2_level_breakdown_agentic.png)
 
-### Tool-trained vs control group
+### Tool-trained vs not tool-trained
 
-![Tool-trained vs control group — SS and agentic performance](images/graph3_trained_vs_control.png)
+![Tool-trained vs not tool-trained — SS and agentic performance](images/graph3_trained_vs_control.png)
 
 ### What I found
 
@@ -86,11 +86,11 @@ In single-shot, 16 of 17 models scored 0% at L2. The one exception: ministral-3-
 
 **A 7B model tops the overall leaderboard.** ibm/granite-4-h-tiny at 89%, beating every model up to 32B. It's consistent, doesn't hallucinate tool names, handles multi-step sequences cleanly, and is fast. If you need reliable local MCP tool calling today, start here.
 
-**The control group plot twist.** In single-shot, ernie-4.5-21b (21B, not tool-trained) and gemma-3-12b (12B, not tool-trained) scored 0% — they never emitted tool calls at all, just wrote helpful text. In the agentic loop: ernie hits 83%, gemma hits 78%. The agentic runner apparently gives them enough context to figure out they're supposed to call tools. Whether that's a win for the agentic methodology or an indictment of the single-shot format is worth debating.
+**The not-tool-trained plot twist.** In single-shot, ernie-4.5-21b (21B) and gemma-3-12b (12B) scored 0% — they never emitted tool calls at all, just wrote helpful text. In the agentic loop: ernie hits 83%, gemma hits 78%. The agentic runner apparently gives them enough context to figure out they're supposed to call tools. Whether that's a win for the agentic methodology or an indictment of the single-shot format is worth debating.
 
-**Tool training still matters for the control group at L2.** Both ernie and gemma fall to 29% at L2 — capable of basic tool use when the context is clear, but struggle with multi-step reasoning chains. The tool-trained models that score well at L2 (granite, qwen3-coder, qwen3-thinking) have a clear edge there.
+**Not being tool-trained still hurts at L2.** Both ernie and gemma fall to 29% at L2 — capable of basic tool use when the context is clear, but struggle with multi-step reasoning chains. The tool-trained models that score well at L2 (granite, qwen3-coder, qwen3-thinking) have a clear edge there.
 
-**DeepSeek-R1 (8B, control group) called a tool named `tool_name`.** Literally that string, on most tasks. It understood the shape of a tool call response — format, structure, everything — but hallucinated a generic placeholder instead of reading the actual function names from the tool list. Fascinating failure mode.
+**DeepSeek-R1 (8B, not tool-trained) called a tool named `tool_name`.** Literally that string, on most tasks. It understood the shape of a tool call response — format, structure, everything — but hallucinated a generic placeholder instead of reading the actual function names from the tool list. Fascinating failure mode.
 
 **phi-4-reasoning-plus is inverted.** 46% at L0 (explicit instructions), 80% at L1 (natural language), 43% at L2. It struggles most when told exactly what to do. This is unusual enough that I suspect something about the explicit instruction format conflicts with its training distribution.
 

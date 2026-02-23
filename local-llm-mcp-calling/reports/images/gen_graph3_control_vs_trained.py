@@ -1,5 +1,5 @@
 """
-Graph 3: Tool-trained vs control group — SS and Agentic scores side by side.
+Graph 3: Tool-trained vs not-tool-trained — SS and Agentic scores side by side.
 """
 
 import matplotlib
@@ -33,11 +33,7 @@ individual = [
 trained = [(d[0], d[1], d[3]) for d in individual if d[2]]
 control = [(d[0], d[1], d[3]) for d in individual if not d[2]]
 
-# Four clearly distinct colors for the right panel bars
-# SS · tool-trained  → steel blue
-# AG · tool-trained  → orange
-# SS · control       → magenta / hot pink
-# AG · control       → lime green
+# Four clearly distinct colors
 C_SS_TOOL = "#4a9eff"   # steel blue
 C_AG_TOOL = "#f97316"   # orange
 C_SS_CTRL = "#e040fb"   # magenta
@@ -61,7 +57,8 @@ for (ss, ag, label) in trained:
 
 cx = [d[0] for d in control]
 cy = [d[1] for d in control]
-ax.scatter(cx, cy, s=90, color=C_SS_CTRL, marker="D", zorder=5, alpha=0.9, label="Control group (5)")
+ax.scatter(cx, cy, s=90, color=C_SS_CTRL, marker="D", zorder=5, alpha=0.9,
+           label="Not tool-trained (5)")
 for (ss, ag, label) in control:
     ax.annotate(label, (ss, ag), fontsize=5.5, color="#c9d1d9",
                 xytext=(3, 3), textcoords="offset points", zorder=6)
@@ -69,7 +66,8 @@ for (ss, ag, label) in control:
 ax.plot([0, 100], [0, 100], color="#30363d", linewidth=1, linestyle="--", zorder=1)
 ax.text(72, 68, "SS = AG", fontsize=7.5, color="#484f58", rotation=45, ha="center")
 ax.fill_between([0, 100], [0, 100], [100, 100], alpha=0.04, color="#3fb950")
-ax.text(15, 90, "Agentic loop\nsignificantly better", fontsize=7.5, color="#3fb950", alpha=0.7, ha="center")
+ax.text(15, 90, "Agentic loop\nsignificantly better", fontsize=7.5, color="#3fb950",
+        alpha=0.7, ha="center")
 
 ax.set_xlabel("Single-shot Overall (%)", fontsize=9, color="#8b949e", labelpad=6)
 ax.set_ylabel("Agentic Loop Overall (%)", fontsize=9, color="#8b949e", labelpad=6)
@@ -86,8 +84,7 @@ ax.xaxis.grid(True, color="#21262d", linewidth=0.6, linestyle="--")
 ax.yaxis.grid(True, color="#21262d", linewidth=0.6, linestyle="--")
 ax.set_axisbelow(True)
 ax.legend(fontsize=8, framealpha=0.25, edgecolor="#30363d",
-          facecolor="#161b22", labelcolor="#c9d1d9",
-          loc="lower right")
+          facecolor="#161b22", labelcolor="#c9d1d9", loc="lower right")
 
 # ── Panel B: Grouped bars — avg by group × methodology × level ───────────────
 ax = axes[1]
@@ -96,7 +93,7 @@ ax = axes[1]
 trained_ag_L0 = [100,100,100,100,100,100, 91,100,100, 91, 55,  0]
 trained_ag_L1 = [100, 90,100, 80, 80, 90, 90, 80, 60, 60, 50,  0]
 trained_ag_L2 = [ 57, 57, 43, 57, 43, 29, 29,  0, 14, 14, 71,  0]
-# Control (5): ernie, gemma, phi4, qwen2.5, deepseek
+# Not-tool-trained (5): ernie, gemma, phi4, qwen2.5, deepseek
 ctrl_ag_L0    = [100, 91, 46, 91, 18]
 ctrl_ag_L1    = [100, 80, 80, 50,  0]
 ctrl_ag_L2    = [ 29, 29, 43, 14,  0]
@@ -120,10 +117,14 @@ ag_trained_means = [avg(trained_ag_L0), avg(trained_ag_L1), avg(trained_ag_L2)]
 ss_ctrl_means    = [avg(ctrl_ss_L0),    avg(ctrl_ss_L1),    avg(ctrl_ss_L2)]
 ag_ctrl_means    = [avg(ctrl_ag_L0),    avg(ctrl_ag_L1),    avg(ctrl_ag_L2)]
 
-b1 = ax.bar(xpos - 1.5*bw, ss_trained_means, bw, color=C_SS_TOOL, alpha=0.90, label="SS · tool-trained")
-b2 = ax.bar(xpos - 0.5*bw, ag_trained_means, bw, color=C_AG_TOOL, alpha=0.95, label="AG · tool-trained")
-b3 = ax.bar(xpos + 0.5*bw, ss_ctrl_means,    bw, color=C_SS_CTRL, alpha=0.90, label="SS · control group")
-b4 = ax.bar(xpos + 1.5*bw, ag_ctrl_means,    bw, color=C_AG_CTRL, alpha=0.95, label="AG · control group")
+b1 = ax.bar(xpos - 1.5*bw, ss_trained_means, bw, color=C_SS_TOOL, alpha=0.90,
+            label="SS · tool-trained")
+b2 = ax.bar(xpos - 0.5*bw, ag_trained_means, bw, color=C_AG_TOOL, alpha=0.95,
+            label="AG · tool-trained")
+b3 = ax.bar(xpos + 0.5*bw, ss_ctrl_means,    bw, color=C_SS_CTRL, alpha=0.90,
+            label="SS · not tool-trained")
+b4 = ax.bar(xpos + 1.5*bw, ag_ctrl_means,    bw, color=C_AG_CTRL, alpha=0.95,
+            label="AG · not tool-trained")
 
 for bars in [b1, b2, b3, b4]:
     for bar in bars:
@@ -136,7 +137,7 @@ ax.set_xticks(xpos)
 ax.set_xticklabels(["L0\nExplicit", "L1\nNatural\nlanguage", "L2\nReasoning"],
                    fontsize=9.5, color="#c9d1d9")
 ax.set_ylabel("Average Pass Rate (%)", fontsize=9, color="#8b949e", labelpad=6)
-ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=12, control n=5)",
+ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=12, not tool-trained n=5)",
              fontsize=10, color="#e6edf3", fontweight="bold", pad=10)
 ax.set_ylim(0, 120)
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x)}%"))
@@ -146,27 +147,27 @@ for spine in ax.spines.values():
 ax.yaxis.grid(True, color="#21262d", linewidth=0.6, linestyle="--")
 ax.set_axisbelow(True)
 
-# Annotate L2 control AG bar
+# Annotate L2 not-tool-trained AG bar
 l2_ctrl_ag_h = ag_ctrl_means[2]
-ax.annotate(f"Control group\ncompetitive at L2\nin agentic loop",
+ax.annotate("Not tool-trained\ncompetitive at L2\nin agentic loop",
             xy=(xpos[2] + 1.5*bw, l2_ctrl_ag_h),
             xytext=(xpos[2] + 1.5*bw + 0.35, l2_ctrl_ag_h + 28),
             fontsize=7.5, color="#a8f0a8",
             arrowprops=dict(arrowstyle="->", color="#a8f0a8", lw=1),
             ha="left")
 
-# Legend below both panels, spanning figure width
+# Legend below both panels
 patches = [
     mpatches.Patch(color=C_SS_TOOL, label="Single-shot · tool-trained"),
     mpatches.Patch(color=C_AG_TOOL, label="Agentic loop · tool-trained"),
-    mpatches.Patch(color=C_SS_CTRL, label="Single-shot · control group"),
-    mpatches.Patch(color=C_AG_CTRL, label="Agentic loop · control group"),
+    mpatches.Patch(color=C_SS_CTRL, label="Single-shot · not tool-trained"),
+    mpatches.Patch(color=C_AG_CTRL, label="Agentic loop · not tool-trained"),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.5, 0.01),
            ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
            facecolor="#161b22", labelcolor="#c9d1d9")
 
-fig.suptitle("Tool-trained vs Control Group — Single-shot and Agentic Performance",
+fig.suptitle("Tool-trained vs Not Tool-trained — Single-shot and Agentic Performance",
              fontsize=12, color="#e6edf3", fontweight="bold", y=1.01)
 
 fig.text(0.99, -0.02, "workunit.app · github.com/3615-computer/workunit-benchmarks",

@@ -40,17 +40,17 @@ n = len(models)
 y = np.arange(n)
 bar_h = 0.35
 
-# Leave right margin for annotations, extra bottom margin for legend
 fig, ax = plt.subplots(figsize=(13, 10))
 fig.patch.set_facecolor("#0d1117")
 ax.set_facecolor("#161b22")
-plt.subplots_adjust(bottom=0.14, right=0.88)
+# Extra bottom margin for legend, right margin for inline annotations
+plt.subplots_adjust(bottom=0.14, right=0.84)
 
 # Four clearly distinct colors
 # SS tool-trained:  steel blue
-# SS control:       purple / violet
+# SS not-tool-trained: violet
 # AG tool-trained:  orange
-# AG control:       red / crimson
+# AG not-tool-trained: red
 SS_TOOL = "#4a9eff"   # steel blue
 SS_CTRL = "#b57bee"   # violet
 AG_TOOL = "#f97316"   # orange
@@ -59,56 +59,44 @@ AG_CTRL = "#ef4444"   # red
 ss_colors = [SS_TOOL if t else SS_CTRL for t in tool_flags]
 ag_colors = [AG_TOOL if t else AG_CTRL for t in tool_flags]
 
-bars_ss = ax.barh(y + bar_h/2, ss_vals, bar_h, color=ss_colors, alpha=0.85, label="_ss")
-bars_ag = ax.barh(y - bar_h/2, ag_vals, bar_h, color=ag_colors, alpha=0.95, label="_ag")
+bars_ss = ax.barh(y + bar_h/2, ss_vals, bar_h, color=ss_colors, alpha=0.85)
+bars_ag = ax.barh(y - bar_h/2, ag_vals, bar_h, color=ag_colors, alpha=0.95)
 
-# Value labels
+# Value labels — always shown, including 0%.
+# SS: regular weight, placed just right of bar (or at x=1.5 for zero)
+# AG: bold, placed just right of bar (or at x=1.5 for zero)
 for bar, val in zip(bars_ss, ss_vals):
-    if val > 0:
-        ax.text(val + 1, bar.get_y() + bar.get_height()/2, f"{val}%",
-                va="center", ha="left", fontsize=7.5, color="#c9d1d9")
+    x = val + 1.2 if val > 0 else 1.5
+    ax.text(x, bar.get_y() + bar.get_height()/2,
+            f"{val}%", va="center", ha="left", fontsize=7.5, color="#c9d1d9")
 
 for bar, val in zip(bars_ag, ag_vals):
-    if val > 0:
-        ax.text(val + 1, bar.get_y() + bar.get_height()/2, f"{val}%",
-                va="center", ha="left", fontsize=7.5, color="#c9d1d9", fontweight="bold")
+    x = val + 1.2 if val > 0 else 1.5
+    ax.text(x, bar.get_y() + bar.get_height()/2,
+            f"{val}%", va="center", ha="left", fontsize=7.5,
+            color="#e6edf3", fontweight="bold")
 
-# Annotations — placed in the right margin (x > 100), clear of bars
+# Inline text annotations — no arrows, placed to the right of the value labels
+# seed paradox: sits at the top (index 0 when reversed = bottom of chart = last row)
 seed_idx  = next(i for i, m in enumerate(models) if "seed"  in m[0])
 ernie_idx = next(i for i, m in enumerate(models) if "ernie" in m[0])
 gemma_idx = next(i for i, m in enumerate(models) if "gemma" in m[0])
 
-ax.annotate("60% SS → 0% AG\n(paradox)",
-            xy=(1, seed_idx - bar_h/2),
-            xytext=(105, seed_idx),
-            fontsize=7.5, color="#ff6b6b",
-            arrowprops=dict(arrowstyle="->", color="#ff6b6b", lw=1,
-                            connectionstyle="arc3,rad=0.0"),
-            ha="left", va="center",
-            annotation_clip=False)
-
-ax.annotate("0% SS → 83% AG\n(control flip)",
-            xy=(1, ernie_idx - bar_h/2),
-            xytext=(105, ernie_idx),
-            fontsize=7.5, color="#a8f0a8",
-            arrowprops=dict(arrowstyle="->", color="#a8f0a8", lw=1,
-                            connectionstyle="arc3,rad=0.0"),
-            ha="left", va="center",
-            annotation_clip=False)
-
-ax.annotate("0% SS → 78% AG\n(control flip)",
-            xy=(1, gemma_idx - bar_h/2),
-            xytext=(105, gemma_idx),
-            fontsize=7.5, color="#a8f0a8",
-            arrowprops=dict(arrowstyle="->", color="#a8f0a8", lw=1,
-                            connectionstyle="arc3,rad=0.0"),
-            ha="left", va="center",
-            annotation_clip=False)
+# These go in the right margin beyond x=100, no arrow needed — the row position
+# already links the text to the model
+for ypos, txt, col in [
+    (seed_idx,  "← 60% SS but 0% AG (paradox)",         "#ff6b6b"),
+    (ernie_idx, "← 0% SS but 83% AG (not tool-trained)", "#a8f0a8"),
+    (gemma_idx, "← 0% SS but 78% AG (not tool-trained)", "#a8f0a8"),
+]:
+    t = ax.text(102, ypos, txt, va="center", ha="left", fontsize=7.5, color=col)
+    t.set_clip_on(False)
 
 ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=9, color="#c9d1d9")
 ax.set_xlabel("Overall Score (%)", fontsize=10, color="#8b949e", labelpad=8)
-ax.set_title("Local LLM MCP Tool Calling — Single-shot vs Agentic Overall Score\n17 models · 28 tasks · 3 difficulty levels",
+ax.set_title("Local LLM MCP Tool Calling — Single-shot vs Agentic Overall Score\n"
+             "17 models · 28 tasks · 3 difficulty levels",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
@@ -120,16 +108,16 @@ for spine in ax.spines.values():
 ax.xaxis.grid(True, color="#21262d", linewidth=0.8, linestyle="--")
 ax.set_axisbelow(True)
 
-# Legend below the chart
+# Legend below the chart, 4 columns
 patches = [
     mpatches.Patch(color=SS_TOOL, label="Single-shot · tool-trained"),
-    mpatches.Patch(color=SS_CTRL, label="Single-shot · control group"),
+    mpatches.Patch(color=SS_CTRL, label="Single-shot · not tool-trained"),
     mpatches.Patch(color=AG_TOOL, label="Agentic loop · tool-trained"),
-    mpatches.Patch(color=AG_CTRL, label="Agentic loop · control group"),
+    mpatches.Patch(color=AG_CTRL, label="Agentic loop · not tool-trained"),
 ]
-ax.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, -0.11),
-          ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
-          facecolor="#161b22", labelcolor="#c9d1d9")
+fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.01),
+           ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
+           facecolor="#161b22", labelcolor="#c9d1d9")
 
 fig.text(0.99, 0.005, "workunit.app · github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
