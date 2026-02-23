@@ -1085,23 +1085,36 @@ def reset_benchmark_env(mcp: "MCPClient"):
     """Wipe all benchmark org data via MCP between model runs for a clean slate.
 
     Steps:
-      1. get_authenticated_user → extract org_id
+      1. Discover org_id (from user profile, or by creating a probe project)
       2. list_projects → remove_project(action=delete) for each
       3. search for orphaned assets → delete_asset for each
       4. list directories → delete(recursive=True) for each
     """
     # 1. Get org_id
+    # get_authenticated_user doesn't return org_id, so we try multiple strategies:
+    #   a) Check the user response for organizations or organization_id
+    #   b) Fall back to creating a temporary probe project and reading org_id from it
+    org_id = ""
     user_raw = mcp.call_tool("get_authenticated_user", {})
     try:
         user_data = json.loads(user_raw)
         orgs = user_data.get("organizations", [])
         org_id = orgs[0]["id"] if orgs else user_data.get("organization_id", "")
     except (json.JSONDecodeError, KeyError, IndexError):
-        console.print("  [yellow]Could not determine org_id from user data, cleanup may be incomplete[/yellow]")
-        org_id = ""
+        pass
 
     if not org_id:
-        console.print("  [yellow]No org_id found, skipping cleanup[/yellow]")
+        # Probe: create a temporary project, extract org_id, then let cleanup delete it
+        probe_raw = mcp.call_tool("create_project", {"name": "_benchmark_cleanup_probe"})
+        try:
+            probe_data = json.loads(probe_raw)
+            project = probe_data.get("project", probe_data)
+            org_id = project.get("organization_id", "")
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    if not org_id:
+        console.print("  [yellow]Could not determine org_id, skipping cleanup[/yellow]")
         return
 
     def _parse_mcp(raw: str, key: str, label: str) -> list:
