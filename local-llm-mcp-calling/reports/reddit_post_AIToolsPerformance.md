@@ -204,7 +204,7 @@ pip install openai rich requests
 python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
 ```
 
-Requires LM Studio with the target models available locally. The benchmark runs against [Workunit](https://workunit.app)'s MCP server, so you need a free account to get an MCP token — the tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
+Requires LM Studio with the target models available locally. The benchmark runs against [Workunit](https://workunit.app)'s MCP server, so you need a free account to get an MCP token. The easiest way to get your tokens: `bunx @modelcontextprotocol/inspector@latest` — connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the access + refresh tokens. The tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
 
 **⚠️ Use a dedicated account.** The agentic runner deletes **all projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, you **will lose all your data**. Create a separate free account just for benchmarking.
 

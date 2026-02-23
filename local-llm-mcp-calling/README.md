@@ -35,7 +35,11 @@ High-level goal. No tool names. No parameter hints. The model must figure out th
 ### Quick Start (using workunit.app)
 
 1. Sign up at [workunit.app](https://workunit.app) (free)
-2. Go to **Settings → API → Generate Token**
+2. Get your MCP tokens using the MCP Inspector:
+   ```bash
+   bunx @modelcontextprotocol/inspector@latest
+   ```
+   Connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the `access_token` and `refresh_token` from the inspector UI.
 3. Install dependencies: `pip install openai rich requests`
 4. Start [LM Studio](https://lmstudio.ai/) with local server enabled on port 1234
 
@@ -56,7 +60,8 @@ python scripts/runner_v1_singleshot.py --models models.txt
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `WORKUNIT_TOKEN` | *(required for v2)* | Workunit API bearer token |
+| `WORKUNIT_TOKEN` | *(required for v2)* | OAuth access token from MCP Inspector |
+| `WORKUNIT_REFRESH_TOKEN` | *(optional)* | OAuth refresh token for automatic renewal |
 | `MCP_URL` | `https://workunit.app/mcp` | MCP endpoint |
 | `OAUTH_TOKEN_URL` | `https://workunit.app/oauth/token` | OAuth token endpoint |
 | `LMSTUDIO_HOST` | `localhost:1234` | LM Studio host:port |

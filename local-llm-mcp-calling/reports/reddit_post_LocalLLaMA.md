@@ -129,7 +129,7 @@ python scripts/runner_v2_agentic.py --model mistralai/ministral-3-3b --token <yo
 python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --refresh-token <refresh>
 ```
 
-Requires LM Studio running locally. The benchmark runs against Workunit's MCP server, so you need a free account at [workunit.app](https://workunit.app) to get an MCP token. The tasks exercise a real project management API — there's no way to run it without an account because the MCP server needs to authenticate your calls and maintain state between tool invocations.
+Requires LM Studio running locally. The benchmark runs against Workunit's MCP server, so you need a free account at [workunit.app](https://workunit.app) to get an MCP token. The easiest way to get your tokens is with the MCP Inspector: `bunx @modelcontextprotocol/inspector@latest` — connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the access + refresh tokens from the inspector UI. The tasks exercise a real project management API — there's no way to run it without an account because the MCP server needs to authenticate your calls and maintain state between tool invocations.
 
 **⚠️ Use a dedicated account.** The agentic runner deletes **all projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, you **will lose all your data**. Create a separate free account just for benchmarking. The runner will prompt for confirmation before starting, but don't rely on that — use a throwaway account.
 
