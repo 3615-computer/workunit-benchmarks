@@ -30,22 +30,70 @@ High-level goal. No tool names. No parameter hints. The model must figure out th
 
 ---
 
+## Reproducing Results
+
+### Quick Start (using workunit.app)
+
+1. Sign up at [workunit.app](https://workunit.app) (free)
+2. Go to **Settings → API → Generate Token**
+3. Install dependencies: `pip install openai rich requests`
+4. Start [LM Studio](https://lmstudio.ai/) with local server enabled on port 1234
+
+**Agentic run** (real MCP tool execution):
+
+```bash
+export WORKUNIT_TOKEN=your_token
+python scripts/runner_v2_agentic.py --models models.txt
+```
+
+**Single-shot run** (no MCP needed, validates tool call format only):
+
+```bash
+python scripts/runner_v1_singleshot.py --models models.txt
+```
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `WORKUNIT_TOKEN` | *(required for v2)* | Workunit API bearer token |
+| `MCP_URL` | `https://workunit.app/mcp` | MCP endpoint |
+| `OAUTH_TOKEN_URL` | `https://workunit.app/oauth/token` | OAuth token endpoint |
+| `LMSTUDIO_HOST` | `localhost:1234` | LM Studio host:port |
+| `TASK_TIMEOUT_S` | `300` | Per-task timeout in seconds |
+| `MCP_CALL_TIMEOUT` | `60` | MCP HTTP call timeout in seconds |
+
+### Data Warning
+
+The agentic runner (v2) deletes **ALL projects, workunits, assets, and directories** in your org between model runs. Use a dedicated Workunit account for benchmarking. The runner will prompt for confirmation before starting unless you pass `--yes`.
+
+### Local Development
+
+If you have the Workunit dev stack running locally:
+
+```bash
+python scripts/runner_v2_agentic.py --models models.txt --local
+```
+
+This overrides `MCP_URL` to `localhost:9000` and `OAUTH_TOKEN_URL` to `localhost:3000`.
+
+---
+
 ## Setup
 
 ### Prerequisites
 
 - **LM Studio** running with local server enabled (`http://localhost:1234`)
-- **Python 3.10+** with `openai` and `rich`:
+- **Python 3.10+** with dependencies:
   ```bash
-  pip install openai rich
+  pip install openai rich requests
   ```
-- **Workunit dev environment** running (`docker compose up` in project root)
 
 ### LM Studio Configuration
 
-The runner connects to `http://localhost:1234` (Tailscale IP). To change this, edit `LMSTUDIO_BASE_URL` at the top of `scripts/runner.py`.
+The runner connects to `http://localhost:1234` by default. Override with `LMSTUDIO_HOST` env var.
 
-Model switching is fully automatic — just specify the model ID in `models.txt` and the runner handles loading/unloading via the chat completions `model` field.
+Model switching is fully automatic — just specify the model ID in `models.txt` and the runner handles loading/unloading via the LM Studio management API.
 
 GPU offload to RAM is automatic. With 16GB VRAM + 64GB RAM, LM Studio will push as many layers as fit into VRAM and overflow the rest to RAM transparently.
 
@@ -56,27 +104,33 @@ GPU offload to RAM is automatic. With 16GB VRAM + 64GB RAM, LM Studio will push 
 ### Full overnight run (all models, all levels)
 
 ```bash
-cd benchmark
-python scripts/runner.py --models models.txt
+export WORKUNIT_TOKEN=your_token
+python scripts/runner_v2_agentic.py --models models.txt
 ```
 
 ### Single model
 
 ```bash
-python scripts/runner.py --model ibm/granite-4-h-tiny
-python scripts/runner.py --model ibm/granite-4-h-tiny --level 0
+python scripts/runner_v2_agentic.py --model ibm/granite-4-h-tiny --level 0
+python scripts/runner_v1_singleshot.py --model ibm/granite-4-h-tiny --level 0
 ```
 
 ### List available models
 
 ```bash
-python scripts/runner.py --list-models
+python scripts/runner_v1_singleshot.py --list-models
 ```
 
 ### Dry run (show plan without executing)
 
 ```bash
-python scripts/runner.py --models models.txt --dry-run
+python scripts/runner_v2_agentic.py --models models.txt --dry-run
+```
+
+### Cleanup org data
+
+```bash
+python scripts/runner_v2_agentic.py --cleanup-only --yes
 ```
 
 ### Aggregate results after runs

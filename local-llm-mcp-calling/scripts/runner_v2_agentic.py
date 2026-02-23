@@ -13,13 +13,19 @@ This means L2 tasks (multi-step reasoning with ID chaining) are actually solvabl
 the model gets real data back and can chain IDs across calls.
 
 Usage:
-    python runner.py --models ../models.txt --token <bearer_token>
-    python runner.py --model mistralai/ministral-3-3b --token <bearer_token>
-    python runner.py --model mistralai/ministral-3-3b --token <bearer_token> --level 0
+    # Token via env var (recommended):
+    export WORKUNIT_TOKEN=your_token
+    python runner_v2_agentic.py --models ../models.txt
+    python runner_v2_agentic.py --model mistralai/ministral-3-3b --level 0
 
-    # Token can also be set via env var to avoid passing it every time:
-    export WORKUNIT_TOKEN=eyJ...
-    python runner.py --models ../models.txt
+    # Token via CLI flag:
+    python runner_v2_agentic.py --models ../models.txt --token <bearer_token>
+
+    # Local dev stack (MCP at localhost:9000, OAuth at localhost:3000):
+    python runner_v2_agentic.py --models ../models.txt --local
+
+    # Cleanup org data only:
+    python runner_v2_agentic.py --cleanup-only --yes
 
 Requirements:
     pip install openai rich requests
@@ -51,11 +57,12 @@ except ImportError:
 _LMSTUDIO_HOST     = os.environ.get("LMSTUDIO_HOST", "localhost:1234")
 LMSTUDIO_BASE_URL  = f"http://{_LMSTUDIO_HOST}/v1"
 LMSTUDIO_MGMT_URL  = f"http://{_LMSTUDIO_HOST}"
-MCP_URL            = "http://localhost:9000/mcp"
+MCP_URL            = os.environ.get("MCP_URL", "https://workunit.app/mcp")
+MCP_CALL_TIMEOUT   = int(os.environ.get("MCP_CALL_TIMEOUT", "60"))
 
 BENCHMARK_DIR = Path(__file__).parent.parent
 TASKS_DIR     = BENCHMARK_DIR / "tasks"
-RESULTS_DIR   = BENCHMARK_DIR / "results"
+RESULTS_DIR   = BENCHMARK_DIR / "results" / "v2_agentic"
 PROJECT_ROOT  = BENCHMARK_DIR.parent
 
 TASK_FILES = {
@@ -69,7 +76,7 @@ TASK_FILES = {
 # L2 agentic tasks may need 3-4 turns, so 300s per task is generous
 # for all legitimate models while still catching pathological hangs
 # like qwen2.5-coder-32b's 1860s text responses.
-TASK_TIMEOUT_S = 300
+TASK_TIMEOUT_S = int(os.environ.get("TASK_TIMEOUT_S", "300"))
 
 SYSTEM_PROMPT = (
     "You are a helpful AI assistant with access to the Workunit project management "
@@ -83,7 +90,7 @@ console = Console()
 
 # ─── MCP Client ───────────────────────────────────────────────────────────────
 
-OAUTH_TOKEN_URL   = "http://localhost:3000/oauth/token"
+OAUTH_TOKEN_URL   = os.environ.get("OAUTH_TOKEN_URL", "https://workunit.app/oauth/token")
 OAUTH_CLIENT_ID   = os.environ.get("WORKUNIT_OAUTH_CLIENT_ID", "")
 
 
@@ -127,13 +134,19 @@ class MCPClient:
             },
         }
         try:
-            resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=10)
+            resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
             if resp.status_code == 401 and self.refresh_token:
                 # Token expired — get a new one and retry
                 if self._do_refresh():
-                    resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=10)
+                    resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
                 else:
                     return False
+            if resp.status_code == 429:
+                wait = int(resp.headers.get("Retry-After", "5"))
+                console.print(f"  [yellow]Rate limited, waiting {wait}s...[/yellow]")
+                time.sleep(wait)
+                payload["id"] = self._next_id()
+                resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
             resp.raise_for_status()
             self.session = resp.headers.get("Mcp-Session-Id")
             return True
@@ -172,6 +185,7 @@ class MCPClient:
         """
         Execute a tool call against the MCP server.
         Transparently refreshes the token on 401 and retries once.
+        Backs off on 429 rate-limit responses.
         Returns the result as a string (JSON or plain text).
         """
         for attempt in range(2):
@@ -182,11 +196,17 @@ class MCPClient:
                 "params": {"name": name, "arguments": arguments},
             }
             try:
-                resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=30)
+                resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
                 if resp.status_code == 401 and attempt == 0:
                     if self._do_refresh() and self.initialize():
                         continue
                     return json.dumps({"error": "unauthorized, refresh failed"})
+                if resp.status_code == 429:
+                    wait = int(resp.headers.get("Retry-After", "5"))
+                    console.print(f"  [yellow]Rate limited on {name}, waiting {wait}s...[/yellow]")
+                    time.sleep(wait)
+                    payload["id"] = self._next_id()
+                    resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
                 resp.raise_for_status()
                 data = resp.json()
                 if "error" in data:
@@ -1061,19 +1081,73 @@ def run_level(client: OpenAI, mcp: MCPClient, model_id: str, level: int) -> dict
 
 # ─── Model runner ──────────────────────────────────────────────────────────────
 
-def reset_benchmark_env():
-    """Wipe all benchmark org data between model runs for a clean slate."""
-    script = BENCHMARK_DIR / "scripts" / "reset_benchmark_env.sh"
-    result = subprocess.run(
-        ["bash", str(script)],
-        env={**os.environ, "FORCE": "1"},
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        console.print(f"  [yellow]DB reset warning: {result.stderr.strip()[:200]}[/yellow]")
+def reset_benchmark_env(mcp: "MCPClient"):
+    """Wipe all benchmark org data via MCP between model runs for a clean slate.
+
+    Steps:
+      1. get_authenticated_user → extract org_id
+      2. list_projects → remove_project(action=delete) for each
+      3. search for orphaned assets → delete_asset for each
+      4. list directories → delete(recursive=True) for each
+    """
+    # 1. Get org_id
+    user_raw = mcp.call_tool("get_authenticated_user", {})
+    try:
+        user_data = json.loads(user_raw)
+        orgs = user_data.get("organizations", [])
+        org_id = orgs[0]["id"] if orgs else user_data.get("organization_id", "")
+    except (json.JSONDecodeError, KeyError, IndexError):
+        console.print("  [yellow]Could not determine org_id from user data, cleanup may be incomplete[/yellow]")
+        org_id = ""
+
+    if not org_id:
+        console.print("  [yellow]No org_id found, skipping cleanup[/yellow]")
+        return
+
+    def _parse_mcp(raw: str, key: str, label: str) -> list:
+        """Parse an MCP call_tool response, warn on errors, return list."""
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            console.print(f"  [yellow]Cleanup: {label} returned invalid JSON[/yellow]")
+            return []
+        if "error" in data:
+            console.print(f"  [yellow]Cleanup: {label} failed: {data['error']}[/yellow]")
+            return []
+        return data.get(key, [])
+
+    # 2. Delete all projects (cascades to workunits/tasks)
+    projects_raw = mcp.call_tool("list_projects", {"organization_id": org_id, "page_size": 100})
+    projects = _parse_mcp(projects_raw, "projects", "list_projects")
+
+    for proj in projects:
+        pid = proj.get("id", "")
+        if pid:
+            mcp.call_tool("remove_project", {"id": pid, "action": "delete"})
+
+    # 3. Delete orphaned assets
+    assets_raw = mcp.call_tool("search", {"query": " ", "result_types": ["asset"], "page_size": 50})
+    assets = _parse_mcp(assets_raw, "results", "search assets")
+
+    for asset in assets:
+        aid = asset.get("id", "")
+        if aid:
+            mcp.call_tool("delete_asset", {"id": aid})
+
+    # 4. Delete directories
+    dirs_raw = mcp.call_tool("directory", {"action": "list", "organization_id": org_id})
+    directories = _parse_mcp(dirs_raw, "directories", "list directories")
+
+    for d in directories:
+        did = d.get("id", "")
+        if did:
+            mcp.call_tool("directory", {"action": "delete", "id": did, "recursive": True})
+
+    deleted = len(projects) + len(assets) + len(directories)
+    if deleted:
+        console.print(f"  [dim]Cleanup: deleted {len(projects)} projects, {len(assets)} assets, {len(directories)} directories[/dim]")
     else:
-        console.print("  [dim]DB reset complete[/dim]")
+        console.print("  [dim]Cleanup: org already clean[/dim]")
 
 
 def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
@@ -1108,16 +1182,16 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
         expand=False
     ))
 
-    # Reset DB before each model so tests don't bleed into each other
-    reset_benchmark_env()
-
     client = OpenAI(base_url=LMSTUDIO_BASE_URL, api_key="lm-studio")
     mcp    = MCPClient(token=token, refresh_token=refresh_token)
 
-    # Initialize MCP session
+    # Initialize MCP session once — used for both cleanup and task execution
     if not mcp.initialize():
         console.print("  [red]Could not connect to MCP server, skipping model[/red]")
         return {}
+
+    # Reset org data before each model so tests don't bleed into each other
+    reset_benchmark_env(mcp)
 
     # Load model with explicit context length so the full TOOLS list fits
     console.print(f"  [dim]Loading model (ctx={MODEL_CONTEXT_LENGTH})...[/dim]")
@@ -1233,6 +1307,10 @@ def main():
     group.add_argument("--model", "-m", help="Single model ID")
     group.add_argument("--models", help="Path to models.txt")
     group.add_argument("--list-models", action="store_true", help="List LM Studio models and exit")
+    group.add_argument(
+        "--cleanup-only", action="store_true",
+        help="Reset the org (delete all projects/assets/directories) and exit",
+    )
 
     parser.add_argument("--level", type=int, choices=[0, 1, 2], help="Run only this level")
     parser.add_argument("--dry-run", action="store_true", help="Show plan without executing")
@@ -1251,7 +1329,21 @@ def main():
         help="OAuth refresh token for automatic renewal (or set WORKUNIT_REFRESH_TOKEN env var)",
         default=os.environ.get("WORKUNIT_REFRESH_TOKEN", ""),
     )
+    parser.add_argument(
+        "--local", action="store_true",
+        help="Use local dev stack (MCP at localhost:9000, OAuth at localhost:3000)",
+    )
+    parser.add_argument(
+        "--yes", "-y", action="store_true",
+        help="Skip the destructive data warning prompt",
+    )
     args = parser.parse_args()
+
+    # --local overrides endpoints to dev stack
+    if args.local:
+        global MCP_URL, OAUTH_TOKEN_URL
+        MCP_URL        = "http://localhost:9000/mcp"
+        OAUTH_TOKEN_URL = "http://localhost:3000/oauth/token"
 
     if args.list_models:
         models = list_models()
@@ -1268,8 +1360,37 @@ def main():
     if not args.token:
         console.print("[red]Error: Workunit bearer token required.[/red]")
         console.print("Pass via --token or set WORKUNIT_TOKEN env var.")
-        console.print("\nGenerate one at: http://localhost:3000/settings/api")
+        console.print("\nGenerate one at: https://workunit.app/settings/api")
         sys.exit(1)
+
+    # --cleanup-only: reset the org and exit
+    if args.cleanup_only:
+        if args.dry_run:
+            console.print("[dim]--dry-run: would delete all projects, assets, and directories in your org[/dim]")
+            return
+        if not args.yes:
+            console.print("[bold red]WARNING: This will delete ALL projects, workunits, assets, and directories in your org.[/bold red]")
+            console.print("Use a dedicated Workunit account for benchmarking.\n")
+            confirm = input("Type 'yes' to continue: ")
+            if confirm.strip().lower() != "yes":
+                console.print("Aborted.")
+                return
+        mcp = MCPClient(token=args.token, refresh_token=args.refresh_token)
+        if not mcp.initialize():
+            console.print("[red]Could not connect to MCP server[/red]")
+            sys.exit(1)
+        reset_benchmark_env(mcp)
+        console.print("[green]Cleanup complete.[/green]")
+        return
+
+    # Destructive data warning before benchmark runs
+    if not args.yes:
+        console.print("[bold yellow]WARNING: The benchmark deletes ALL projects, workunits, assets, and directories[/bold yellow]")
+        console.print("[bold yellow]in your org between each model run. Use a dedicated Workunit account.[/bold yellow]\n")
+        confirm = input("Type 'yes' to continue (or use --yes to skip): ")
+        if confirm.strip().lower() != "yes":
+            console.print("Aborted.")
+            return
 
     levels = [args.level] if args.level is not None else [0, 1, 2]
 
@@ -1342,7 +1463,7 @@ def main():
     if failed_models:
         console.print(f"\n[yellow]Models that crashed (can be re-run individually):[/yellow]")
         for m in failed_models:
-            console.print(f"  python runner.py --model {m} --token $WORKUNIT_TOKEN")
+            console.print(f"  python runner_v2_agentic.py --model {m} --token $WORKUNIT_TOKEN --yes")
 
     console.print("\n[dim]To generate the aggregated report:[/dim]")
     console.print(f"  python {Path(__file__).parent / 'aggregate_results.py'}")

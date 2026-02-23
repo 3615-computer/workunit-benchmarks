@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 """
-Workunit MCP Benchmark — Unified Runner
+Workunit MCP Benchmark — Single-shot Runner
 Runs all three levels for all models via LM Studio's OpenAI-compatible API.
-No OpenCode, no manual steps. Fully autonomous overnight execution.
-
-LM Studio auto-loads/unloads models when the `model` field changes in a request.
-GPU offload to RAM is handled automatically by LM Studio based on available VRAM.
+Evaluates the first response only (no agentic loop). No MCP server required —
+tool calls are validated structurally, not executed.
 
 Usage:
     # Run all models, all levels
-    python runner.py --models ../models.txt
+    python runner_v1_singleshot.py --models ../models.txt
 
     # Single model, single level
-    python runner.py --model ibm/granite-4-h-tiny --level 0
+    python runner_v1_singleshot.py --model ibm/granite-4-h-tiny --level 0
 
     # Dry run — show plan without executing
-    python runner.py --models ../models.txt --dry-run
+    python runner_v1_singleshot.py --models ../models.txt --dry-run
 
     # List models available in LM Studio
-    python runner.py --list-models
+    python runner_v1_singleshot.py --list-models
 
 Requirements:
     pip install openai rich
@@ -26,6 +24,7 @@ Requirements:
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -50,7 +49,7 @@ LMSTUDIO_MGMT_URL  = f"http://{_LMSTUDIO_HOST}"
 
 BENCHMARK_DIR = Path(__file__).parent.parent
 TASKS_DIR     = BENCHMARK_DIR / "tasks"
-RESULTS_DIR   = BENCHMARK_DIR / "results"
+RESULTS_DIR   = BENCHMARK_DIR / "results" / "v1_singleshot"
 PROJECT_ROOT  = BENCHMARK_DIR.parent
 
 TASK_FILES = {
@@ -665,11 +664,32 @@ def run_level(client: OpenAI, model_id: str, level: int, context: dict) -> dict:
 
 # ─── Model runner ──────────────────────────────────────────────────────────────
 
-def run_model(model_id: str, levels: list[int], tool_trained: bool) -> dict:
-    """Run all levels for one model. Handles model switching automatically."""
+def run_model(model_id: str, levels: list[int], tool_trained: bool,
+              force: bool = False, no_git: bool = False) -> dict:
+    """Run all levels for one model. Handles model switching automatically.
+
+    Skips levels that already have a result file unless force=True.
+    """
+    # Check which levels still need running
+    pending_levels = []
+    for level in levels:
+        if not force and result_exists(model_id, level):
+            console.print(f"  [dim]Level {level}: already done, skipping (use --force to re-run)[/dim]")
+        else:
+            pending_levels.append(level)
+
+    if not pending_levels:
+        console.print(Panel(
+            f"[bold cyan]{model_id}[/bold cyan]\n"
+            f"[dim]All levels already complete — skipping[/dim]",
+            expand=False
+        ))
+        return {}
+
     console.print(Panel(
         f"[bold cyan]{model_id}[/bold cyan]\n"
-        f"[dim]Tool-trained: {'yes' if tool_trained else 'no (control group)'}[/dim]",
+        f"[dim]Tool-trained: {'yes' if tool_trained else 'no (control group)'}  "
+        f"Levels to run: {pending_levels}[/dim]",
         expand=False
     ))
 
@@ -691,7 +711,7 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool) -> dict:
         "levels": {},
     }
 
-    for level in levels:
+    for level in pending_levels:
         level_result = run_level(client, model_id, level, context)
         model_results["levels"][level] = level_result
 
@@ -703,12 +723,20 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool) -> dict:
 
         # Save result file immediately after each level
         save_result(model_id, level, level_result, tool_trained)
-        git_commit(model_id, level)
+        if not no_git:
+            git_commit(model_id, level)
 
     return model_results
 
 
 # ─── Persistence ──────────────────────────────────────────────────────────────
+
+def result_exists(model_id: str, level: int) -> bool:
+    """Return True if a non-empty result file already exists for this model+level."""
+    safe = re.sub(r"[^\w\-.]", "_", model_id)
+    existing = list(RESULTS_DIR.glob(f"level{level}_{safe}_*.json"))
+    return len(existing) > 0
+
 
 def save_result(model_id: str, level: int, level_result: dict, tool_trained: bool):
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -774,7 +802,7 @@ def load_models_file(path: str) -> list[tuple[str, bool]]:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Workunit MCP Benchmark — autonomous runner via LM Studio API",
+        description="Workunit MCP Benchmark — single-shot runner via LM Studio API",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     group = parser.add_mutually_exclusive_group()
@@ -785,6 +813,10 @@ def main():
     parser.add_argument("--level", type=int, choices=[0, 1, 2], help="Run only this level")
     parser.add_argument("--dry-run", action="store_true", help="Show plan without executing")
     parser.add_argument("--no-git", action="store_true", help="Skip git commits")
+    parser.add_argument(
+        "--force", action="store_true",
+        help="Re-run levels that already have result files (default: skip completed levels)",
+    )
     args = parser.parse_args()
 
     if args.list_models:
@@ -811,20 +843,32 @@ def main():
         parser.error("Provide --model, --models, or --list-models")
 
     if args.dry_run:
-        console.print(Panel(
-            f"[bold]Dry Run Plan[/bold]\n\n"
-            f"Models ({len(model_list)}):\n" +
-            "\n".join(f"  • {m} {'(no tool training)' if not tt else ''}" for m, tt in model_list) +
-            f"\n\nLevels: {levels}\n"
-            f"Tasks per level: L0={11}, L1={10}, L2={7}\n"
-            f"Total task runs: {len(model_list) * sum([11,10,7][l] for l in levels)}",
-        ))
+        pending = []
+        done    = []
+        for m, tt in model_list:
+            for lvl in levels:
+                if not args.force and result_exists(m, lvl):
+                    done.append(f"  [dim]✓ L{lvl} {m}[/dim]")
+                else:
+                    pending.append(f"  • L{lvl} {m}{' (no tool training)' if not tt else ''}")
+
+        lines = []
+        if pending:
+            lines.append(f"[bold]Will run ({len(pending)}):[/bold]")
+            lines.extend(pending)
+        if done:
+            lines.append(f"\n[dim]Already done, will skip ({len(done)}):[/dim]")
+            lines.extend(done)
+        lines.append(f"\nTasks per level: L0=11, L1=10, L2=7")
+
+        console.print(Panel("\n".join(lines), title="Dry Run Plan"))
         return
 
     console.print(Panel(
-        f"[bold cyan]Workunit MCP Benchmark[/bold cyan]\n\n"
+        f"[bold cyan]Workunit MCP Benchmark — Single-shot[/bold cyan]\n\n"
         f"Models: {len(model_list)}\n"
         f"Levels: {levels}\n"
+        f"Force re-run: {'yes' if args.force else 'no (skipping completed levels)'}\n"
         f"LM Studio: {LMSTUDIO_BASE_URL}",
         title="Starting Run"
     ))
@@ -832,7 +876,7 @@ def main():
     start = time.time()
     for i, (model_id, tool_trained) in enumerate(model_list, 1):
         console.print(f"\n[dim]── Model {i}/{len(model_list)} ──────────────────────────────[/dim]")
-        run_model(model_id, levels, tool_trained)
+        run_model(model_id, levels, tool_trained, args.force, args.no_git)
 
     elapsed = time.time() - start
     console.print(f"\n[bold green]Complete![/bold green] {elapsed/60:.1f} minutes total")
@@ -843,7 +887,25 @@ def main():
     subprocess.run([sys.executable, str(agg)], cwd=str(BENCHMARK_DIR))
 
     if not args.no_git:
-        git_commit("final-report", "all")
+        # Commit any remaining aggregated report changes
+        try:
+            subprocess.run(
+                ["git", "add", "benchmark/results/"],
+                cwd=str(PROJECT_ROOT), check=True, capture_output=True
+            )
+            result = subprocess.run(
+                ["git", "diff", "--cached", "--quiet"],
+                cwd=str(PROJECT_ROOT), capture_output=True
+            )
+            if result.returncode != 0:
+                subprocess.run(
+                    ["git", "commit", "-m",
+                     "results: aggregated report\n\n[benchmark auto-commit]"],
+                    cwd=str(PROJECT_ROOT), check=True, capture_output=True
+                )
+                console.print(f"  [dim]Committed aggregated report to git[/dim]")
+        except subprocess.CalledProcessError:
+            pass
 
 
 if __name__ == "__main__":

@@ -206,6 +206,8 @@ python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --re
 
 Requires LM Studio with the target models available locally. The benchmark runs against [Workunit](https://workunit.app)'s MCP server, so you need a free account to get an MCP token — the tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
 
+**Disclosure:** I ran these benchmarks against my local dev stack with direct database access for resets between models. I've since refactored the runner to point to `workunit.app` by default (MCP-based cleanup instead of direct SQL), but I haven't re-run the full suite against the production endpoint yet. If you hit issues running against `workunit.app`, please open an issue on the repo.
+
 Task definitions: `tasks/*.json` (plain JSON, every prompt and validation criterion)
 Results: `results/v2_agentic/*.json` (per-model, per-level)
 Aggregated report: `results/v2_agentic/aggregated_report.md`
