@@ -10,7 +10,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 # Data: (label, L0, L1, L2, tool_trained)
-# Sorted by AG Overall descending (same order as other graphs)
+# Sorted by AG Overall descending
 models = [
     ("granite-4-h-tiny 7B",         100, 100, 57, True),
     ("qwen3-coder-30b 30B",         100,  90, 57, True),
@@ -44,45 +44,45 @@ bar_h = 0.24
 fig, ax = plt.subplots(figsize=(13, 10))
 fig.patch.set_facecolor("#0d1117")
 ax.set_facecolor("#161b22")
+plt.subplots_adjust(bottom=0.12, right=0.87)
 
-C_L0 = "#3fb950"   # green   — explicit
-C_L1 = "#4a9eff"   # blue    — natural language
-C_L2 = "#d29922"   # amber   — reasoning
+C_L0 = "#3fb950"   # green
+C_L1 = "#4a9eff"   # blue
+C_L2 = "#e8ab30"   # amber
 
-bars_l0 = ax.barh(y + bar_h,     l0_vals, bar_h, color=C_L0, alpha=0.90, label="L0 — Explicit")
-bars_l1 = ax.barh(y,             l1_vals, bar_h, color=C_L1, alpha=0.90, label="L1 — Natural language")
-bars_l2 = ax.barh(y - bar_h,     l2_vals, bar_h, color=C_L2, alpha=0.90, label="L2 — Reasoning")
+bars_l0 = ax.barh(y + bar_h,  l0_vals, bar_h, color=C_L0, alpha=0.90, label="L0")
+bars_l1 = ax.barh(y,          l1_vals, bar_h, color=C_L1, alpha=0.90, label="L1")
+bars_l2 = ax.barh(y - bar_h,  l2_vals, bar_h, color=C_L2, alpha=0.90, label="L2")
 
-# Value labels (only non-zero)
+# Value labels (non-zero only)
 for bars, vals in [(bars_l0, l0_vals), (bars_l1, l1_vals), (bars_l2, l2_vals)]:
     for bar, val in zip(bars, vals):
         if val > 0:
             ax.text(val + 1, bar.get_y() + bar.get_height()/2, f"{val}%",
                     va="center", ha="left", fontsize=7, color="#c9d1d9")
 
-# Annotate glm-4.7-flash anomaly (L2 > L0 and L1)
+# Annotations — placed in right margin, outside axes
 glm47_idx = next(i for i, m in enumerate(models) if "glm-4.7" in m[0])
-ax.annotate("L2 (71%) > L0 (55%) & L1 (50%) — anomaly",
+phi_idx   = next(i for i, m in enumerate(models) if "phi-4"   in m[0])
+
+ax.annotate("L2 (71%) > L0 & L1\n— anomaly",
             xy=(72, glm47_idx - bar_h),
-            xytext=(80, glm47_idx - 3.5),
+            xytext=(104, glm47_idx),
             fontsize=7.5, color="#ffa657",
-            arrowprops=dict(arrowstyle="->", color="#ffa657", lw=1, connectionstyle="arc3,rad=0.15"),
-            ha="left")
+            arrowprops=dict(arrowstyle="->", color="#ffa657", lw=1),
+            ha="left", va="center",
+            annotation_clip=False)
 
-# Annotate phi-4 inversion
-phi_idx = next(i for i, m in enumerate(models) if "phi-4" in m[0])
-ax.annotate("46% L0 but 80% L1 — inverted",
+ax.annotate("46% L0 but 80% L1\n— inverted",
             xy=(47, phi_idx + bar_h),
-            xytext=(56, phi_idx + 2.5),
+            xytext=(104, phi_idx),
             fontsize=7.5, color="#ff6b6b",
-            arrowprops=dict(arrowstyle="->", color="#ff6b6b", lw=1, connectionstyle="arc3,rad=-0.15"),
-            ha="left")
+            arrowprops=dict(arrowstyle="->", color="#ff6b6b", lw=1),
+            ha="left", va="center",
+            annotation_clip=False)
 
-# Mark control group labels with slightly different y-tick color via text
 ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=8.5, color="#c9d1d9")
-
-# Tint y-tick labels for control group
 for tick, flag in zip(ax.get_yticklabels(), tool_flags):
     if not flag:
         tick.set_color("#8b949e")
@@ -91,7 +91,7 @@ ax.set_xlabel("Pass Rate (%)", fontsize=10, color="#8b949e", labelpad=8)
 ax.set_title("Agentic Loop — Pass Rate by Difficulty Level\n17 models · L0 Explicit / L1 Natural language / L2 Reasoning",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
-ax.set_xlim(0, 128)
+ax.set_xlim(0, 102)
 ax.set_ylim(-0.8, n - 0.2)
 ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x)}%"))
 ax.tick_params(colors="#8b949e", labelsize=9)
@@ -100,26 +100,21 @@ for spine in ax.spines.values():
 ax.xaxis.grid(True, color="#21262d", linewidth=0.8, linestyle="--")
 ax.set_axisbelow(True)
 
-# Vertical line at 100% for reference
-ax.axvline(100, color="#30363d", linewidth=1, linestyle=":")
-
-# Legend
+# Legend below the chart
 patches = [
     mpatches.Patch(color=C_L0, label="L0 — Explicit (11 tasks): exact tool + params given"),
     mpatches.Patch(color=C_L1, label="L1 — Natural language (10 tasks): model picks tool + maps params"),
     mpatches.Patch(color=C_L2, label="L2 — Reasoning (7 tasks): high-level goal, must chain IDs"),
 ]
-ax.legend(handles=patches, loc="lower right", fontsize=8.5,
-          framealpha=0.25, edgecolor="#30363d",
+ax.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, -0.10),
+          ncol=1, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
           facecolor="#161b22", labelcolor="#c9d1d9")
 
-# Control group note
 fig.text(0.13, 0.005, "✗ = control group (not tool-trained per LM Studio metadata)",
          ha="left", fontsize=7.5, color="#8b949e", style="italic")
 fig.text(0.99, 0.005, "workunit.app · github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
 
-plt.tight_layout()
 output = "graph2_level_breakdown_agentic.png"
 plt.savefig(output, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
 print(f"Saved: {output}")
