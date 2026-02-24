@@ -84,7 +84,7 @@ for tick, flag in zip(ax.get_yticklabels(), tool_flags):
 
 ax.set_xlabel("Pass Rate (%)", fontsize=10, color="#8b949e", labelpad=8)
 ax.set_title("Agentic Loop — Pass Rate by Difficulty Level\n"
-             "17 models · L0 Explicit / L1 Natural language / L2 Reasoning",
+             "19 models · L0 Explicit / L1 Natural language / L2 Reasoning",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
@@ -108,7 +108,7 @@ fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.07),
 
 fig.text(0.13, 0.005, "✗ = not trained for tool calling (per LM Studio metadata)",
          ha="left", fontsize=7.5, color="#8b949e", style="italic")
-fig.text(0.99, 0.005, "workunit.app · github.com/3615-computer/workunit-benchmarks",
+fig.text(0.99, 0.005, "github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
 
 output = "graph2_level_breakdown_agentic.png"

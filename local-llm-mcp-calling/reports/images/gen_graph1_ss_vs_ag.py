@@ -103,7 +103,7 @@ ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=9, color="#c9d1d9")
 ax.set_xlabel("Overall Score (%)", fontsize=10, color="#8b949e", labelpad=8)
 ax.set_title("Local LLM MCP Tool Calling — Single-shot vs Agentic Overall Score\n"
-             "17 models · 28 tasks · 3 difficulty levels",
+             "19 models · 28 tasks · 3 difficulty levels",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
@@ -130,7 +130,7 @@ fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.01),
            ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
            facecolor="#161b22", labelcolor="#c9d1d9")
 
-fig.text(0.99, 0.005, "workunit.app · github.com/3615-computer/workunit-benchmarks",
+fig.text(0.99, 0.005, "github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
 
 output = "graph1_ss_vs_ag_overall.png"

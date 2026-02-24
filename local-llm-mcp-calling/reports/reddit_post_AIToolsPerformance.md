@@ -6,7 +6,7 @@
 
 ## TITLE
 
-17 local LLMs on real MCP tool calling — 3 levels (explicit, natural language, reasoning), single-shot vs agentic. Same models, wildly different rankings.
+19 local LLMs on real MCP tool calling — 3 levels (explicit, natural language, reasoning), single-shot vs agentic. Same models, wildly different rankings.
 
 ---
 
@@ -14,12 +14,12 @@
 
 ### What this is
 
-A benchmark comparing how 17 local LLMs perform on real MCP (Model Context Protocol) tool calling, run twice with two different evaluation methodologies:
+A benchmark comparing how 19 local LLMs perform on real MCP (Model Context Protocol) tool calling, run twice with two different evaluation methodologies:
 
 1. **Single-shot**: one API call per task, score the first response
 2. **Agentic loop**: model receives actual tool results after each call and continues until the task passes or a 5-minute timeout is hit
 
-Both runs used the same 17 models, same 28 tasks, and the same live MCP server.
+Both runs used the same 19 models, same 28 tasks, and the same live MCP server.
 
 ---
 
@@ -29,7 +29,7 @@ Both runs used the same 17 models, same 28 tasks, and the same live MCP server.
 - **RAM**: 64GB system
 - **Model runtime**: LM Studio (local, OpenAI-compatible API at `http://localhost:1234/v1`)
 - **Context length**: 8192 tokens for all models (loaded programmatically via LM Studio management API)
-- **MCP server**: Workunit's production MCP server running locally (`http://localhost:9000/mcp`), 19 tools
+- **MCP server**: A real project management MCP server running locally (`http://localhost:9000/mcp`), 19 tools
 - **Runner**: Custom Python script using the `openai` client library for model calls and streamable HTTP for MCP
 - **Temperature**: 0.0 for all models
 - **Task timeout**: 300s per task (agentic run only)
@@ -40,27 +40,29 @@ All models were unloaded from VRAM before each run and reloaded at a fixed 8192 
 
 ### Models tested
 
-17 models total. 5 are not trained for tool calling (per LM Studio metadata), included to measure whether reasoning capability substitutes for tool-call fine-tuning.
+19 models total. 5 are not trained for tool calling (per LM Studio metadata), included to measure whether reasoning capability substitutes for tool-call fine-tuning. All models run at Q4_K_M quantization unless noted otherwise.
 
-| Model | Size | Tool-trained |
-|-------|------|-------------|
-| ibm/granite-4-h-tiny | 7B | ✅ |
-| qwen/qwen3-coder-30b | 30B | ✅ |
-| mistralai/magistral-small-2509 | 24B | ✅ |
-| qwen/qwen3-4b-thinking-2507 | 4B | ✅ |
-| openai/gpt-oss-20b | 20B | ✅ |
-| mistralai/ministral-3-14b-reasoning | 14B | ✅ |
-| mistralai/ministral-3-3b | 3B | ✅ |
-| essentialai/rnj-1 | 8.3B | ✅ |
-| nvidia/nemotron-3-nano | 30B | ✅ |
-| zai-org/glm-4.6v-flash | 9.4B | ✅ |
-| zai-org/glm-4.7-flash | 30B | ✅ |
-| bytedance/seed-oss-36b | 36B | ✅ |
-| baidu/ernie-4.5-21b-a3b | 21B | ❌ |
-| google/gemma-3-12b | 12B | ❌ |
-| microsoft/phi-4-reasoning-plus | 15B | ❌ |
-| qwen/qwen2.5-coder-32b | 32B | ❌ |
-| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌ |
+| Model | Size | Quant | Tool-trained |
+|-------|------|-------|-------------|
+| ibm/granite-4-h-tiny | 7B | Q4_K_M | ✅ |
+| qwen/qwen3-coder-30b | 30B | Q4_K_M | ✅ |
+| mistralai/magistral-small-2509 | 24B | Q4_K_M | ✅ |
+| qwen/qwen3-4b-thinking-2507 | 4B | Q4_K_M | ✅ |
+| openai/gpt-oss-20b | 20B | MXFP4 | ✅ |
+| mistralai/ministral-3-14b-reasoning | 14B | Q4_K_M | ✅ |
+| mistralai/ministral-3-3b | 3B | Q4_K_M | ✅ |
+| essentialai/rnj-1 | 8.3B | Q4_K_M | ✅ |
+| nvidia/nemotron-3-nano | 30B | Q4_K_M | ✅ |
+| zai-org/glm-4.6v-flash | 9.4B | Q4_K_M | ✅ |
+| zai-org/glm-4.7-flash | 30B | Q4_K_M | ✅ |
+| bytedance/seed-oss-36b | 36B | Q4_K_M | ✅ |
+| mistralai/devstral-small-2-2512 | 24B | Q3_K_L | ✅ |
+| qwen/qwen3-coder-next | 80B | Q4_K_M | ✅ |
+| baidu/ernie-4.5-21b-a3b | 21B | Q4_K_M | ❌ |
+| google/gemma-3-12b | 12B | Q4_K_M | ❌ |
+| microsoft/phi-4-reasoning-plus | 15B | Q4_K_M | ❌ |
+| qwen/qwen2.5-coder-32b | 32B | Q4_K_M | ❌ |
+| deepseek/deepseek-r1-0528-qwen3-8b | 8B | Q4_K_M | ❌ |
 
 ---
 
@@ -104,55 +106,61 @@ Both runs used `temperature=0.0`. The agentic run also resets the test database 
 
 ### Results
 
-![Agentic pass rate by difficulty level — 17 models](images/graph2_level_breakdown_agentic.png)
+![Agentic pass rate by difficulty level — 19 models](images/graph2_level_breakdown_agentic.png)
 
 **Agentic loop (primary results):**
 
-| Model | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
-|-------|---------|---------|---------|--------------|
-| ibm/granite-4-h-tiny | 100% | 100% | 57% | **89%** |
-| qwen/qwen3-coder-30b | 100% | 90% | 57% | **88%** |
-| mistralai/magistral-small-2509 | 100% | 100% | 43% | **85%** |
-| qwen/qwen3-4b-thinking-2507 | 100% | 80% | 57% | **85%** |
-| openai/gpt-oss-20b | 100% | 80% | 43% | **85%** |
-| mistralai/ministral-3-14b-reasoning | 100% | 90% | 29% | **84%** |
-| baidu/ernie-4.5-21b-a3b ❌ | 100% | 100% | 29% | **83%** |
-| mistralai/ministral-3-3b | 91% | 90% | 29% | **81%** |
-| google/gemma-3-12b ❌ | 91% | 80% | 29% | **78%** |
-| essentialai/rnj-1 | 100% | 80% | 0% | **77%** |
-| nvidia/nemotron-3-nano | 100% | 60% | 14% | **71%** |
-| zai-org/glm-4.6v-flash | 91% | 60% | 14% | **68%** |
-| microsoft/phi-4-reasoning-plus ❌ | 46% | 80% | 43% | **64%** |
-| zai-org/glm-4.7-flash | 55% | 50% | 71% | **61%** |
-| qwen/qwen2.5-coder-32b ❌ | 91% | 50% | 14% | **58%** |
-| deepseek/deepseek-r1-0528-qwen3-8b ❌ | 18% | 0% | 0% | **6%** |
-| bytedance/seed-oss-36b | 0% | 0% | 0% | **0%** |
+| Model | Quant | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
+|-------|-------|---------|---------|---------|--------------|
+| ibm/granite-4-h-tiny | Q4_K_M | 100% | 100% | 57% | **89%** |
+| qwen/qwen3-coder-30b | Q4_K_M | 100% | 90% | 57% | **88%** |
+| mistralai/magistral-small-2509 | Q4_K_M | 100% | 100% | 43% | **85%** |
+| qwen/qwen3-4b-thinking-2507 | Q4_K_M | 100% | 80% | 57% | **85%** |
+| openai/gpt-oss-20b | MXFP4 | 100% | 80% | 43% | **85%** |
+| mistralai/ministral-3-14b-reasoning | Q4_K_M | 100% | 90% | 29% | **84%** |
+| baidu/ernie-4.5-21b-a3b ❌ | Q4_K_M | 100% | 100% | 29% | **83%** |
+| mistralai/ministral-3-3b | Q4_K_M | 91% | 90% | 29% | **81%** |
+| google/gemma-3-12b ❌ | Q4_K_M | 91% | 80% | 29% | **78%** |
+| essentialai/rnj-1 | Q4_K_M | 100% | 80% | 0% | **77%** |
+| nvidia/nemotron-3-nano | Q4_K_M | 100% | 60% | 14% | **71%** |
+| zai-org/glm-4.6v-flash | Q4_K_M | 91% | 60% | 14% | **68%** |
+| microsoft/phi-4-reasoning-plus ❌ | Q4_K_M | 46% | 80% | 43% | **64%** |
+| zai-org/glm-4.7-flash | Q4_K_M | 55% | 50% | 71% | **61%** |
+| qwen/qwen2.5-coder-32b ❌ | Q4_K_M | 91% | 50% | 14% | **58%** |
+| deepseek/deepseek-r1-0528-qwen3-8b ❌ | Q4_K_M | 18% | 0% | 0% | **6%** |
+| bytedance/seed-oss-36b | Q4_K_M | 0% | 0% | 0% | **0%** |
+| mistralai/devstral-small-2-2512 | Q3_K_L | — | — | — | **—** |
+| qwen/qwen3-coder-next | Q4_K_M | — | — | — | **—** |
 
 ❌ = not trained for tool calling
+— = test pending
 
 **Single-shot (reference):**
 
-| Model | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
-|-------|---------|---------|---------|--------------|
-| mistralai/ministral-3-3b | 100% | 90% | 57% | **89%** |
-| mistralai/magistral-small-2509 | 100% | 90% | 0% | **78%** |
-| mistralai/ministral-3-14b-reasoning | 100% | 90% | 0% | **78%** |
-| qwen/qwen3-4b-thinking-2507 | 100% | 80% | 0% | **74%** |
-| essentialai/rnj-1 | 100% | 80% | 0% | **74%** |
-| ibm/granite-4-h-tiny | 100% | 80% | 0% | **73%** |
-| openai/gpt-oss-20b | 100% | 70% | 0% | **72%** |
-| qwen/qwen3-coder-30b | 100% | 80% | 0% | **71%** |
-| bytedance/seed-oss-36b | 100% | 80% | 0% | **71%** |
-| zai-org/glm-4.6v-flash | 82% | 80% | 0% | **67%** |
-| nvidia/nemotron-3-nano | 91% | 60% | 0% | **59%** |
-| microsoft/phi-4-reasoning-plus ❌ | 55% | 70% | 0% | **48%** |
-| zai-org/glm-4.7-flash | 64% | 40% | 0% | **44%** |
-| qwen/qwen2.5-coder-32b ❌ | 64% | 40% | 0% | **38%** |
-| deepseek/deepseek-r1-0528-qwen3-8b ❌ | 9% | 0% | 0% | **3%** |
-| baidu/ernie-4.5-21b-a3b ❌ | 0% | 0% | 0% | **0%** |
-| google/gemma-3-12b ❌ | 0% | 0% | 0% | **0%** |
+| Model | Quant | L0 Pass% | L1 Pass% | L2 Pass% | Overall Score |
+|-------|-------|---------|---------|---------|--------------|
+| mistralai/ministral-3-3b | Q4_K_M | 100% | 90% | 57% | **89%** |
+| mistralai/magistral-small-2509 | Q4_K_M | 100% | 90% | 0% | **78%** |
+| mistralai/ministral-3-14b-reasoning | Q4_K_M | 100% | 90% | 0% | **78%** |
+| qwen/qwen3-4b-thinking-2507 | Q4_K_M | 100% | 80% | 0% | **74%** |
+| essentialai/rnj-1 | Q4_K_M | 100% | 80% | 0% | **74%** |
+| ibm/granite-4-h-tiny | Q4_K_M | 100% | 80% | 0% | **73%** |
+| openai/gpt-oss-20b | MXFP4 | 100% | 70% | 0% | **72%** |
+| qwen/qwen3-coder-30b | Q4_K_M | 100% | 80% | 0% | **71%** |
+| bytedance/seed-oss-36b | Q4_K_M | 100% | 80% | 0% | **71%** |
+| zai-org/glm-4.6v-flash | Q4_K_M | 82% | 80% | 0% | **67%** |
+| nvidia/nemotron-3-nano | Q4_K_M | 91% | 60% | 0% | **59%** |
+| microsoft/phi-4-reasoning-plus ❌ | Q4_K_M | 55% | 70% | 0% | **48%** |
+| zai-org/glm-4.7-flash | Q4_K_M | 64% | 40% | 0% | **44%** |
+| qwen/qwen2.5-coder-32b ❌ | Q4_K_M | 64% | 40% | 0% | **38%** |
+| deepseek/deepseek-r1-0528-qwen3-8b ❌ | Q4_K_M | 9% | 0% | 0% | **3%** |
+| baidu/ernie-4.5-21b-a3b ❌ | Q4_K_M | 0% | 0% | 0% | **0%** |
+| google/gemma-3-12b ❌ | Q4_K_M | 0% | 0% | 0% | **0%** |
+| mistralai/devstral-small-2-2512 | Q3_K_L | — | — | — | **—** |
+| qwen/qwen3-coder-next | Q4_K_M | — | — | — | **—** |
 
 ❌ = not trained for tool calling
+— = test pending
 
 Single-shot L2 was 0% for 16 of 17 models. The one exception: mistralai/ministral-3-3b scored 57% (4/7 tasks). On inspection, the 4 tasks it passes don't require ID chaining — they're standalone calls (bootstrap project, find stale work, document a decision, create project with linked asset). The tasks that do require chaining an `id` from one call into the next were 0% across the board in single-shot, as expected: the model has no way to observe intermediate results in a single-response evaluation.
 
@@ -162,7 +170,7 @@ Single-shot L0 and L1 results are directionally consistent with the agentic run,
 
 ### Single-shot vs agentic — overall delta
 
-![Single-shot vs Agentic Overall Score — 17 models](images/graph1_ss_vs_ag_overall.png)
+![Single-shot vs Agentic Overall Score — 19 models](images/graph1_ss_vs_ag_overall.png)
 
 ### Tool-trained vs not tool-trained
 
@@ -185,10 +193,10 @@ Single-shot L0 and L1 results are directionally consistent with the agentic run,
 ### Limitations
 
 - **Single hardware configuration**: all results on one 4080 16GB system; different quantizations or hardware may produce different results
-- **8192 fixed context**: some models may perform better with longer context; the limit was chosen to fit all 17 models on the GPU
+- **8192 fixed context**: some models may perform better with longer context; the limit was chosen to fit all 19 models on the GPU
 - **Single run per model**: no statistical averaging across multiple runs; results should be treated as a point estimate
 - **LM Studio tool-training labels**: "tool-trained" classification is LM Studio's metadata, not independently verified
-- **Task set is Workunit-specific**: the API schema (update_mask pattern, context atoms, etc.) is not universal; results may not generalize to other MCP servers
+- **Single API schema**: the API schema (update_mask pattern, context atoms, etc.) is specific to the project management server used; results may not generalize to other MCP servers
 
 ---
 
@@ -204,11 +212,7 @@ pip install openai rich requests
 python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
 ```
 
-Requires LM Studio with the target models available locally. The benchmark runs against [Workunit](https://workunit.app)'s MCP server, so you need a free account to get an MCP token. The easiest way to get your tokens: `bunx @modelcontextprotocol/inspector@latest` — connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the access + refresh tokens. The tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
-
-**⚠️ Use a dedicated account.** The agentic runner deletes **all projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, you **will lose all your data**. Create a separate free account just for benchmarking.
-
-**Disclosure:** I ran these benchmarks against my local dev stack with direct database access for resets between models. I've since refactored the runner to point to `workunit.app` by default (MCP-based cleanup instead of direct SQL), but I haven't re-run the full suite against the production endpoint yet. If you hit issues running against `workunit.app`, please open an issue on the repo.
+Requires LM Studio with the target models available locally. The benchmark runs against a real project management MCP server. See the repo README for setup options (local dev stack or production endpoint). The tasks exercise a real API that needs to authenticate calls and maintain state between tool invocations.
 
 Task definitions: `tasks/*.json` (plain JSON, every prompt and validation criterion)
 Results: `results/v2_agentic/*.json` (per-model, per-level)

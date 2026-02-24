@@ -186,7 +186,7 @@ fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.5, 0.01),
 fig.suptitle("Tool-trained vs Not Tool-trained — Single-shot and Agentic Performance",
              fontsize=12, color="#e6edf3", fontweight="bold", y=1.01)
 
-fig.text(0.99, -0.02, "workunit.app · github.com/3615-computer/workunit-benchmarks",
+fig.text(0.99, -0.02, "github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
 
 output = "graph3_trained_vs_control.png"

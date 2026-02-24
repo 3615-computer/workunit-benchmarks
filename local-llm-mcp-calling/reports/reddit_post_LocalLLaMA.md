@@ -5,15 +5,15 @@
 
 ## TITLE
 
-I tested 17 local LLMs on real tool calling: direct, NLP, and multi-step reasoning (single-shot & agentic). A 7B model topped the leaderboard.
+I tested 19 local LLMs on real tool calling: direct, NLP, and multi-step reasoning (single-shot & agentic). A 7B model topped the leaderboard.
 
 ---
 
 ## POST BODY
 
-I benchmarked 17 local LLMs on real MCP tool calling — not synthetic function-calling evals, but actual calls against a production API with 19 tools, real validation, and real results.
+I benchmarked 19 local LLMs on real MCP tool calling — not synthetic function-calling evals, but actual calls against a real API with 19 tools, real validation, and real results.
 
-I ran each model twice. First single-shot (one API call, score the first response). Then agentic (model gets tool results back, keeps going until it passes or times out). Same 17 models, same 28 tasks, same MCP server.
+I ran each model twice. First single-shot (one API call, score the first response). Then agentic (model gets tool results back, keeps going until it passes or times out). Same 19 models, same 28 tasks, same MCP server.
 
 The methodology difference changes everything.
 
@@ -21,50 +21,59 @@ The methodology difference changes everything.
 
 ### The setup
 
-**17 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to a real MCP server ([Workunit](https://workunit.app)'s project management API — 19 tools) through a custom Python runner.
+**19 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to a real MCP server (a project management API with 19 tools) through a custom Python runner. All models run at Q4_K_M quantization unless noted otherwise.
 
 5 models are **not trained for tool calling** (per LM Studio metadata) — included to test whether raw reasoning ability compensates for missing fine-tuning.
 
 **Three difficulty levels:**
 
-**Level 0 — Explicit** (11 tasks): Exact tool name and all parameters given. Pure format compliance.
+**Level 0 — Explicit** (11 tasks): I tell the model exactly which tool to call and what parameters to use. Tests: can it follow instructions and emit a valid tool call? Most models nail this.
 > *"Call `create_workunit` with name='Hello World', problem_statement='Users can't track work', success_criteria='Workunit visible in dashboard', priority='normal'"*
 
-**Level 1 — Natural language** (10 tasks): Human-style request. Model picks the right tool, maps description to params.
+**Level 1 — Natural language** (10 tasks): I describe what I want in plain English. The model has to figure out which tool to use and map my words to the right parameters. Harder, but most tool-trained models handle it.
 > *"Create a workunit called 'Fix Login Page Bug'. Problem: users can't log in with special characters. Done when all character types work with regression tests. High priority."*
 
-**Level 2 — Reasoning** (7 tasks): High-level goal only. No tool names, no hints. Model must plan the sequence and chain IDs across calls.
+**Level 2 — Reasoning** (7 tasks): I give a high-level goal like 'close out the sprint.' The model has to plan multiple steps, call tools in sequence, and pass IDs from one call to the next. This is where most models fall apart.
 > *"End of sprint. Mark all todo tasks done, save a summary of what was accomplished, and complete the workunit."*
+
+**Two methods:**
+
+**Single-shot**: The model gets one chance. I send the task, it responds, done. No feedback, no retries. If it gets it wrong, that's the score.
+
+**Agentic loop**: The model calls a tool, gets the real result back, and can keep going (calling more tools, correcting mistakes, chaining results, etc). Like how you'd actually use it in an agent framework. 5 minute timeout per task.
 
 ---
 
 ### Results — Single-shot vs. Agentic
 
-![Single-shot vs Agentic Overall Score — 17 models](images/graph1_ss_vs_ag_overall.png)
+![Single-shot vs Agentic Overall Score — 19 models](images/graph1_ss_vs_ag_overall.png)
 
 The left column is single-shot (first response only). Right column is agentic (full loop with tool results fed back).
 
-| Model | Size | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
-|-------|------|-------------|-------|-------|-------|------------|---|-------|-------|-------|------------|
-| ibm/granite-4-h-tiny | 7B | ✅ | 100% | 80% | 0% | **73%** | → | 100% | 100% | 57% | **89%** |
-| qwen/qwen3-coder-30b | 30B | ✅ | 100% | 80% | 0% | **71%** | → | 100% | 90% | 57% | **88%** |
-| mistralai/magistral-small-2509 | 24B | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 100% | 43% | **85%** |
-| qwen/qwen3-4b-thinking-2507 | 4B | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 57% | **85%** |
-| openai/gpt-oss-20b | 20B | ✅ | 100% | 70% | 0% | **72%** | → | 100% | 80% | 43% | **85%** |
-| mistralai/ministral-3-14b-reasoning | 14B | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 90% | 29% | **84%** |
-| baidu/ernie-4.5-21b-a3b | 21B | ❌* | 0% | 0% | 0% | **0%** | → | 100% | 100% | 29% | **83%** |
-| mistralai/ministral-3-3b | 3B | ✅ | 100% | 90% | 57% | **89%** | → | 91% | 90% | 29% | **81%** |
-| google/gemma-3-12b | 12B | ❌* | 0% | 0% | 0% | **0%** | → | 91% | 80% | 29% | **78%** |
-| essentialai/rnj-1 | 8.3B | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 0% | **77%** |
-| nvidia/nemotron-3-nano | 30B | ✅ | 91% | 60% | 0% | **59%** | → | 100% | 60% | 14% | **71%** |
-| zai-org/glm-4.6v-flash | 9.4B | ✅ | 82% | 80% | 0% | **67%** | → | 91% | 60% | 14% | **68%** |
-| microsoft/phi-4-reasoning-plus | 15B | ❌* | 55% | 70% | 0% | **48%** | → | 46% | 80% | 43% | **64%** |
-| zai-org/glm-4.7-flash | 30B | ✅ | 64% | 40% | 0% | **44%** | → | 55% | 50% | 71% | **61%** |
-| qwen/qwen2.5-coder-32b | 32B | ❌* | 64% | 40% | 0% | **38%** | → | 91% | 50% | 14% | **58%** |
-| deepseek/deepseek-r1-0528-qwen3-8b | 8B | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
-| bytedance/seed-oss-36b | 36B | ✅ | 100% | 80% | 0% | **71%** | → | 0% | 0% | 0% | **0%** |
+| Model | Size | Quant | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
+|-------|------|-------|-------------|-------|-------|-------|------------|---|-------|-------|-------|------------|
+| ibm/granite-4-h-tiny | 7B | Q4_K_M | ✅ | 100% | 80% | 0% | **73%** | → | 100% | 100% | 57% | **89%** |
+| qwen/qwen3-coder-30b | 30B | Q4_K_M | ✅ | 100% | 80% | 0% | **71%** | → | 100% | 90% | 57% | **88%** |
+| mistralai/magistral-small-2509 | 24B | Q4_K_M | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 100% | 43% | **85%** |
+| qwen/qwen3-4b-thinking-2507 | 4B | Q4_K_M | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 57% | **85%** |
+| openai/gpt-oss-20b | 20B | MXFP4 | ✅ | 100% | 70% | 0% | **72%** | → | 100% | 80% | 43% | **85%** |
+| mistralai/ministral-3-14b-reasoning | 14B | Q4_K_M | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 90% | 29% | **84%** |
+| baidu/ernie-4.5-21b-a3b | 21B | Q4_K_M | ❌* | 0% | 0% | 0% | **0%** | → | 100% | 100% | 29% | **83%** |
+| mistralai/ministral-3-3b | 3B | Q4_K_M | ✅ | 100% | 90% | 57% | **89%** | → | 91% | 90% | 29% | **81%** |
+| google/gemma-3-12b | 12B | Q4_K_M | ❌* | 0% | 0% | 0% | **0%** | → | 91% | 80% | 29% | **78%** |
+| essentialai/rnj-1 | 8.3B | Q4_K_M | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 0% | **77%** |
+| nvidia/nemotron-3-nano | 30B | Q4_K_M | ✅ | 91% | 60% | 0% | **59%** | → | 100% | 60% | 14% | **71%** |
+| zai-org/glm-4.6v-flash | 9.4B | Q4_K_M | ✅ | 82% | 80% | 0% | **67%** | → | 91% | 60% | 14% | **68%** |
+| microsoft/phi-4-reasoning-plus | 15B | Q4_K_M | ❌* | 55% | 70% | 0% | **48%** | → | 46% | 80% | 43% | **64%** |
+| zai-org/glm-4.7-flash | 30B | Q4_K_M | ✅ | 64% | 40% | 0% | **44%** | → | 55% | 50% | 71% | **61%** |
+| qwen/qwen2.5-coder-32b | 32B | Q4_K_M | ❌* | 64% | 40% | 0% | **38%** | → | 91% | 50% | 14% | **58%** |
+| deepseek/deepseek-r1-0528-qwen3-8b | 8B | Q4_K_M | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
+| bytedance/seed-oss-36b | 36B | Q4_K_M | ✅ | 100% | 80% | 0% | **71%** | → | 0% | 0% | 0% | **0%** |
+| mistralai/devstral-small-2-2512 | 24B | Q3_K_L | ✅ | — | — | — | **—** | → | — | — | — | **—** |
+| qwen/qwen3-coder-next | 80B | Q4_K_M | ✅ | — | — | — | **—** | → | — | — | — | **—** |
 
 *\* = not trained for tool calling (per LM Studio metadata)*
+*— = test pending*
 
 **How scoring works:** The L0/L1/L2 columns show **binary pass rates** — the percentage of tasks the model fully passed at each level. The **Overall** column is different: it averages each level's *score* (which includes partial credit for completing some steps of a multi-step task), then averages those three level scores. This is why Overall can be higher than you'd expect from the pass rate columns alone — a model that partially completes several tasks gets credit even if it doesn't fully pass them. The repo's `aggregated_report.md` shows both pass rates and scores per level.
 
@@ -104,11 +113,10 @@ In single-shot, 16 of 17 models scored 0% at L2. The one exception: ministral-3-
 
 ### What I couldn't test
 
-My 4080 16GB tops out around 32-36B at Q4. Would love community results for:
+My 4080 16GB tops out around 32-36B at Q4 (80B with CPU offloading). Would love community results for:
 - Llama 3.3 70B
 - Qwen2.5-72B
 - DeepSeek-R1 671B
-- Mistral Large / Mixtral 8x22B
 - Llama 4 Scout/Maverick
 
 **The benchmark is ready to run if you have the hardware.**
@@ -117,38 +125,7 @@ My 4080 16GB tops out around 32-36B at Q4. Would love community results for:
 
 ### Run it yourself
 
-```bash
-git clone https://github.com/3615-computer/workunit-benchmarks
-cd workunit-benchmarks/local-llm-mcp-calling
-pip install openai rich requests
-
-# Single model
-python scripts/runner_v2_agentic.py --model mistralai/ministral-3-3b --token <your-mcp-token>
-
-# Full suite
-python scripts/runner_v2_agentic.py --models models.txt --token <your-token> --refresh-token <refresh>
-```
-
-Requires LM Studio running locally. The benchmark runs against Workunit's MCP server, so you need a free account at [workunit.app](https://workunit.app) to get an MCP token. The easiest way to get your tokens is with the MCP Inspector: `bunx @modelcontextprotocol/inspector@latest` — connect to `https://workunit.app/mcp`, complete the OAuth flow, and copy the access + refresh tokens from the inspector UI. The tasks exercise a real project management API — there's no way to run it without an account because the MCP server needs to authenticate your calls and maintain state between tool invocations.
-
-**⚠️ Use a dedicated account.** The agentic runner deletes **all projects, workunits, assets, and directories** in your org between each model run to prevent data bleed. If you use your main account, you **will lose all your data**. Create a separate free account just for benchmarking. The runner will prompt for confirmation before starting, but don't rely on that — use a throwaway account.
-
-**Disclosure:** I ran these benchmarks against my local dev stack with direct database access for resets between models. I've since refactored the runner to point to `workunit.app` by default (MCP-based cleanup instead of direct SQL), but I haven't re-run the full suite against the production endpoint yet. If you hit issues running against `workunit.app`, please open an issue on the repo.
-
-The runner:
-- Unloads all models at start (clean VRAM)
-- Loads each model at 8192 context via the management API
-- Resets the test database between models
-- Stops each task as soon as it passes
-- Saves per-model/level JSON results, commits incrementally
-
-Task definitions are plain JSON in `benchmark/tasks/` — every prompt and validation criterion is readable. Methodology is fully transparent.
-
----
-
-### About Workunit
-
-[Workunit](https://workunit.app) is the project manager these models were talking to. Each workunit has a problem statement, tasks, and a trail-of-thought the AI writes back as it works — decisions made, approaches tried, progress checkpoints. Define the work once, any AI (Claude, GPT, Gemini, or local via MCP) picks it up with full context, does the work, leaves notes for the next session. I built it because I was tired of re-explaining my codebase every morning.
+You can find all the code and instructions to run this yourself on the repository https://github.com/3615-computer/workunit-benchmarks
 
 ---
 

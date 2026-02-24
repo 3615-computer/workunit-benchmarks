@@ -24,6 +24,7 @@ mistralai/ministral-3-14b-reasoning
 openai/gpt-oss-20b
 baidu/ernie-4.5-21b-a3b                      # * no tool training
 mistralai/magistral-small-2509
+mistralai/devstral-small-2-2512
 
 # === XL (30-36B) ===
 qwen/qwen2.5-coder-32b                       # * no tool training
@@ -31,3 +32,6 @@ zai-org/glm-4.7-flash
 qwen/qwen3-coder-30b
 nvidia/nemotron-3-nano
 bytedance/seed-oss-36b
+
+# === XXL (70B+) ===
+qwen/qwen3-coder-next
