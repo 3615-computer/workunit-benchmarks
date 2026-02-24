@@ -503,7 +503,8 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
         # update_mask path check
         paths_required = validation.get("update_mask_must_contain", [])
         if paths_required:
-            actual_paths = args.get("update_mask", {}).get("paths", [])
+            update_mask  = args.get("update_mask", {})
+            actual_paths = update_mask.get("paths", []) if isinstance(update_mask, dict) else []
             for p in paths_required:
                 if p not in actual_paths:
                     details.append(f"update_mask.paths missing '{p}'")
