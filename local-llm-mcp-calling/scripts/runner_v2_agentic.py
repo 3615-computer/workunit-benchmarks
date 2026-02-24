@@ -788,6 +788,16 @@ TOOLS = [
 
 # ─── Validation ────────────────────────────────────────────────────────────────
 
+def _normalize(val):
+    """Coerce string booleans to actual booleans for comparison."""
+    if isinstance(val, str):
+        if val.lower() == "true":
+            return True
+        if val.lower() == "false":
+            return False
+    return val
+
+
 def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]]:
     """
     Returns (passed, score 0.0-1.0, details).
@@ -817,10 +827,29 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
                 score -= 0.25
 
         for param, expected_val in validation.get("param_exact", {}).items():
-            actual_val = args.get(param)
+            actual_val = _normalize(args.get(param))
+            expected_val = _normalize(expected_val)
             if actual_val != expected_val:
                 details.append(f"'{param}': expected {expected_val!r}, got {actual_val!r}")
                 score -= 0.15
+
+        for param, expected_val in validation.get("param_contains", {}).items():
+            actual_val = args.get(param)
+            if isinstance(expected_val, str) and isinstance(actual_val, str):
+                if expected_val.lower() not in actual_val.lower():
+                    details.append(f"'{param}': expected to contain {expected_val!r}, got {actual_val!r}")
+                    score -= 0.15
+            elif isinstance(expected_val, list) and isinstance(actual_val, list):
+                actual_lower = [v.lower() if isinstance(v, str) else v for v in actual_val]
+                for item in expected_val:
+                    needle = item.lower() if isinstance(item, str) else item
+                    if needle not in actual_lower:
+                        details.append(f"'{param}': missing expected item {item!r}")
+                        score -= 0.05
+            else:
+                if _normalize(actual_val) != _normalize(expected_val):
+                    details.append(f"'{param}': expected {expected_val!r}, got {actual_val!r}")
+                    score -= 0.15
 
         for param in validation.get("param_present", []):
             if param not in args or args[param] is None or args[param] == "":
@@ -897,9 +926,20 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
                     step_score -= 0.25
 
             for param, val in step.get("param_exact", {}).items():
-                if args.get(param) != val:
+                if _normalize(args.get(param)) != _normalize(val):
                     details.append(f"Step {i+1} ({expected_tool}): '{param}'={args.get(param)!r} (want {val!r})")
                     step_score -= 0.2
+
+            for param, val in step.get("param_contains", {}).items():
+                actual_val = args.get(param)
+                if isinstance(val, str) and isinstance(actual_val, str):
+                    if val.lower() not in actual_val.lower():
+                        details.append(f"Step {i+1} ({expected_tool}): '{param}'={actual_val!r} (want contains {val!r})")
+                        step_score -= 0.2
+                else:
+                    if _normalize(actual_val) != _normalize(val):
+                        details.append(f"Step {i+1} ({expected_tool}): '{param}'={actual_val!r} (want {val!r})")
+                        step_score -= 0.2
 
             for param in step.get("param_present", []):
                 if param not in args:

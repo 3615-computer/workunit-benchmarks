@@ -36,7 +36,7 @@
           {
             "tool": "create_workunit",
             "must_have_params": ["name", "problem_statement", "success_criteria"],
-            "param_exact": { "name": "Implement User Notifications" }
+            "param_contains": { "name": "Implement User Notifications" }
           },
           {
             "tool": "create_task",
