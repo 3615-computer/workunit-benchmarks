@@ -682,7 +682,7 @@ def run_level(client: OpenAI, model_id: str, level: int, context: dict) -> dict:
         score_pct = f"{result['score']:.0%}"
         console.print(f"    {icon} {task['id']} [{score_pct}] {task['name']} ({result['elapsed_s']}s)")
         if not result["passed"] or result["error"]:
-            for d in result["details"][:2]:
+            for d in result["details"]:
                 console.print(f"       [dim]{d}[/dim]")
 
         results.append(result)

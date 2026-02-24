@@ -1098,7 +1098,7 @@ def run_level(client: OpenAI, mcp: MCPClient, model_id: str, level: int) -> dict
             f"({result['elapsed_s']}s{' ' + turns_str if turns_str else ''}{timeout_str})"
         )
         if not result["passed"] or result["error"]:
-            for d in result["details"][:2]:
+            for d in result["details"]:
                 console.print(f"       [dim]{d}[/dim]")
 
         results.append(result)
