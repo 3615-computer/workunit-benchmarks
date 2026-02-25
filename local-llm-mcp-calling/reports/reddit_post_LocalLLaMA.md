@@ -1,81 +1,78 @@
-# Reddit Post — r/LocalLLaMA (FINAL)
+# Reddit Post — r/LocalLLaMA
 # https://www.reddit.com/r/LocalLLaMA/
 
 ---
 
 ## TITLE
 
-I tested 19 local LLMs on real tool calling: direct, NLP, and multi-step reasoning (single-shot & agentic). A 7B model topped the leaderboard.
+I tested 21 local LLMs on real MCP tool calling — 3B to 80B, single-shot vs agentic. qwen3-coder ties at 92%, a 4B model matches a 7B at 85%, and two "not tool-trained" models beat most of the field.
 
 ---
 
 ## POST BODY
 
-I benchmarked 19 local LLMs on real MCP tool calling — not synthetic function-calling evals, but actual calls against a real API with 19 tools, real validation, and real results.
+I benchmarked 21 local LLMs on real MCP tool calling — not synthetic function-calling evals, but actual calls against a live API with 19 tools, real validation, and real results.
 
-I ran each model twice. First single-shot (one API call, score the first response). Then agentic (model gets tool results back, keeps going until it passes or times out). Same 19 models, same 28 tasks, same MCP server.
-
-The methodology difference changes everything.
+Each model was tested twice: single-shot (one API call, score the first response) and agentic (model gets tool results back, keeps going until it passes or times out). Same 21 models, same 28 tasks, same MCP server.
 
 ---
 
 ### The setup
 
-**19 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to a real MCP server (a project management API with 19 tools) through a custom Python runner. All models run at Q4_K_M quantization unless noted otherwise.
+**21 models** on a 4080 16GB + 64GB RAM, running via LM Studio, talking to a real MCP server (a project management API with 19 tools) through a custom Python runner. All models at Q4_K_M quantization unless noted otherwise. Temperature 0.0 across the board.
 
-5 models are **not trained for tool calling** (per LM Studio metadata) — included to test whether raw reasoning ability compensates for missing fine-tuning.
+5 models are **not trained for tool calling** (per LM Studio metadata) — included as a control group to see if raw reasoning compensates for missing fine-tuning.
 
 **Three difficulty levels:**
 
-**Level 0 — Explicit** (11 tasks): I tell the model exactly which tool to call and what parameters to use. Tests: can it follow instructions and emit a valid tool call? Most models nail this.
+**Level 0 — Explicit** (11 tasks): I tell the model exactly which tool to call and what parameters to use. Tests: can it follow instructions and emit a valid tool call?
 > *"Call `create_workunit` with name='Hello World', problem_statement='Users can't track work', success_criteria='Workunit visible in dashboard', priority='normal'"*
 
-**Level 1 — Natural language** (10 tasks): I describe what I want in plain English. The model has to figure out which tool to use and map my words to the right parameters. Harder, but most tool-trained models handle it.
+**Level 1 — Natural language** (10 tasks): I describe what I want in plain English. The model figures out which tool to use and maps my words to the right parameters.
 > *"Create a workunit called 'Fix Login Page Bug'. Problem: users can't log in with special characters. Done when all character types work with regression tests. High priority."*
 
-**Level 2 — Reasoning** (7 tasks): I give a high-level goal like 'close out the sprint.' The model has to plan multiple steps, call tools in sequence, and pass IDs from one call to the next. This is where most models fall apart.
+**Level 2 — Reasoning** (7 tasks): High-level goal. The model has to plan multiple steps, call tools in sequence, and pass IDs from one call to the next. This is where most models fall apart.
 > *"End of sprint. Mark all todo tasks done, save a summary of what was accomplished, and complete the workunit."*
 
 **Two methods:**
 
-**Single-shot**: The model gets one chance. I send the task, it responds, done. No feedback, no retries. If it gets it wrong, that's the score.
+**Single-shot**: One chance. Send the task, score the response. No feedback, no retries.
 
-**Agentic loop**: The model calls a tool, gets the real result back, and can keep going (calling more tools, correcting mistakes, chaining results, etc). Like how you'd actually use it in an agent framework. 5 minute timeout per task.
+**Agentic loop**: The model calls a tool, gets the real result back, and can keep going — correcting mistakes, chaining results, calling more tools. 5 minute timeout per task.
 
 ---
 
-### Results — Single-shot vs. Agentic
+### Results — Agentic loop (primary)
 
-![Single-shot vs Agentic Overall Score — 19 models](images/graph1_ss_vs_ag_overall.png)
+![Single-shot vs Agentic Overall Score — 21 models](images/graph1_ss_vs_ag_overall.png)
 
-The left column is single-shot (first response only). Right column is agentic (full loop with tool results fed back).
-
-| Model | Size | Quant | Tool-trained | SS L0 | SS L1 | SS L2 | SS Overall | → | AG L0 | AG L1 | AG L2 | AG Overall |
-|-------|------|-------|-------------|-------|-------|-------|------------|---|-------|-------|-------|------------|
-| ibm/granite-4-h-tiny | 7B | Q4_K_M | ✅ | 100% | 80% | 0% | **73%** | → | 100% | 100% | 57% | **89%** |
-| qwen/qwen3-coder-30b | 30B | Q4_K_M | ✅ | 100% | 80% | 0% | **71%** | → | 100% | 90% | 57% | **88%** |
-| mistralai/magistral-small-2509 | 24B | Q4_K_M | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 100% | 43% | **85%** |
-| qwen/qwen3-4b-thinking-2507 | 4B | Q4_K_M | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 57% | **85%** |
-| openai/gpt-oss-20b | 20B | MXFP4 | ✅ | 100% | 70% | 0% | **72%** | → | 100% | 80% | 43% | **85%** |
-| mistralai/ministral-3-14b-reasoning | 14B | Q4_K_M | ✅ | 100% | 90% | 0% | **78%** | → | 100% | 90% | 29% | **84%** |
-| baidu/ernie-4.5-21b-a3b | 21B | Q4_K_M | ❌* | 0% | 0% | 0% | **0%** | → | 100% | 100% | 29% | **83%** |
-| mistralai/ministral-3-3b | 3B | Q4_K_M | ✅ | 100% | 90% | 57% | **89%** | → | 91% | 90% | 29% | **81%** |
-| google/gemma-3-12b | 12B | Q4_K_M | ❌* | 0% | 0% | 0% | **0%** | → | 91% | 80% | 29% | **78%** |
-| essentialai/rnj-1 | 8.3B | Q4_K_M | ✅ | 100% | 80% | 0% | **74%** | → | 100% | 80% | 0% | **77%** |
-| nvidia/nemotron-3-nano | 30B | Q4_K_M | ✅ | 91% | 60% | 0% | **59%** | → | 100% | 60% | 14% | **71%** |
-| zai-org/glm-4.6v-flash | 9.4B | Q4_K_M | ✅ | 82% | 80% | 0% | **67%** | → | 91% | 60% | 14% | **68%** |
-| microsoft/phi-4-reasoning-plus | 15B | Q4_K_M | ❌* | 55% | 70% | 0% | **48%** | → | 46% | 80% | 43% | **64%** |
-| zai-org/glm-4.7-flash | 30B | Q4_K_M | ✅ | 64% | 40% | 0% | **44%** | → | 55% | 50% | 71% | **61%** |
-| qwen/qwen2.5-coder-32b | 32B | Q4_K_M | ❌* | 64% | 40% | 0% | **38%** | → | 91% | 50% | 14% | **58%** |
-| deepseek/deepseek-r1-0528-qwen3-8b | 8B | Q4_K_M | ❌* | 9% | 0% | 0% | **3%** | → | 18% | 0% | 0% | **6%** |
-| bytedance/seed-oss-36b | 36B | Q4_K_M | ✅ | 100% | 80% | 0% | **71%** | → | 0% | 0% | 0% | **0%** |
-| mistralai/devstral-small-2-2512 | 24B | Q3_K_L | ✅ | — | — | — | **—** | → | — | — | — | **—** |
-| qwen/qwen3-coder-next | 80B | Q4_K_M | ✅ | — | — | — | **—** | → | — | — | — | **—** |
+| Model | Size | Quant | Tool | SS Overall | AG Overall |
+|-------|------|-------|------|-----------|-----------|
+| qwen/qwen3-coder-30b | 30B | Q4_K_M | Yes | 73% | **92%** |
+| qwen/qwen3-coder-next | 80B | Q4_K_M | Yes | 81% | **92%** |
+| baidu/ernie-4.5-21b-a3b | 21B | Q4_K_M | No* | 0% | **85%** |
+| qwen/qwen3-4b-thinking-2507 | 4B | Q4_K_M | Yes | 37% | **85%** |
+| ibm/granite-4-h-tiny | 7B | Q4_K_M | Yes | 73% | **85%** |
+| openai/gpt-oss-20b | 20B | MXFP4 | Yes | 76% | **85%** |
+| mistralai/ministral-3-14b-reasoning | 14B | Q4_K_M | Yes | 78% | **84%** |
+| mistralai/magistral-small-2509 | 24B | Q4_K_M | Yes | 78% | **82%** |
+| mistralai/devstral-small-2-2512 | 24B | Q3_K_L | Yes | 79% | **82%** |
+| mistralai/ministral-3-3b | 3B | Q4_K_M | Yes | 76% | **81%** |
+| google/gemma-3-12b | 12B | Q4_K_M | No* | 0% | **80%** |
+| qwen/qwen3.5-35b-a3b | 35B | Q4_K_M | Yes | 65% | **77%** |
+| nvidia/nemotron-3-nano | 30B | Q4_K_M | Yes | 51% | **77%** |
+| essentialai/rnj-1 | 8.3B | Q4_K_M | Yes | 74% | **77%** |
+| liquid/lfm2-24b-a2b | 24B | Q4_K_M | Yes | 78% | **73%** |
+| zai-org/glm-4.6v-flash | 9.4B | Q4_K_M | Yes | 61% | **70%** |
+| zai-org/glm-4.7-flash | 30B | Q4_K_M | Yes | 44% | **63%** |
+| microsoft/phi-4-reasoning-plus | 15B | Q4_K_M | No* | 38% | **62%** |
+| qwen/qwen2.5-coder-32b | 32B | Q4_K_M | No* | 38% | **58%** |
+| deepseek/deepseek-r1-0528-qwen3-8b | 8B | Q4_K_M | No* | 3% | **0%** |
+| bytedance/seed-oss-36b | 36B | Q4_K_M | Yes | 71% | **0%** |
 
 *\* = not trained for tool calling (per LM Studio metadata)*
-*— = test pending*
 
-**How scoring works:** The L0/L1/L2 columns show **binary pass rates** — the percentage of tasks the model fully passed at each level. The **Overall** column is different: it averages each level's *score* (which includes partial credit for completing some steps of a multi-step task), then averages those three level scores. This is why Overall can be higher than you'd expect from the pass rate columns alone — a model that partially completes several tasks gets credit even if it doesn't fully pass them. The repo's `aggregated_report.md` shows both pass rates and scores per level.
+**How scoring works:** L0/L1/L2 columns show binary pass rates — percentage of tasks fully passed. The Overall column averages each level's mean *score* (including partial credit), then averages those three level scores. So Overall can be higher than pass rates suggest because partial completions count. Full breakdown in the repo's `aggregated_report.md`.
 
 ---
 
@@ -87,53 +84,66 @@ The left column is single-shot (first response only). Right column is agentic (f
 
 ![Tool-trained vs not tool-trained — SS and agentic performance](images/graph3_trained_vs_control.png)
 
+---
+
 ### What I found
 
-**The agentic loop is the difference between L2 being hard and L2 being solvable.**
+**qwen3-coder leads at 92%.** Both the 30B and the 80B (CPU-offloaded) variant tie at the top. They're the only models hitting 71% at L2 — they handle multi-step ID chaining and complex reasoning tasks where most models plateau at 29-43%.
 
-In single-shot, 16 of 17 models scored 0% at L2. The one exception: ministral-3-3b hit 57% — because 4 of its 7 passes don't require ID chaining (bootstrap project, find stale work, document a decision, create project with linked asset). The ID-chaining tasks (where you need the `id` from `create_project` to pass into `create_workunit`) were 0% across the board in single-shot. With the agentic loop, granite, qwen3-coder-30b, and qwen3-4b-thinking all hit 57% at L2 including the chaining tasks. The model calls a tool, gets an ID back, uses it in the next call. That's the whole unlock.
+**A 4B model ties with a 7B at 85%.** qwen3-4b-thinking (4B) matches granite-4-h-tiny (7B) and gpt-oss (20B). Size isn't the predictor — tool-call fine-tuning and architecture matter more. The 32B qwen2.5-coder scores 58%.
 
-**A 7B model tops the overall leaderboard.** ibm/granite-4-h-tiny at 89%, beating every model up to 32B. It's consistent, doesn't hallucinate tool names, handles multi-step sequences cleanly, and is fast. If you need reliable local MCP tool calling today, start here.
+**The agentic loop changes everything for L2.** In single-shot, 20 of 21 models scored 0% at L2. The exception: lfm2-24b hit 57%, the only model managing L2 tasks without seeing intermediate results. With the agentic loop, the top models reach 71% at L2 because they can observe IDs returned from one call and feed them into the next. That's the fundamental unlock — single-shot L2 is structurally impossible for tasks that require ID chaining.
 
-**The not-tool-trained plot twist.** In single-shot, ernie-4.5-21b (21B) and gemma-3-12b (12B) scored 0% — they never emitted tool calls at all, just wrote helpful text. In the agentic loop: ernie hits 83%, gemma hits 78%. The agentic runner apparently gives them enough context to figure out they're supposed to call tools. Whether that's a win for the agentic methodology or an indictment of the single-shot format is worth debating.
+**Two "not tool-trained" models outperform most of the field.** ernie-4.5-21b scored 0% in single-shot — never emitted a tool call, just wrote helpful text. In the agentic loop: 85%, tied for 3rd place. gemma-3-12b: same pattern, 0% → 80%. The agentic context apparently gives them enough signal to figure out they're supposed to call tools. Whether that's a win for agentic evaluation or exposes single-shot as insufficient is worth discussing.
 
-**Not being tool-trained still hurts at L2.** Both ernie and gemma fall to 29% at L2 — capable of basic tool use when the context is clear, but struggle with multi-step reasoning chains. The tool-trained models that score well at L2 (granite, qwen3-coder, qwen3-thinking) have a clear edge there.
+**Not tool-trained still hurts at L2.** ernie and gemma both fall to 29-43% at L2. The tool-trained models that score well at L2 (qwen3-coder at 71%, qwen3-4b at 57%) have a clear edge on multi-step reasoning chains.
 
-**DeepSeek-R1 (8B, not tool-trained) called a tool named `tool_name`.** Literally that string, on most tasks. It understood the shape of a tool call response — format, structure, everything — but hallucinated a generic placeholder instead of reading the actual function names from the tool list. Fascinating failure mode.
+**DeepSeek-R1 (8B, not tool-trained) hallucinated tool names.** It called a tool literally named `tool_name` on most tasks. Understood the shape of a tool call — format, structure, everything — but never read the actual function names from the tool list.
 
-**phi-4-reasoning-plus is inverted.** 46% at L0 (explicit instructions), 80% at L1 (natural language), 43% at L2. It struggles most when told exactly what to do. This is unusual enough that I suspect something about the explicit instruction format conflicts with its training distribution.
+**phi-4-reasoning-plus has an inverted difficulty curve.** 46% at L0 (explicit instructions), 80% at L1 (natural language), 43% at L2. It does worst when told exactly what to do. Something about the explicit instruction format likely conflicts with its training distribution.
 
-**glm-4.7-flash scores higher at L2 (71%) than L0 (55%) or L1 (50%).** It passes L2-01 through L2-05 while fumbling basic explicit tool calls. I don't have a good explanation. The reasoning tasks seem to activate something that the simpler tasks don't.
+**glm-4.7-flash scores higher at L2 (71%) than L0 (55%) or L1 (60%).** It passes 5 of 7 reasoning tasks while fumbling basic explicit tool calls. The reasoning tasks seem to activate something that the simpler tasks don't.
 
-**Two tasks are the universal wall.** L1-03 ("add three tasks to a workunit") — most models call `create_task` once and stop. L1-05 ("search for a workunit then retrieve its details") — models do the search but almost universally skip the follow-up `get_workunit`. Both require deciding to make multiple sequential calls from a single user message, which appears to be a reliably hard mental model. And L2-07 (end-of-sprint closeout: mark tasks done + save context + complete workunit) — 0/17 models fully pass it even in the agentic loop. Three sequential calls with state threading. Nobody nails all three.
+**seed-oss-36b is still the most bizarre result.** 71% overall in single-shot (100% L0, 80% L1). 0% across all 28 tasks in the agentic loop — never emitted a single tool call. The only difference: the agentic runner feeds tool results back. Somehow receiving tool results caused the model to completely stop calling tools.
 
-**seed-oss-36b is the most bizarre result.** In single-shot it scored 100% L0 and 80% L1 (71% overall) — among the better results in the single-shot run. In the agentic loop it scored 0% across all 28 tasks and never emitted a single tool call. The only thing different between runs is that the agentic runner feeds tool results back as context. Somehow receiving tool results caused the model to completely stop calling tools. If you've run this model in an agentic setup successfully, I'd genuinely like to know what setup you used.
+**L2-07 (sprint closeout) remains unsolved.** Three sequential calls with state threading — mark tasks done, save a context summary, complete the workunit. 0/21 models fully pass it, though ernie-4.5 gets closest at 95% task score.
+
+**Reproducibility note:** I retested 17 models across two runs. Agentic results are stable — mean delta of 2 percentage points, 67% of models identical. Single-shot has more variance, especially reasoning/thinking models (qwen3-4b dropped from 74% to 37% across runs due to nondeterministic empty responses, despite temperature=0.0). Treat results as point estimates.
 
 ---
 
 ### What I couldn't test
 
-My 4080 16GB tops out around 32-36B at Q4 (80B with CPU offloading). Would love community results for:
+My 4080 16GB tops out around 36B at Q4 (80B with heavy CPU offloading). Would love community results for:
 - Llama 3.3 70B
 - Qwen2.5-72B
 - DeepSeek-R1 671B
 - Llama 4 Scout/Maverick
 
-**The benchmark is ready to run if you have the hardware.**
+The benchmark is ready to run if you have the hardware.
 
 ---
 
 ### Run it yourself
 
-You can find all the code and instructions to run this yourself on the repository https://github.com/3615-computer/workunit-benchmarks
+All code, tasks, and results are open source: https://github.com/3615-computer/workunit-benchmarks
+
+```bash
+git clone https://github.com/3615-computer/workunit-benchmarks
+cd workunit-benchmarks/local-llm-mcp-calling
+pip install openai rich requests
+python scripts/runner_v2_agentic.py --models models.txt --token <mcp-token> --refresh-token <refresh-token>
+```
+
+Requires LM Studio with the target models available locally. See the repo README for setup options (local dev stack or production endpoint).
 
 ---
 
 ### Questions for the community
 
-1. **seed-oss-36b paradox** — scored 71% overall in single-shot but 0% in the agentic loop. The only difference is getting tool results back. Anyone run this successfully in an agentic framework?
-2. **L2-07 (sprint closeout)** — 0/17 pass in the agentic loop. Is a 3-step sequential task with state threading genuinely unsolvable in a single session, or is this a prompting issue?
-3. **What are you actually using for local MCP in production?** Especially curious about 70B+ results.
+1. **seed-oss-36b** — 71% single-shot, 0% agentic. Anyone run this model successfully in an agentic framework?
+2. **L2-07 (sprint closeout)** — 0/21 pass. Is a 3-step sequential task with state threading genuinely too hard for <80B models at 8K context, or is this a prompting issue?
+3. **What local models are you using for MCP tool calling in practice?** Especially curious about 70B+ results.
 
 Drop results in the comments if you run it on hardware I don't have. I'll update the repo.
 
