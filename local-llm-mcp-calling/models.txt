@@ -25,9 +25,11 @@ openai/gpt-oss-20b
 baidu/ernie-4.5-21b-a3b                      # * no tool training
 mistralai/magistral-small-2509
 mistralai/devstral-small-2-2512
+liquid/lfm2-24b-a2b
 
 # === XL (30-36B) ===
 qwen/qwen2.5-coder-32b                       # * no tool training
+qwen/qwen3.5-35b-a3b
 zai-org/glm-4.7-flash
 qwen/qwen3-coder-30b
 nvidia/nemotron-3-nano

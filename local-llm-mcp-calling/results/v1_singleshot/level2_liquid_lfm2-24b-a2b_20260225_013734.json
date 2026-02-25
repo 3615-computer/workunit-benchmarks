@@ -1,0 +1,280 @@
+{
+  "level": 2,
+  "model": "liquid/lfm2-24b-a2b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T01:37:34.366335",
+  "summary": {
+    "total": 7,
+    "passed": 4,
+    "pass_rate": 0.571,
+    "avg_score": 0.75
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementing dark mode for the application to improve user experience in low-light environments.",
+            "status": "active",
+            "tags": [
+              "UI",
+              "User Experience"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode UI",
+            "problem_statement": "Users experience eye strain and reduced readability in low-light conditions; current light mode lacks a dark theme option.",
+            "success_criteria": "Successful implementation of a system-wide dark mode with proper contrast ratios, reduced battery consumption on OLED screens, and user-selectable toggle persisting across sessions.",
+            "project_id": "PROJ-001",
+            "priority": "high",
+            "status": "active",
+            "description": "Develop and integrate dark mode UI components across all application screens.",
+            "tags": [
+              "UI",
+              "Dark Mode",
+              "Accessibility"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 2.34,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Need to notify users of workunit updates in real-time via email and in-app alerts",
+            "success_criteria": "All stakeholders receive timely notifications through preferred channels with confirmation of delivery",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "tags": [
+              "notifications",
+              "user-experience",
+              "communication"
+            ],
+            "description": "End-to-end implementation of user notification system for workunit changes including email, in-app alerts, and delivery confirmation mechanisms"
+          }
+        }
+      ],
+      "elapsed_s": 1.62,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 50
+          }
+        }
+      ],
+      "elapsed_s": 0.59,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): not called",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "notifications",
+            "atom_type": "decision",
+            "title": "WebSockets vs Polling Decision",
+            "content": "Chose WebSockets over polling for real-time notifications. Considered tradeoffs: WebSockets provide lower latency and server efficiency but require complex connection management. Polling is simpler but less efficient for real-time use cases.",
+            "importance": "critical",
+            "tags": [
+              "real-time",
+              "architecture",
+              "tradeoffs"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 1.46,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "status": "active",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design",
+            "format": "document"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "<project_id_from_first_step>",
+            "asset_id": "<asset_id_from_second_step>",
+            "action": "link",
+            "notes": "Link knowledge asset to project"
+          }
+        }
+      ],
+      "elapsed_s": 1.7,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "tasks.*.priority"
+              ]
+            },
+            "priority": "normal",
+            "tags": []
+          }
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "tasks.*.priority"
+              ]
+            },
+            "priority": "high",
+            "tags": []
+          }
+        }
+      ],
+      "elapsed_s": 1.47,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": true,
+      "score": 0.75,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): \u2713",
+        "Step 4 (update_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "progress",
+            "title": "Sprint Completion Summary",
+            "content": "All tasks in workunit {{workunit_id}} were completed. Key accomplishments include [list specific achievements].",
+            "importance": "high",
+            "tags": [
+              "sprint",
+              "completion"
+            ]
+          }
+        },
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Workunit {{workunit_id}} successfully completed at end of sprint. All tasks finalized and reviewed."
+          }
+        }
+      ],
+      "elapsed_s": 1.95,
+      "error": null
+    }
+  ]
+}
