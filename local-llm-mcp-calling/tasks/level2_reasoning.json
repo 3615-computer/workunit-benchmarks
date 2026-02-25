@@ -28,7 +28,7 @@
     {
       "id": "L2-02",
       "name": "Break down a feature into tasks",
-      "prompt": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" in project {{project_id}} and add all the implementation tasks to it. Be thorough — this is a real feature, not a toy example.",
+      "prompt": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough — this is a real feature, not a toy example.",
       "expected_tool_sequence": ["create_workunit", "create_task (multiple)"],
       "validation": {
         "type": "reasoning_chain",
@@ -138,7 +138,7 @@
     {
       "id": "L2-06",
       "name": "Triage and prioritize tasks",
-      "prompt": "Look at the tasks in workunit {{workunit_id}}. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "prompt": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
       "expected_tool_sequence": ["get_workunit", "update_task (conditional, multiple)"],
       "validation": {
         "type": "reasoning_chain",
@@ -162,13 +162,14 @@
     {
       "id": "L2-07",
       "name": "End-of-sprint workunit closeout",
-      "prompt": "It's the end of the sprint. For workunit {{workunit_id}}: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "prompt": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
       "expected_tool_sequence": ["get_workunit", "update_task (multiple)", "save_context", "update_workunit"],
       "validation": {
         "type": "reasoning_chain",
         "steps": [
           {
             "tool": "get_workunit",
+            "must_have_params": ["id"],
             "param_exact": { "include_tasks": true }
           },
           {

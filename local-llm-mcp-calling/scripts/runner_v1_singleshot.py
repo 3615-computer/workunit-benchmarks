@@ -2,15 +2,23 @@
 """
 Workunit MCP Benchmark — Single-shot Runner
 Runs all three levels for all models via LM Studio's OpenAI-compatible API.
-Evaluates the first response only (no agentic loop). No MCP server required —
-tool calls are validated structurally, not executed.
+Evaluates the first response only (no agentic loop). After scoring, tool calls
+are executed against the real MCP server to capture entity IDs for subsequent
+tasks (e.g., project_id from create_project feeds into create_workunit).
 
 Usage:
-    # Run all models, all levels
+    # Run all models, all levels (token via env var):
+    export WORKUNIT_TOKEN=your_token
     python runner_v1_singleshot.py --models ../models.txt
 
-    # Single model, single level
+    # Single model, single level:
     python runner_v1_singleshot.py --model ibm/granite-4-h-tiny --level 0
+
+    # Token via CLI flag:
+    python runner_v1_singleshot.py --models ../models.txt --token <bearer_token>
+
+    # Local dev stack (MCP at localhost:9000, OAuth at localhost:3000):
+    python runner_v1_singleshot.py --models ../models.txt --local
 
     # Dry run — show plan without executing
     python runner_v1_singleshot.py --models ../models.txt --dry-run
@@ -19,7 +27,7 @@ Usage:
     python runner_v1_singleshot.py --list-models
 
 Requirements:
-    pip install openai rich
+    pip install openai rich requests
 """
 
 import argparse
@@ -37,8 +45,9 @@ try:
     from rich.console import Console
     from rich.table import Table
     from rich.panel import Panel
+    import requests
 except ImportError:
-    print("Missing dependencies. Run: pip install openai rich")
+    print("Missing dependencies. Run: pip install openai rich requests")
     sys.exit(1)
 
 # ─── Config ───────────────────────────────────────────────────────────────────
@@ -46,11 +55,16 @@ except ImportError:
 _LMSTUDIO_HOST     = os.environ.get("LMSTUDIO_HOST", "localhost:1234")
 LMSTUDIO_BASE_URL  = f"http://{_LMSTUDIO_HOST}/v1"
 LMSTUDIO_MGMT_URL  = f"http://{_LMSTUDIO_HOST}"
+MCP_URL            = os.environ.get("MCP_URL", "https://workunit.app/mcp")
+MCP_CALL_TIMEOUT   = int(os.environ.get("MCP_CALL_TIMEOUT", "60"))
 
-BENCHMARK_DIR = Path(__file__).parent.parent
-TASKS_DIR     = BENCHMARK_DIR / "tasks"
-RESULTS_DIR   = BENCHMARK_DIR / "results" / "v1_singleshot"
-PROJECT_ROOT  = BENCHMARK_DIR.parent
+BENCHMARK_DIR       = Path(__file__).parent.parent
+TASKS_DIR           = BENCHMARK_DIR / "tasks"
+DEFAULT_RESULTS_DIR = BENCHMARK_DIR / "results" / "v1_singleshot"
+PROJECT_ROOT        = BENCHMARK_DIR.parent
+
+# Mutable — overridden by --results-dir CLI arg
+RESULTS_DIR = DEFAULT_RESULTS_DIR
 
 TASK_FILES = {
     0: TASKS_DIR / "level0_explicit.json",
@@ -66,6 +80,274 @@ SYSTEM_PROMPT = (
 )
 
 console = Console()
+
+
+# ─── MCP Client ───────────────────────────────────────────────────────────────
+
+OAUTH_TOKEN_URL   = os.environ.get("OAUTH_TOKEN_URL", "https://workunit.app/oauth/token")
+OAUTH_CLIENT_ID   = os.environ.get("WORKUNIT_OAUTH_CLIENT_ID", "")
+
+
+class MCPClient:
+    """
+    Minimal stateful MCP client over HTTP (streamable transport).
+    Handles initialize handshake, tool calls, and transparent token refresh.
+    """
+
+    def __init__(self, token: str, refresh_token: str = ""):
+        self.token           = token
+        self.refresh_token   = refresh_token
+        self.session         = None
+        self._refresh_failed = False
+        self._req_id       = 0
+
+    def _headers(self) -> dict:
+        h = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+            "Authorization": f"Bearer {self.token}",
+        }
+        if self.session:
+            h["Mcp-Session-Id"] = self.session
+        return h
+
+    def _next_id(self) -> int:
+        self._req_id += 1
+        return self._req_id
+
+    def initialize(self) -> bool:
+        """Perform MCP handshake, store session ID. Returns True on success."""
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "initialize",
+            "id": self._next_id(),
+            "params": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {},
+                "clientInfo": {"name": "benchmark-v1", "version": "1.0"},
+            },
+        }
+        try:
+            resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
+            if resp.status_code == 401 and self.refresh_token:
+                if self._do_refresh():
+                    resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
+                else:
+                    return False
+            if resp.status_code == 429:
+                wait = int(resp.headers.get("Retry-After", "5"))
+                console.print(f"  [yellow]Rate limited, waiting {wait}s...[/yellow]")
+                time.sleep(wait)
+                payload["id"] = self._next_id()
+                resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
+            resp.raise_for_status()
+            self.session = resp.headers.get("Mcp-Session-Id")
+            return True
+        except Exception as e:
+            console.print(f"  [red]MCP init failed: {e}[/red]")
+            return False
+
+    def _do_refresh(self) -> bool:
+        """Exchange refresh_token for a new access_token. Returns True on success."""
+        if self._refresh_failed:
+            return False
+        try:
+            resp = requests.post(
+                OAUTH_TOKEN_URL,
+                data={
+                    "grant_type":    "refresh_token",
+                    "refresh_token": self.refresh_token,
+                    "client_id":     OAUTH_CLIENT_ID,
+                },
+                timeout=10,
+            )
+            resp.raise_for_status()
+            data               = resp.json()
+            self.token         = data["access_token"]
+            self.refresh_token = data.get("refresh_token", self.refresh_token)
+            self.session       = None
+            self._refresh_failed = False
+            console.print("  [dim]Token refreshed[/dim]")
+            return True
+        except Exception as e:
+            console.print(f"  [red]Token refresh failed: {e}[/red]")
+            self._refresh_failed = True
+            return False
+
+    def call_tool(self, name: str, arguments: dict) -> str:
+        """
+        Execute a tool call against the MCP server.
+        Transparently refreshes the token on 401 and retries once.
+        Returns the result as a string (JSON or plain text).
+        """
+        for attempt in range(2):
+            payload = {
+                "jsonrpc": "2.0",
+                "method": "tools/call",
+                "id": self._next_id(),
+                "params": {"name": name, "arguments": arguments},
+            }
+            try:
+                resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
+                if resp.status_code == 401 and attempt == 0:
+                    if self._do_refresh() and self.initialize():
+                        continue
+                    return json.dumps({"error": "unauthorized, refresh failed"})
+                if resp.status_code == 429:
+                    wait = int(resp.headers.get("Retry-After", "5"))
+                    console.print(f"  [yellow]Rate limited on {name}, waiting {wait}s...[/yellow]")
+                    time.sleep(wait)
+                    payload["id"] = self._next_id()
+                    resp = requests.post(MCP_URL, json=payload, headers=self._headers(), timeout=MCP_CALL_TIMEOUT)
+                resp.raise_for_status()
+                data = resp.json()
+                if "error" in data:
+                    return json.dumps({"error": data["error"]})
+                content = data.get("result", {}).get("content", [])
+                if content:
+                    return content[0].get("text", "")
+                return "{}"
+            except Exception as e:
+                return json.dumps({"error": str(e)})
+        return json.dumps({"error": "tool call failed after token refresh"})
+
+
+def extract_ids_from_result(tool_name: str, mcp_result: str) -> dict:
+    """Extract entity IDs from a successful MCP tool response."""
+    ids = {}
+    try:
+        data = json.loads(mcp_result)
+    except (json.JSONDecodeError, TypeError):
+        return ids
+    if "error" in data:
+        return ids
+
+    if tool_name == "create_project":
+        obj = data.get("project", data)
+        if "id" in obj:
+            ids["project_id"] = obj["id"]
+    elif tool_name == "create_workunit":
+        obj = data.get("workunit", data)
+        if "id" in obj:
+            ids["workunit_id"] = obj["id"]
+    elif tool_name == "create_task":
+        obj = data.get("task", data)
+        if "id" in obj:
+            ids["task_id"] = obj["id"]
+    return ids
+
+
+def seed_l2_fixtures(mcp: MCPClient) -> dict:
+    """
+    Create fixture data required by L2-06 and L2-07 tasks.
+    Returns a context dict with the created entity IDs.
+    """
+    context = {}
+
+    # Create project
+    proj_raw = mcp.call_tool("create_project", {
+        "name": "Notifications Feature",
+        "status": "active",
+    })
+    proj_ids = extract_ids_from_result("create_project", proj_raw)
+    context.update(proj_ids)
+
+    # Create workunit
+    wu_raw = mcp.call_tool("create_workunit", {
+        "name": "Implement User Notifications",
+        "problem_statement": "Users need to be notified when workunits they follow are updated, but no notification system exists yet.",
+        "success_criteria": "Users receive timely notifications for workunit updates via email and in-app channels.",
+        "project_id": context.get("project_id", ""),
+        "status": "active",
+    })
+    wu_ids = extract_ids_from_result("create_workunit", wu_raw)
+    context.update(wu_ids)
+
+    wu_id = context.get("workunit_id", "")
+    if not wu_id:
+        console.print("  [yellow]L2 fixture seeding: could not create workunit[/yellow]")
+        return context
+
+    # Create tasks that match L2-06 triage rules
+    fixture_tasks = [
+        {"title": "Write unit tests for notification service", "status": "todo"},
+        {"title": "Fix email delivery bug", "status": "todo"},
+        {"title": "Add integration testing for webhooks", "status": "todo"},
+        {"title": "Fix race condition in notification queue", "status": "todo"},
+    ]
+    for t in fixture_tasks:
+        task_raw = mcp.call_tool("create_task", {
+            "workunit_id": wu_id,
+            "title": t["title"],
+            "status": t["status"],
+        })
+        task_ids = extract_ids_from_result("create_task", task_raw)
+        context.update(task_ids)
+
+    console.print(f"  [dim]L2 fixtures seeded: project={context.get('project_id', '?')}, "
+                  f"workunit={context.get('workunit_id', '?')}, {len(fixture_tasks)} tasks[/dim]")
+    return context
+
+
+def reset_benchmark_env(mcp: MCPClient):
+    """Wipe all benchmark org data via MCP between model runs for a clean slate."""
+    org_id = ""
+    user_raw = mcp.call_tool("get_authenticated_user", {})
+    try:
+        user_data = json.loads(user_raw)
+        orgs = user_data.get("organizations", [])
+        org_id = orgs[0]["id"] if orgs else user_data.get("organization_id", "")
+    except (json.JSONDecodeError, KeyError, IndexError):
+        pass
+
+    if not org_id:
+        probe_raw = mcp.call_tool("create_project", {"name": "_benchmark_cleanup_probe"})
+        try:
+            probe_data = json.loads(probe_raw)
+            project = probe_data.get("project", probe_data)
+            org_id = project.get("organization_id", "")
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    if not org_id:
+        console.print("  [yellow]Could not determine org_id, skipping cleanup[/yellow]")
+        return
+
+    def _parse_mcp(raw: str, key: str, label: str) -> list:
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            return []
+        if "error" in data:
+            return []
+        return data.get(key, [])
+
+    projects_raw = mcp.call_tool("list_projects", {"organization_id": org_id, "page_size": 100})
+    projects = _parse_mcp(projects_raw, "projects", "list_projects")
+    for proj in projects:
+        pid = proj.get("id", "")
+        if pid:
+            mcp.call_tool("remove_project", {"id": pid, "action": "delete"})
+
+    assets_raw = mcp.call_tool("search", {"query": " ", "result_types": ["asset"], "page_size": 50})
+    assets = _parse_mcp(assets_raw, "results", "search assets")
+    for asset in assets:
+        aid = asset.get("id", "")
+        if aid:
+            mcp.call_tool("delete_asset", {"id": aid})
+
+    dirs_raw = mcp.call_tool("directory", {"action": "list", "organization_id": org_id})
+    directories = _parse_mcp(dirs_raw, "directories", "list directories")
+    for d in directories:
+        did = d.get("id", "")
+        if did:
+            mcp.call_tool("directory", {"action": "delete", "id": did, "recursive": True})
+
+    deleted = len(projects) + len(assets) + len(directories)
+    if deleted:
+        console.print(f"  [dim]Cleanup: deleted {len(projects)} projects, {len(assets)} assets, {len(directories)} directories[/dim]")
+    else:
+        console.print("  [dim]Cleanup: org already clean[/dim]")
 
 
 # ─── LM Studio helpers ────────────────────────────────────────────────────────
@@ -607,8 +889,13 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
 
 # ─── Single task execution ─────────────────────────────────────────────────────
 
-def run_task(client: OpenAI, model_id: str, task: dict, context: dict) -> dict:
-    """Run one task. Returns result dict."""
+def run_task(client: OpenAI, model_id: str, task: dict, context: dict,
+             mcp: MCPClient | None = None) -> dict:
+    """Run one task. Returns result dict.
+
+    After scoring, executes the model's tool calls against MCP (if available)
+    to capture real entity IDs for subsequent tasks.
+    """
     # Inject context variables ({{project_id}}, {{workunit_id}}, etc.)
     prompt = task["prompt"]
     for key, val in context.items():
@@ -616,6 +903,8 @@ def run_task(client: OpenAI, model_id: str, task: dict, context: dict) -> dict:
 
     start = time.time()
     tool_calls = []
+    mcp_results = []
+    model_response = None  # raw text content from the model
     error = None
 
     try:
@@ -632,6 +921,7 @@ def run_task(client: OpenAI, model_id: str, task: dict, context: dict) -> dict:
         )
 
         msg = response.choices[0].message
+        model_response = msg.content
         if msg.tool_calls:
             for tc in msg.tool_calls:
                 try:
@@ -648,13 +938,26 @@ def run_task(client: OpenAI, model_id: str, task: dict, context: dict) -> dict:
     elapsed = round(time.time() - start, 2)
     passed, score, details = validate(tool_calls, task)
 
+    # Execute tool calls against MCP to capture real IDs for subsequent tasks.
+    # This happens AFTER scoring so it doesn't affect the benchmark results.
+    if mcp and tool_calls:
+        for tc in tool_calls:
+            try:
+                result = mcp.call_tool(tc["name"], tc["arguments"])
+                mcp_results.append(result)
+            except Exception:
+                mcp_results.append("{}")
+
     return {
         "task_id": task["id"],
         "task_name": task["name"],
+        "prompt_sent": prompt,
+        "model_response": model_response,
         "passed": passed,
         "score": score,
         "details": details,
         "tool_calls": tool_calls,
+        "mcp_results": mcp_results,
         "elapsed_s": elapsed,
         "error": error,
     }
@@ -662,8 +965,14 @@ def run_task(client: OpenAI, model_id: str, task: dict, context: dict) -> dict:
 
 # ─── Level runner ──────────────────────────────────────────────────────────────
 
-def run_level(client: OpenAI, model_id: str, level: int, context: dict) -> dict:
-    """Run all tasks for a level. Returns summary + per-task results."""
+def run_level(client: OpenAI, model_id: str, level: int, context: dict,
+              mcp: MCPClient | None = None) -> dict:
+    """Run all tasks for a level. Returns summary + per-task results.
+
+    context is a mutable dict of entity IDs carried across tasks.
+    mcp is optional — when provided, tool calls are executed after scoring
+    to capture real entity IDs for subsequent tasks.
+    """
     task_file = TASK_FILES[level]
     level_names = {0: "Explicit", 1: "Natural Language", 2: "Reasoning"}
 
@@ -671,12 +980,22 @@ def run_level(client: OpenAI, model_id: str, level: int, context: dict) -> dict:
         task_data = json.load(f)
     tasks = task_data["tasks"]
 
+    # Seed fixture data for L2 tasks that require pre-existing workunits/tasks
+    if level == 2 and mcp:
+        fixture_ctx = seed_l2_fixtures(mcp)
+        context.update(fixture_ctx)
+
     console.print(f"\n  [bold]Level {level} — {level_names[level]}[/bold] ({len(tasks)} tasks)")
 
     results = []
     for task in tasks:
         with console.status(f"    [dim]{task['id']}: {task['name']}[/dim]"):
-            result = run_task(client, model_id, task, context)
+            result = run_task(client, model_id, task, context, mcp)
+
+        # Extract entity IDs from MCP responses for subsequent tasks
+        for call, mcp_result in zip(result["tool_calls"], result.get("mcp_results", [])):
+            ids = extract_ids_from_result(call["name"], mcp_result)
+            context.update(ids)
 
         icon = "✅" if result["passed"] else "❌"
         score_pct = f"{result['score']:.0%}"
@@ -706,10 +1025,13 @@ def run_level(client: OpenAI, model_id: str, level: int, context: dict) -> dict:
 # ─── Model runner ──────────────────────────────────────────────────────────────
 
 def run_model(model_id: str, levels: list[int], tool_trained: bool,
+              token: str = "", refresh_token: str = "",
               force: bool = False, no_git: bool = False) -> dict:
     """Run all levels for one model. Handles model switching automatically.
 
     Skips levels that already have a result file unless force=True.
+    When a token is provided, connects to MCP to execute tool calls after scoring
+    and capture real entity IDs for placeholder substitution.
     """
     # Check which levels still need running
     pending_levels = []
@@ -736,6 +1058,17 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool,
 
     client = OpenAI(base_url=LMSTUDIO_BASE_URL, api_key="lm-studio")
 
+    # Set up MCP client for ID capture and fixture seeding
+    mcp = None
+    if token:
+        mcp = MCPClient(token=token, refresh_token=refresh_token)
+        if not mcp.initialize():
+            console.print("  [yellow]MCP connection failed — running without ID capture[/yellow]")
+            mcp = None
+        else:
+            # Reset org data before each model so tests don't bleed into each other
+            reset_benchmark_env(mcp)
+
     # Trigger model load by sending a probe request
     console.print("  [dim]Loading model...[/dim]")
     if not wait_for_model(model_id):
@@ -753,7 +1086,7 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool,
     }
 
     for level in pending_levels:
-        level_result = run_level(client, model_id, level, context)
+        level_result = run_level(client, model_id, level, context, mcp)
         model_results["levels"][level] = level_result
 
         s = level_result["summary"]
@@ -785,12 +1118,19 @@ def save_result(model_id: str, level: int, level_result: dict, tool_trained: boo
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     out = RESULTS_DIR / f"level{level}_{safe}_{ts}.json"
 
+    # Strip mcp_results from saved output — they're large and only needed at runtime
+    clean_results = []
+    for r in level_result.get("results", []):
+        clean = {k: v for k, v in r.items() if k != "mcp_results"}
+        clean_results.append(clean)
+
     output = {
         "level": level,
         "model": model_id,
         "tool_trained": tool_trained,
         "timestamp": datetime.now().isoformat(),
-        **level_result,
+        **{k: v for k, v in level_result.items() if k != "results"},
+        "results": clean_results,
     }
     with open(out, "w") as f:
         json.dump(output, f, indent=2)
@@ -858,7 +1198,37 @@ def main():
         "--force", action="store_true",
         help="Re-run levels that already have result files (default: skip completed levels)",
     )
+    parser.add_argument(
+        "--token",
+        help="Workunit MCP bearer token for ID capture (or set WORKUNIT_TOKEN env var)",
+        default=os.environ.get("WORKUNIT_TOKEN", ""),
+    )
+    parser.add_argument(
+        "--refresh-token",
+        help="OAuth refresh token for automatic renewal (or set WORKUNIT_REFRESH_TOKEN env var)",
+        default=os.environ.get("WORKUNIT_REFRESH_TOKEN", ""),
+    )
+    parser.add_argument(
+        "--local", action="store_true",
+        help="Use local dev stack (MCP at localhost:9000, OAuth at localhost:3000)",
+    )
+    parser.add_argument(
+        "--yes", "-y", action="store_true",
+        help="Skip the destructive data warning prompt",
+    )
+    parser.add_argument(
+        "--results-dir",
+        help="Directory to write result files (default: results/v1_singleshot/)",
+    )
     args = parser.parse_args()
+
+    # Override globals from CLI flags
+    global RESULTS_DIR, MCP_URL, OAUTH_TOKEN_URL
+    if args.results_dir:
+        RESULTS_DIR = Path(args.results_dir)
+    if args.local:
+        MCP_URL        = "http://localhost:9000/mcp"
+        OAUTH_TOKEN_URL = "http://localhost:3000/oauth/token"
 
     if args.list_models:
         models = list_models()
@@ -877,7 +1247,14 @@ def main():
 
     # Resolve model list
     if args.model:
-        model_list = [(args.model, True)]  # Assume tool-trained for single model
+        default_models_file = BENCHMARK_DIR / "models.txt"
+        tool_trained = True
+        if default_models_file.exists():
+            for mid, tt in load_models_file(str(default_models_file)):
+                if mid == args.model:
+                    tool_trained = tt
+                    break
+        model_list = [(args.model, tool_trained)]
     elif args.models:
         model_list = load_models_file(args.models)
     else:
@@ -901,15 +1278,27 @@ def main():
             lines.append(f"\n[dim]Already done, will skip ({len(done)}):[/dim]")
             lines.extend(done)
         lines.append(f"\nTasks per level: L0=11, L1=10, L2=7")
+        lines.append(f"MCP token: {'set' if args.token else 'not set (no ID capture)'}")
 
         console.print(Panel("\n".join(lines), title="Dry Run Plan"))
         return
+
+    # Destructive data warning when MCP token is set
+    if args.token and not args.yes:
+        console.print("[bold yellow]WARNING: The benchmark deletes ALL projects, workunits, assets, and directories[/bold yellow]")
+        console.print("[bold yellow]in your org between each model run. Use a dedicated Workunit account.[/bold yellow]\n")
+        confirm = input("Type 'yes' to continue (or use --yes to skip): ")
+        if confirm.strip().lower() != "yes":
+            console.print("Aborted.")
+            return
 
     console.print(Panel(
         f"[bold cyan]Workunit MCP Benchmark — Single-shot[/bold cyan]\n\n"
         f"Models: {len(model_list)}\n"
         f"Levels: {levels}\n"
         f"Force re-run: {'yes' if args.force else 'no (skipping completed levels)'}\n"
+        f"MCP: {'enabled' if args.token else 'disabled (no --token)'}\n"
+        f"Results: {RESULTS_DIR}\n"
         f"LM Studio: {LMSTUDIO_BASE_URL}",
         title="Starting Run"
     ))
@@ -917,7 +1306,8 @@ def main():
     start = time.time()
     for i, (model_id, tool_trained) in enumerate(model_list, 1):
         console.print(f"\n[dim]── Model {i}/{len(model_list)} ──────────────────────────────[/dim]")
-        run_model(model_id, levels, tool_trained, args.force, args.no_git)
+        run_model(model_id, levels, tool_trained, args.token, args.refresh_token,
+                  args.force, args.no_git)
 
     elapsed = time.time() - start
     console.print(f"\n[bold green]Complete![/bold green] {elapsed/60:.1f} minutes total")
@@ -925,7 +1315,7 @@ def main():
     # Final aggregated report
     console.print("\nGenerating report...")
     agg = Path(__file__).parent / "aggregate_results.py"
-    subprocess.run([sys.executable, str(agg)], cwd=str(BENCHMARK_DIR))
+    subprocess.run([sys.executable, str(agg), "--results-dir", str(RESULTS_DIR)], cwd=str(BENCHMARK_DIR))
 
     if not args.no_git:
         # Commit any remaining aggregated report changes

@@ -37,7 +37,6 @@ import os
 import re
 import sys
 import time
-import threading
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -60,10 +59,13 @@ LMSTUDIO_MGMT_URL  = f"http://{_LMSTUDIO_HOST}"
 MCP_URL            = os.environ.get("MCP_URL", "https://workunit.app/mcp")
 MCP_CALL_TIMEOUT   = int(os.environ.get("MCP_CALL_TIMEOUT", "60"))
 
-BENCHMARK_DIR = Path(__file__).parent.parent
-TASKS_DIR     = BENCHMARK_DIR / "tasks"
-RESULTS_DIR   = BENCHMARK_DIR / "results" / "v2_agentic"
-PROJECT_ROOT  = BENCHMARK_DIR.parent
+BENCHMARK_DIR       = Path(__file__).parent.parent
+TASKS_DIR           = BENCHMARK_DIR / "tasks"
+DEFAULT_RESULTS_DIR = BENCHMARK_DIR / "results" / "v2_agentic"
+PROJECT_ROOT        = BENCHMARK_DIR.parent
+
+# Mutable — overridden by --results-dir CLI arg
+RESULTS_DIR = DEFAULT_RESULTS_DIR
 
 TASK_FILES = {
     0: TASKS_DIR / "level0_explicit.json",
@@ -960,7 +962,88 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
 
 # ─── Agentic task execution ────────────────────────────────────────────────────
 
-def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict) -> dict:
+def extract_ids_from_result(tool_name: str, mcp_result: str) -> dict:
+    """Extract entity IDs from a successful MCP tool response."""
+    ids = {}
+    try:
+        data = json.loads(mcp_result)
+    except (json.JSONDecodeError, TypeError):
+        return ids
+    if "error" in data:
+        return ids
+
+    # MCP responses may wrap in {"project": {...}}, {"workunit": {...}}, etc.
+    # or return the object directly
+    if tool_name == "create_project":
+        obj = data.get("project", data)
+        if "id" in obj:
+            ids["project_id"] = obj["id"]
+    elif tool_name == "create_workunit":
+        obj = data.get("workunit", data)
+        if "id" in obj:
+            ids["workunit_id"] = obj["id"]
+    elif tool_name == "create_task":
+        obj = data.get("task", data)
+        if "id" in obj:
+            ids["task_id"] = obj["id"]
+    return ids
+
+
+def seed_l2_fixtures(mcp: MCPClient) -> dict:
+    """
+    Create fixture data required by L2-06 and L2-07 tasks.
+    Returns a context dict with the created entity IDs.
+    """
+    context = {}
+
+    # Create project
+    proj_raw = mcp.call_tool("create_project", {
+        "name": "Notifications Feature",
+        "status": "active",
+    })
+    proj_ids = extract_ids_from_result("create_project", proj_raw)
+    context.update(proj_ids)
+
+    # Create workunit
+    wu_raw = mcp.call_tool("create_workunit", {
+        "name": "Implement User Notifications",
+        "problem_statement": "Users need to be notified when workunits they follow are updated, but no notification system exists yet.",
+        "success_criteria": "Users receive timely notifications for workunit updates via email and in-app channels.",
+        "project_id": context.get("project_id", ""),
+        "status": "active",
+    })
+    wu_ids = extract_ids_from_result("create_workunit", wu_raw)
+    context.update(wu_ids)
+
+    wu_id = context.get("workunit_id", "")
+    if not wu_id:
+        console.print("  [yellow]L2 fixture seeding: could not create workunit[/yellow]")
+        return context
+
+    # Create tasks that match L2-06 triage rules
+    fixture_tasks = [
+        {"title": "Write unit tests for notification service", "status": "todo"},
+        {"title": "Fix email delivery bug", "status": "todo"},
+        {"title": "Add integration testing for webhooks", "status": "todo"},
+        {"title": "Fix race condition in notification queue", "status": "todo"},
+    ]
+    for t in fixture_tasks:
+        task_raw = mcp.call_tool("create_task", {
+            "workunit_id": wu_id,
+            "title": t["title"],
+            "status": t["status"],
+        })
+        task_ids = extract_ids_from_result("create_task", task_raw)
+        # Keep updating task_id so context has the last one (for L0/L1 compatibility)
+        context.update(task_ids)
+
+    console.print(f"  [dim]L2 fixtures seeded: project={context.get('project_id', '?')}, "
+                  f"workunit={context.get('workunit_id', '?')}, {len(fixture_tasks)} tasks[/dim]")
+    return context
+
+
+def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict,
+             context: dict | None = None) -> dict:
     """
     Run one task with a full agentic loop:
     - Model calls tool → we execute it against MCP → feed result back → repeat
@@ -969,11 +1052,18 @@ def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict) -> dict:
     """
     prompt = task["prompt"]
 
-    start      = time.time()
-    all_calls  = []   # every tool call across all turns, for validation
-    turns      = 0
-    timed_out  = False
-    error      = None
+    # Substitute any {{placeholder}} references with real IDs from context
+    if context:
+        for key, val in context.items():
+            prompt = prompt.replace(f"{{{{{key}}}}}", str(val))
+
+    start       = time.time()
+    all_calls   = []   # every tool call across all turns, for validation
+    mcp_results = []   # MCP response strings, parallel to all_calls
+    turns       = 0
+    timed_out   = False
+    error       = None
+    model_responses = []  # text content from each assistant turn
 
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -998,6 +1088,8 @@ def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict) -> dict:
 
             msg   = response.choices[0].message
             turns += 1
+            if msg.content:
+                model_responses.append(msg.content)
 
             if not msg.tool_calls:
                 # Model is done — no more tool calls
@@ -1034,6 +1126,7 @@ def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict) -> dict:
             # Execute each tool call against MCP and append results
             for tc in turn_calls:
                 result = mcp.call_tool(tc["name"], tc["arguments"])
+                mcp_results.append(result)
                 messages.append({
                     "role":         "tool",
                     "tool_call_id": tc["id"],
@@ -1058,23 +1151,34 @@ def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict) -> dict:
         details.insert(0, f"Task timed out after {TASK_TIMEOUT_S}s ({turns} turns completed)")
 
     return {
-        "task_id":    task["id"],
-        "task_name":  task["name"],
-        "passed":     passed,
-        "score":      score,
-        "details":    details,
-        "tool_calls": all_calls,
-        "turns":      turns,
-        "elapsed_s":  elapsed,
-        "timed_out":  timed_out,
-        "error":      error,
+        "task_id":         task["id"],
+        "task_name":       task["name"],
+        "prompt_sent":     prompt,
+        "model_responses": model_responses,
+        "passed":          passed,
+        "score":           score,
+        "details":         details,
+        "tool_calls":      all_calls,
+        "mcp_results":     mcp_results,
+        "turns":           turns,
+        "elapsed_s":       elapsed,
+        "timed_out":       timed_out,
+        "error":           error,
     }
 
 
 # ─── Level runner ──────────────────────────────────────────────────────────────
 
-def run_level(client: OpenAI, mcp: MCPClient, model_id: str, level: int) -> dict:
-    """Run all tasks for a level. Returns summary + per-task results."""
+def run_level(client: OpenAI, mcp: MCPClient, model_id: str, level: int,
+              context: dict | None = None) -> dict:
+    """Run all tasks for a level. Returns summary + per-task results.
+
+    context is a mutable dict of entity IDs (project_id, workunit_id, task_id)
+    carried across tasks so {{placeholder}} substitution works.
+    """
+    if context is None:
+        context = {}
+
     task_file   = TASK_FILES[level]
     level_names = {0: "Explicit", 1: "Natural Language", 2: "Reasoning"}
 
@@ -1082,12 +1186,22 @@ def run_level(client: OpenAI, mcp: MCPClient, model_id: str, level: int) -> dict
         task_data = json.load(f)
     tasks = task_data["tasks"]
 
+    # Seed fixture data for L2 tasks that require pre-existing workunits/tasks
+    if level == 2:
+        fixture_ctx = seed_l2_fixtures(mcp)
+        context.update(fixture_ctx)
+
     console.print(f"\n  [bold]Level {level} — {level_names[level]}[/bold] ({len(tasks)} tasks)")
 
     results = []
     for task in tasks:
         with console.status(f"    [dim]{task['id']}: {task['name']}[/dim]"):
-            result = run_task(client, mcp, model_id, task)
+            result = run_task(client, mcp, model_id, task, context)
+
+        # Extract entity IDs from MCP responses for subsequent tasks
+        for call, mcp_result in zip(result["tool_calls"], result.get("mcp_results", [])):
+            ids = extract_ids_from_result(call["name"], mcp_result)
+            context.update(ids)
 
         icon      = "✅" if result["passed"] else "❌"
         score_pct = f"{result['score']:.0%}"
@@ -1260,10 +1374,12 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
         "levels":       {},
     }
 
+    context = {}  # Entity IDs carried across levels for placeholder substitution
+
     try:
         for level in pending_levels:
             try:
-                level_result = run_level(client, mcp, model_id, level)
+                level_result = run_level(client, mcp, model_id, level, context)
                 model_results["levels"][level] = level_result
 
                 s = level_result["summary"]
@@ -1300,12 +1416,19 @@ def save_result(model_id: str, level: int, level_result: dict, tool_trained: boo
     ts   = datetime.now().strftime("%Y%m%d_%H%M%S")
     out  = RESULTS_DIR / f"level{level}_{safe}_{ts}.json"
 
+    # Strip mcp_results from saved output — they're large and only needed at runtime
+    clean_results = []
+    for r in level_result.get("results", []):
+        clean = {k: v for k, v in r.items() if k != "mcp_results"}
+        clean_results.append(clean)
+
     output = {
         "level":       level,
         "model":       model_id,
         "tool_trained": tool_trained,
         "timestamp":   datetime.now().isoformat(),
-        **level_result,
+        **{k: v for k, v in level_result.items() if k != "results"},
+        "results":     clean_results,
     }
     with open(out, "w") as f:
         json.dump(output, f, indent=2)
@@ -1390,11 +1513,17 @@ def main():
         "--yes", "-y", action="store_true",
         help="Skip the destructive data warning prompt",
     )
+    parser.add_argument(
+        "--results-dir",
+        help="Directory to write result files (default: results/v2_agentic/)",
+    )
     args = parser.parse_args()
 
-    # --local overrides endpoints to dev stack
+    # Override globals from CLI flags
+    global RESULTS_DIR, MCP_URL, OAUTH_TOKEN_URL
+    if args.results_dir:
+        RESULTS_DIR = Path(args.results_dir)
     if args.local:
-        global MCP_URL, OAUTH_TOKEN_URL
         MCP_URL        = "http://localhost:9000/mcp"
         OAUTH_TOKEN_URL = "http://localhost:3000/oauth/token"
 
@@ -1491,6 +1620,7 @@ def main():
         f"Levels: {levels}\n"
         f"Task timeout: {TASK_TIMEOUT_S}s\n"
         f"Force re-run: {'yes' if args.force else 'no (skipping completed levels)'}\n"
+        f"Results: {RESULTS_DIR}\n"
         f"LM Studio: {LMSTUDIO_BASE_URL}\n"
         f"MCP: {MCP_URL}",
         title="Starting Run"
