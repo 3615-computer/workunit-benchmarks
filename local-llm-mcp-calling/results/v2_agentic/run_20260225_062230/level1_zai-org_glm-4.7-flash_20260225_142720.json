@@ -1,0 +1,363 @@
+{
+  "level": 1,
+  "model": "zai-org/glm-4.7-flash",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T14:27:20.723400",
+  "summary": {
+    "total": 10,
+    "passed": 10,
+    "pass_rate": 1.0,
+    "avg_score": 0.97
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "prompt_sent": "Create a new project called \"Mobile App Redesign\". Set its status to active and add a description: \"Complete redesign of the mobile application with new UX patterns.\" Also add the tags: mobile, redesign, ux.",
+      "model_responses": [
+        "I'll create the new project \"Mobile App Redesign\" with the specified details."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "status": "active",
+            "tags": [
+              "mobile",
+              "redesign",
+              "ux"
+            ]
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T13:24:03Z\",\"description\":\"Complete redesign of the mobile application with new UX patterns.\",\"id\":\"25bab28ce4d2448c9b8ba606267de822\",\"name\":\"Mobile App Redesign\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"tags\":[\"mobile\",\"redesign\",\"ux\"],\"updated_at\":\"2026-02-25T13:24:03Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 12.91,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "prompt_sent": "I need to track some work on fixing our login page. Create a workunit named \"Fix Login Page Bug\" in project 25bab28ce4d2448c9b8ba606267de822. The problem is that users can't log in when they have special characters in their password. We'll know it's done when all character types are supported and there are regression tests. Make it high priority.",
+      "model_responses": [
+        "I'll create a workunit for fixing the login page bug with the details you provided."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "project_id": "25bab28ce4d2448c9b8ba606267de822",
+            "problem_statement": "Users can't log in when they have special characters in their password",
+            "success_criteria": "All character types are supported and there are regression tests",
+            "priority": "high",
+            "description": "Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.",
+            "tags": [
+              "login",
+              "authentication",
+              "password",
+              "special-characters",
+              "bug-fix"
+            ]
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:24:29Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.\",\"id\":\"253d517aaadc4c10828334cf237cd854\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Fix Login Page Bug\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"high\",\"problem_statement\":\"Users can't log in when they have special characters in their password\",\"project_id\":\"25bab28ce4d2448c9b8ba606267de822\",\"status\":\"active\",\"success_criteria\":\"All character types are supported and there are regression tests\",\"tags\":[\"login\",\"authentication\",\"password\",\"special-characters\",\"bug-fix\"],\"total_tasks\":0,\"updated_at\":\"2026-02-25T13:24:29Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 26.27,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "prompt_sent": "Add these three tasks to workunit 253d517aaadc4c10828334cf237cd854:\n1. \"Reproduce the bug locally\" - high priority\n2. \"Identify root cause\" - high priority  \n3. \"Write fix and add regression tests\" - normal priority\n\nAll should start as todo.",
+      "model_responses": [
+        "I'll create these three tasks for workunit 253d517aaadc4c10828334cf237cd854."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "3/3 calls made correctly"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "253d517aaadc4c10828334cf237cd854",
+            "title": "Reproduce the bug locally",
+            "priority": "high",
+            "status": "todo"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:24:55Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"d6478505baa8423c8b2d49aac7146360\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Reproduce the bug locally\",\"updated_at\":\"2026-02-25T13:24:55Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}}"
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "253d517aaadc4c10828334cf237cd854",
+            "title": "Identify root cause",
+            "priority": "high",
+            "status": "todo"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:25:00Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"54edd4137f544703afdc85fa9faec616\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Identify root cause\",\"updated_at\":\"2026-02-25T13:25:00Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}}"
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "253d517aaadc4c10828334cf237cd854",
+            "priority": "normal",
+            "status": "todo",
+            "title": "Write fix and add regression tests"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:25:04Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"fe8a88944bb24e2f9976a50168084b32\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"todo\",\"title\":\"Write fix and add regression tests\",\"updated_at\":\"2026-02-25T13:25:04Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 34.62,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "prompt_sent": "Mark task fe8a88944bb24e2f9976a50168084b32 as currently in progress.",
+      "model_responses": [
+        "I'll update the task status to \"in progress\" for you."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "fe8a88944bb24e2f9976a50168084b32",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:25:04Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"created_by_name\":\"Alyx\",\"id\":\"fe8a88944bb24e2f9976a50168084b32\",\"is_active\":true,\"priority\":\"normal\",\"started_at\":\"2026-02-25T13:25:37Z\",\"status\":\"in_progress\",\"title\":\"Write fix and add regression tests\",\"updated_at\":\"2026-02-25T13:25:37Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 32.9,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "prompt_sent": "Find the workunit called \"Fix Login Page Bug\" and get its full details including all tasks.",
+      "model_responses": [
+        "I'll help you find the workunit called \"Fix Login Page Bug\" and get its full details. Let me start by searching for it."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":false,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T13:24:29Z\",\"description\":\"Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.\",\"id\":\"253d517aaadc4c10828334cf237cd854\",\"name\":\"Fix Login Page Bug\",\"problem_statement\":\"Users can't log in when they have special characters in their password\",\"relevance_score\":1602,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T13:24:29Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":1}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "253d517aaadc4c10828334cf237cd854",
+            "include_tasks": true
+          },
+          "mcp_result": "{\"tasks\":[{\"task\":{\"created_at\":\"2026-02-25T13:25:04Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"fe8a88944bb24e2f9976a50168084b32\",\"is_active\":true,\"priority\":\"normal\",\"started_at\":\"2026-02-25T13:25:37Z\",\"status\":\"in_progress\",\"title\":\"Write fix and add regression tests\",\"updated_at\":\"2026-02-25T13:25:37Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}},{\"task\":{\"created_at\":\"2026-02-25T13:25:00Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"54edd4137f544703afdc85fa9faec616\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Identify root cause\",\"updated_at\":\"2026-02-25T13:25:00Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}},{\"task\":{\"created_at\":\"2026-02-25T13:24:55Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"d6478505baa8423c8b2d49aac7146360\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Reproduce the bug locally\",\"updated_at\":\"2026-02-25T13:24:55Z\",\"workunit_id\":\"253d517aaadc4c10828334cf237cd854\"}}],\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:24:29Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.\",\"id\":\"253d517aaadc4c10828334cf237cd854\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Fix Login Page Bug\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"high\",\"problem_statement\":\"Users can't log in when they have special characters in their password\",\"project_id\":\"25bab28ce4d2448c9b8ba606267de822\",\"status\":\"active\",\"success_criteria\":\"All character types are supported and there are regression tests\",\"tags\":[\"login\",\"authentication\",\"password\",\"special-characters\",\"bug-fix\"],\"total_tasks\":3,\"updated_at\":\"2026-02-25T13:24:29Z\"}}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 19.34,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "prompt_sent": "Save a context note on workunit 253d517aaadc4c10828334cf237cd854 recording this decision: we chose to fix the password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+      "model_responses": [
+        "I'll save this architectural decision to the workunit's context trail."
+      ],
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'importance': expected 'high', got 'critical'"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "253d517aaadc4c10828334cf237cd854",
+            "atom_type": "decision",
+            "title": "Backend password validation for security",
+            "content": "We chose to fix password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+            "importance": "critical",
+            "author_model": "human",
+            "confidence": "high"
+          },
+          "mcp_result": "{\"atom_id\":\"d60822b6-0803-4a7f-a2a4-2d734ea21adb\"}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 25.69,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "prompt_sent": "Create a new product asset called \"Workunit Mobile SDK\" in draft status. It's a software product currently in the development lifecycle stage. Add a description: \"iOS and Android SDK for integrating Workunit into mobile applications.\"",
+      "model_responses": [
+        "I'll create the new product asset \"Workunit Mobile SDK\" with the details you provided."
+      ],
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'category': expected 'software', got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "status": "draft",
+            "lifecycle_stage": "development",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications."
+          },
+          "mcp_result": "{\"asset\":{\"asset_type\":\"PRODUCT\",\"created_at\":\"2026-02-25T13:26:36Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"iOS and Android SDK for integrating Workunit into mobile applications.\",\"id\":\"b1aadde8e13949d08b0aed80d4fc5134\",\"is_active\":true,\"lifecycle_stage\":\"development\",\"name\":\"Workunit Mobile SDK\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"status\":\"draft\",\"updated_at\":\"2026-02-25T13:26:36Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 14.7,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "prompt_sent": "Show me the details of project 25bab28ce4d2448c9b8ba606267de822, including how many workunits and assets it has.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "25bab28ce4d2448c9b8ba606267de822",
+            "include_stats": true
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T13:24:03Z\",\"description\":\"Complete redesign of the mobile application with new UX patterns.\",\"id\":\"25bab28ce4d2448c9b8ba606267de822\",\"name\":\"Mobile App Redesign\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"tags\":[\"mobile\",\"redesign\",\"ux\"],\"updated_at\":\"2026-02-25T13:24:03Z\"},\"stats\":{\"asset_count\":0,\"checkin_count\":0,\"workunit_count\":1}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 6.36,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "prompt_sent": "Update workunit 253d517aaadc4c10828334cf237cd854: change its priority to urgent, and set its tags to: bug, authentication, critical.",
+      "model_responses": [
+        "I'll update the workunit with the new priority and tags."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "253d517aaadc4c10828334cf237cd854",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "tags"
+              ]
+            },
+            "priority": "urgent",
+            "tags": [
+              "bug",
+              "authentication",
+              "critical"
+            ]
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:24:29Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.\",\"id\":\"253d517aaadc4c10828334cf237cd854\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Fix Login Page Bug\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"urgent\",\"problem_statement\":\"Users can't log in when they have special characters in their password\",\"project_id\":\"25bab28ce4d2448c9b8ba606267de822\",\"status\":\"active\",\"success_criteria\":\"All character types are supported and there are regression tests\",\"tags\":[\"bug\",\"authentication\",\"critical\"],\"total_tasks\":0,\"updated_at\":\"2026-02-25T13:26:58Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 15.6,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "prompt_sent": "Mark workunit 253d517aaadc4c10828334cf237cd854 as completed. Add completion notes explaining that the password validation was moved to the backend, all special characters now work, and 12 regression tests were added.",
+      "model_responses": [
+        "I'll mark workunit 253d517aaadc4c10828334cf237cd854 as completed with the specified notes."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "253d517aaadc4c10828334cf237cd854",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Password validation was moved to the backend, all special characters now work, and 12 regression tests were added."
+          },
+          "mcp_result": "{\"workunit\":{\"completed_at\":\"2026-02-25T13:27:20Z\",\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:24:29Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Investigate and fix the issue where users cannot log in when their passwords contain special characters. This workunit will track the investigation, implementation, and testing of the fix.\",\"id\":\"253d517aaadc4c10828334cf237cd854\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Fix Login Page Bug\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"urgent\",\"problem_statement\":\"Users can't log in when they have special characters in their password\",\"project_id\":\"25bab28ce4d2448c9b8ba606267de822\",\"status\":\"completed\",\"success_criteria\":\"All character types are supported and there are regression tests\",\"tags\":[\"bug\",\"authentication\",\"critical\"],\"total_tasks\":0,\"updated_at\":\"2026-02-25T13:27:20Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 21.89,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,374 @@
+{
+  "level": 2,
+  "model": "nvidia/nemotron-3-nano",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T15:27:06.208689",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.598
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_responses": [
+        "\n\n",
+        "\n\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Implementation of dark mode toggle and theming for the mobile app",
+            "tags": [
+              "dark-mode",
+              "ui",
+              "theme"
+            ],
+            "name": "Dark Mode Feature"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T14:06:23Z\",\"description\":\"Implementation of dark mode toggle and theming for the mobile app\",\"id\":\"077681a4443a44d9ad55a0700ab9a9fc\",\"name\":\"Dark Mode Feature\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"tags\":[\"dark-mode\",\"ui\",\"theme\"],\"updated_at\":\"2026-02-25T14:06:23Z\"}}"
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "status": "draft",
+            "problem_statement": "The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.",
+            "tags": [
+              "dark-mode",
+              "ui",
+              "theme"
+            ],
+            "success_criteria": "A fully functional dark mode toggle that works across all major screens, meets accessibility contrast standards (WCAG AA), and reduces average screen brightness by at least 15% when enabled.",
+            "project_id": "077681a4443a44d9ad55a0700ab9a9fc",
+            "owner_id": "3e3eeb7faeb5408a8ed4146eb15e5892",
+            "description": "Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.",
+            "priority": "high",
+            "organization_id": "7ecc4c86996c489fa21c4f9231b5039f",
+            "name": "Implement Dark Mode Feature"
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T14:07:19Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.\",\"id\":\"9687026b69034767944f6448c4863320\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Implement Dark Mode Feature\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"high\",\"problem_statement\":\"The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.\",\"project_id\":\"077681a4443a44d9ad55a0700ab9a9fc\",\"status\":\"draft\",\"success_criteria\":\"A fully functional dark mode toggle that works across all major screens, meets accessibility contrast standards (WCAG AA), and reduces average screen brightness by at least 15% when enabled.\",\"tags\":[\"dark-mode\",\"ui\",\"theme\"],\"total_tasks\":0,\"updated_at\":\"2026-02-25T14:07:19Z\"}}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 121.59,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_responses": [
+        "\n\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {},
+          "mcp_result": "{\"authenticated_via\":\"oauth2_jwt\",\"client_id\":\"d4f7a891-3a31-4541-9ab9-f7dba7df2e43\",\"display_name\":\"Alyx\",\"email\":\"workunit.app@alyx.pink\",\"scopes\":[\"read\",\"write\",\"mcp:tools\"],\"user_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\"}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 281.81,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_responses": [
+        "\n\n",
+        "\nI searched for workunits related to authentication, but the query returned no matching results (total_count\u202f=\u202f0). Since no workunits were found, there are no active or draft units to review, and therefore no insights to add at this time. If you'd like to broaden the search or check a different keyword, let me know!"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"total_count\":0,\"total_pages\":4}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 66.83,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_responses": [
+        "\n\n",
+        "\n\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "notifications"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T14:05:18Z\",\"id\":\"dfb4bee9f8de43f096f721541106ce11\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":559,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:05:18Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":4}"
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "author_model": "assistant",
+            "importance": "critical",
+            "workunit_id": "dfb4bee9f8de43f096f721541106ce11",
+            "atom_type": "decision",
+            "confidence": "high",
+            "title": "Adopt WebSockets for Real-Time Notifications",
+            "content": "We decided to use WebSockets instead of polling for the real-time notification feature. Tradeoffs considered: latency, server load, complexity, scalability, and implementation effort. WebSockets provide lower latency and reduce server load by maintaining persistent connections, but they add complexity to the server architecture and require careful handling of connection lifecycle. Polling is simpler but incurs higher server load and higher latency. Given the need for real-time updates and scalability, WebSockets were chosen.",
+            "tags": [
+              "architecture",
+              "notifications",
+              "websockets"
+            ],
+            "strength": "hard"
+          },
+          "mcp_result": "{\"atom_id\":\"556f06b3-567f-453d-9345-56a8d20a986e\"}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 112.67,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_responses": [
+        "\n\n",
+        "\n\n",
+        "\n\n"
+      ],
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "repo_url": "github.com/example/api-v2",
+            "description": "REST API redesign work",
+            "default_branch": "main",
+            "tags": [
+              "api",
+              "rest",
+              "redesign"
+            ],
+            "name": "API v2"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T14:15:55Z\",\"default_branch\":\"main\",\"description\":\"REST API redesign work\",\"id\":\"16ea8e5f28f04ec2a05f53dedbf3a56a\",\"name\":\"API v2\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"repo_url\":\"github.com/example/api-v2\",\"status\":\"active\",\"tags\":[\"api\",\"rest\",\"redesign\"],\"updated_at\":\"2026-02-25T14:15:55Z\"}}"
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "description": "Document describing the new API design.",
+            "organization_id": "7ecc4c86996c489fa21c4f9231b5039f",
+            "name": "API v2 Design Spec",
+            "asset_type": "knowledge"
+          },
+          "mcp_result": "{\"asset\":{\"asset_type\":\"KNOWLEDGE\",\"created_at\":\"2026-02-25T14:16:17Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Document describing the new API design.\",\"id\":\"89868e7e7bed4a5e8911f03aeb116281\",\"is_active\":true,\"name\":\"API v2 Design Spec\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"status\":\"\",\"updated_at\":\"2026-02-25T14:16:17Z\"}}"
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "asset_id": "89868e7e7bed4a5e8911f03aeb116281",
+            "project_id": "16ea8e5f28f04ec2a05f53dedbf3a56a",
+            "notes": "Linking API v2 Design Spec knowledge asset to API v2 project for REST API redesign.",
+            "action": "link"
+          },
+          "mcp_result": "{\"action\":\"link\",\"success\":true}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 91.62,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_responses": [
+        "\n\n",
+        "\n\n",
+        "\n\n",
+        "\n\n",
+        "\n\n"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out after 300s (5 turns completed)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T14:05:18Z\",\"id\":\"dfb4bee9f8de43f096f721541106ce11\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:05:18Z\",\"workunit_id\":\"00000000000000000000000000000000\"},{\"created_at\":\"2026-02-25T14:07:19Z\",\"description\":\"Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.\",\"id\":\"9687026b69034767944f6448c4863320\",\"name\":\"Implement Dark Mode Feature\",\"problem_statement\":\"The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.\",\"relevance_score\":220,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:07:19Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":2,\"total_pages\":4}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/id: type: 0 has type \\\"integer\\\", want \\\"string\\\"\"}}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/id: type: 0 has type \\\"integer\\\", want \\\"string\\\"\"}}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/include_tasks: type: True has type \\\"string\\\", want \\\"boolean\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T14:05:18Z\",\"id\":\"dfb4bee9f8de43f096f721541106ce11\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:05:18Z\",\"workunit_id\":\"00000000000000000000000000000000\"},{\"created_at\":\"2026-02-25T14:07:19Z\",\"description\":\"Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.\",\"id\":\"9687026b69034767944f6448c4863320\",\"name\":\"Implement Dark Mode Feature\",\"problem_statement\":\"The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.\",\"relevance_score\":220,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:07:19Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":2,\"total_pages\":4}"
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 323.77,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_responses": [
+        "\n\n",
+        "\n\n",
+        "\n\n",
+        "\n\n",
+        "\n\n"
+      ],
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Task timed out after 300s (5 turns completed)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T14:05:18Z\",\"id\":\"dfb4bee9f8de43f096f721541106ce11\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:05:18Z\",\"workunit_id\":\"00000000000000000000000000000000\"},{\"created_at\":\"2026-02-25T14:07:19Z\",\"description\":\"Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.\",\"id\":\"9687026b69034767944f6448c4863320\",\"name\":\"Implement Dark Mode Feature\",\"problem_statement\":\"The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.\",\"relevance_score\":220,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:07:19Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":2,\"total_pages\":4}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/id: type: 0 has type \\\"integer\\\", want \\\"string\\\"\"}}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/id: type: 0 has type \\\"integer\\\", want \\\"string\\\"\"}}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": 0
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/id: type: 0 has type \\\"integer\\\", want \\\"string\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T14:05:18Z\",\"id\":\"dfb4bee9f8de43f096f721541106ce11\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:05:18Z\",\"workunit_id\":\"00000000000000000000000000000000\"},{\"created_at\":\"2026-02-25T14:07:19Z\",\"description\":\"Implement dark mode toggle and theming for the mobile app, including UI adjustments, asset theming, and user settings persistence.\",\"id\":\"9687026b69034767944f6448c4863320\",\"name\":\"Implement Dark Mode Feature\",\"problem_statement\":\"The app currently lacks a dark mode toggle and theming support, resulting in poor user experience in low-light environments and higher battery consumption on OLED screens.\",\"relevance_score\":220,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T14:07:19Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":2,\"total_pages\":4}"
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 309.73,
+      "timed_out": true,
+      "error": null
+    }
+  ]
+}

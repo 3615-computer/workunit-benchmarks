@@ -1,0 +1,327 @@
+{
+  "level": 0,
+  "model": "zai-org/glm-4.7-flash",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T14:23:50.446862",
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "pass_rate": 1.0,
+    "avg_score": 1.0
+  },
+  "results": [
+    {
+      "task_id": "L0-01",
+      "task_name": "Ping the MCP server",
+      "prompt_sent": "Call the `ping` tool with the message \"hello from benchmark\".",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          },
+          "mcp_result": "{\"message\":\"hello from benchmark\",\"status\":\"pong\",\"timestamp\":\"2026-02-25T13:21:58Z\"}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 7.13,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-02",
+      "task_name": "Get authenticated user",
+      "prompt_sent": "Call the `get_authenticated_user` tool to retrieve the current user's details.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {},
+          "mcp_result": "{\"authenticated_via\":\"oauth2_jwt\",\"client_id\":\"d4f7a891-3a31-4541-9ab9-f7dba7df2e43\",\"display_name\":\"Alyx\",\"email\":\"workunit.app@alyx.pink\",\"scopes\":[\"read\",\"write\",\"mcp:tools\"],\"user_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\"}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 3.12,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-03",
+      "task_name": "Create a project",
+      "prompt_sent": "Call the `create_project` tool with these exact parameters: name=\"Benchmark Test Project\", description=\"Created during MCP benchmark testing\", status=\"active\".",
+      "model_responses": [
+        "I'll call the `create_project` tool with the exact parameters you provided."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Benchmark Test Project",
+            "description": "Created during MCP benchmark testing",
+            "status": "active"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T13:22:24Z\",\"description\":\"Created during MCP benchmark testing\",\"id\":\"ce98386bd8f246038b3fda848926f2c5\",\"name\":\"Benchmark Test Project\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"updated_at\":\"2026-02-25T13:22:24Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 23.15,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-04",
+      "task_name": "Create a workunit",
+      "prompt_sent": "Call the `create_workunit` tool with these exact parameters: name=\"Hello World\", problem_statement=\"This is a test workunit created during the MCP benchmark.\", success_criteria=\"The workunit exists and has the correct name.\", project_id=\"ce98386bd8f246038b3fda848926f2c5\", priority=\"normal\".",
+      "model_responses": [
+        "I'll create the workunit with the specified parameters."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Hello World",
+            "problem_statement": "This is a test workunit created during the MCP benchmark.",
+            "success_criteria": "The workunit exists and has the correct name.",
+            "project_id": "ce98386bd8f246038b3fda848926f2c5",
+            "priority": "normal"
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:22:38Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"11c70bb137f94bf294ed40b81281c78f\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Hello World\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"project_id\":\"ce98386bd8f246038b3fda848926f2c5\",\"status\":\"active\",\"success_criteria\":\"The workunit exists and has the correct name.\",\"total_tasks\":0,\"updated_at\":\"2026-02-25T13:22:38Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 13.92,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-05",
+      "task_name": "Create a task in a workunit",
+      "prompt_sent": "Call the `create_task` tool with these exact parameters: workunit_id=\"11c70bb137f94bf294ed40b81281c78f\", title=\"Write unit tests\", description=\"Add comprehensive unit tests for the authentication module.\", priority=\"high\", status=\"todo\".",
+      "model_responses": [
+        "I'll create the task with the specified parameters."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "11c70bb137f94bf294ed40b81281c78f",
+            "title": "Write unit tests",
+            "description": "Add comprehensive unit tests for the authentication module.",
+            "priority": "high",
+            "status": "todo"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:22:50Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Add comprehensive unit tests for the authentication module.\",\"id\":\"fe6dffcb52f14889943a64c2e6865fc4\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Write unit tests\",\"updated_at\":\"2026-02-25T13:22:50Z\",\"workunit_id\":\"11c70bb137f94bf294ed40b81281c78f\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 11.67,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-06",
+      "task_name": "Get a workunit with tasks",
+      "prompt_sent": "Call the `get_workunit` tool with id=\"11c70bb137f94bf294ed40b81281c78f\", include_tasks=true, and include_ai_context=true.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "11c70bb137f94bf294ed40b81281c78f",
+            "include_tasks": true,
+            "include_ai_context": true
+          },
+          "mcp_result": "{\"tasks\":[{\"task\":{\"created_at\":\"2026-02-25T13:22:50Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Add comprehensive unit tests for the authentication module.\",\"id\":\"fe6dffcb52f14889943a64c2e6865fc4\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Write unit tests\",\"updated_at\":\"2026-02-25T13:22:50Z\",\"workunit_id\":\"11c70bb137f94bf294ed40b81281c78f\"}}],\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:22:38Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"11c70bb137f94bf294ed40b81281c78f\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Hello World\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"project_id\":\"ce98386bd8f246038b3fda848926f2c5\",\"status\":\"active\",\"success_criteria\":\"The workunit exists and has the correct name.\",\"total_tasks\":1,\"updated_at\":\"2026-02-25T13:22:38Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 6.41,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-07",
+      "task_name": "Update a task status",
+      "prompt_sent": "Call the `update_task` tool with id=\"fe6dffcb52f14889943a64c2e6865fc4\", status=\"in_progress\", and update_mask={\"paths\":[\"status\"]}.",
+      "model_responses": [
+        "I'll update the task with the specified ID to set its status to \"in_progress\"."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "fe6dffcb52f14889943a64c2e6865fc4",
+            "status": "in_progress",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            }
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T13:22:50Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"created_by_name\":\"Alyx\",\"description\":\"Add comprehensive unit tests for the authentication module.\",\"id\":\"fe6dffcb52f14889943a64c2e6865fc4\",\"is_active\":true,\"priority\":\"high\",\"started_at\":\"2026-02-25T13:23:05Z\",\"status\":\"in_progress\",\"title\":\"Write unit tests\",\"updated_at\":\"2026-02-25T13:23:05Z\",\"workunit_id\":\"11c70bb137f94bf294ed40b81281c78f\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 9.08,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-08",
+      "task_name": "Save a context atom",
+      "prompt_sent": "Call the `save_context` tool with these exact parameters: workunit_id=\"11c70bb137f94bf294ed40b81281c78f\", atom_type=\"progress\", title=\"Benchmark test completed\", content=\"This context atom was saved as part of the MCP benchmark test suite.\", importance=\"normal\".",
+      "model_responses": [
+        "I'll call the `save_context` tool with the exact parameters you provided."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "11c70bb137f94bf294ed40b81281c78f",
+            "atom_type": "progress",
+            "title": "Benchmark test completed",
+            "content": "This context atom was saved as part of the MCP benchmark test suite.",
+            "importance": "normal"
+          },
+          "mcp_result": "{\"atom_id\":\"227c7c21-2f6c-4e85-9fab-43f320431313\"}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 16.95,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-09",
+      "task_name": "Search for workunits",
+      "prompt_sent": "Call the `search` tool with query=\"Hello World\", result_types=[\"workunit\"], and page_size=10.",
+      "model_responses": [
+        "I'll call the search tool with the specified parameters."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Hello World",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T13:22:38Z\",\"id\":\"11c70bb137f94bf294ed40b81281c78f\",\"name\":\"Hello World\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"relevance_score\":1099,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T13:22:38Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":7}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 9.16,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-10",
+      "task_name": "Create a knowledge asset",
+      "prompt_sent": "Call the `create_asset` tool with these exact parameters: asset_type=\"knowledge\", name=\"API Documentation\", description=\"Reference documentation for the REST API.\", category=\"documentation\", format=\"document\", status=\"draft\".",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API Documentation",
+            "description": "Reference documentation for the REST API.",
+            "category": "documentation",
+            "format": "document",
+            "status": "draft"
+          },
+          "mcp_result": "{\"asset\":{\"asset_type\":\"KNOWLEDGE\",\"category\":\"documentation\",\"created_at\":\"2026-02-25T13:23:41Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Reference documentation for the REST API.\",\"format\":\"document\",\"id\":\"044747481f344cb1bc0fc06b93fb6f95\",\"is_active\":true,\"name\":\"API Documentation\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"status\":\"draft\",\"updated_at\":\"2026-02-25T13:23:41Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 10.01,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-11",
+      "task_name": "Update a workunit status to completed",
+      "prompt_sent": "Call the `update_workunit` tool with id=\"11c70bb137f94bf294ed40b81281c78f\", status=\"completed\", completion_notes=\"Benchmark test workunit successfully completed.\", and update_mask={\"paths\":[\"status\",\"completion_notes\"]}.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "11c70bb137f94bf294ed40b81281c78f",
+            "status": "completed",
+            "completion_notes": "Benchmark test workunit successfully completed.",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            }
+          },
+          "mcp_result": "{\"workunit\":{\"completed_at\":\"2026-02-25T13:23:50Z\",\"completed_tasks\":0,\"created_at\":\"2026-02-25T13:22:38Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"11c70bb137f94bf294ed40b81281c78f\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Hello World\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"project_id\":\"ce98386bd8f246038b3fda848926f2c5\",\"status\":\"completed\",\"success_criteria\":\"The workunit exists and has the correct name.\",\"total_tasks\":0,\"updated_at\":\"2026-02-25T13:23:50Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 8.76,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}
