@@ -449,6 +449,19 @@ def unload_all_models():
         pass
 
 
+def unload_model(instance_id: str):
+    """Unload a specific model instance after we're done with it."""
+    try:
+        requests.post(
+            f"{LMSTUDIO_MGMT_URL}/api/v1/models/unload",
+            json={"instance_id": instance_id},
+            timeout=15,
+        )
+        console.print(f"  [dim]Model unloaded[/dim]")
+    except Exception:
+        pass  # Best-effort
+
+
 # ─── MCP Tool schemas (used as `tools` in chat completions) ───────────────────
 
 TOOLS = [
@@ -1127,7 +1140,8 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool,
 
     # Explicitly load model with correct context length
     console.print("  [dim]Loading model...[/dim]")
-    if not load_model(model_id):
+    instance_id = load_model(model_id)
+    if not instance_id:
         console.print(f"  [red]Model failed to load within timeout, skipping[/red]")
         return {}
 
@@ -1141,20 +1155,23 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool,
         "levels": {},
     }
 
-    for level in pending_levels:
-        level_result = run_level(client, model_id, level, context, mcp)
-        model_results["levels"][level] = level_result
+    try:
+        for level in pending_levels:
+            level_result = run_level(client, model_id, level, context, mcp)
+            model_results["levels"][level] = level_result
 
-        s = level_result["summary"]
-        console.print(
-            f"  → Level {level}: {s['passed']}/{s['total']} passed "
-            f"({s['pass_rate']:.0%} pass rate, {s['avg_score']:.0%} avg score)"
-        )
+            s = level_result["summary"]
+            console.print(
+                f"  → Level {level}: {s['passed']}/{s['total']} passed "
+                f"({s['pass_rate']:.0%} pass rate, {s['avg_score']:.0%} avg score)"
+            )
 
-        # Save result file immediately after each level
-        save_result(model_id, level, level_result, tool_trained)
-        if not no_git:
-            git_commit(model_id, level)
+            # Save result file immediately after each level
+            save_result(model_id, level, level_result, tool_trained)
+            if not no_git:
+                git_commit(model_id, level)
+    finally:
+        unload_model(instance_id)
 
     return model_results
 
