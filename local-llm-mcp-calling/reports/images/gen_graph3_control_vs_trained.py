@@ -11,22 +11,26 @@ import numpy as np
 # Individual model data
 # (ss_overall, ag_overall, tool_trained, short_label)
 individual = [
-    (73,  89, True,  "granite\n7B"),
-    (71,  88, True,  "qwen3-coder\n30B"),
-    (78,  85, True,  "magistral\n24B"),
-    (74,  85, True,  "qwen3-4b\n4B"),
-    (72,  85, True,  "gpt-oss\n20B"),
+    (73,  92, True,  "qwen3-coder\n30B"),
+    (81,  92, True,  "qwen3-coder-next\n80B"),
+    ( 0,  85, False, "ernie-4.5\n21B"),
+    (37,  85, True,  "qwen3-4b\n4B"),
+    (73,  85, True,  "granite\n7B"),
+    (76,  85, True,  "gpt-oss\n20B"),
     (78,  84, True,  "ministral-14b\n14B"),
-    ( 0,  83, False, "ernie-4.5\n21B"),
-    (89,  81, True,  "ministral-3b\n3B"),
-    ( 0,  78, False, "gemma-3\n12B"),
+    (78,  82, True,  "magistral\n24B"),
+    (79,  82, True,  "devstral\n24B"),
+    (76,  81, True,  "ministral-3b\n3B"),
+    ( 0,  80, False, "gemma-3\n12B"),
+    (65,  77, True,  "qwen3.5-35b\n35B"),
+    (51,  77, True,  "nemotron\n30B"),
     (74,  77, True,  "rnj-1\n8.3B"),
-    (59,  71, True,  "nemotron\n30B"),
-    (67,  68, True,  "glm-4.6v\n9.4B"),
-    (48,  64, False, "phi-4-rplus\n15B"),
-    (44,  61, True,  "glm-4.7\n30B"),
+    (78,  73, True,  "lfm2-24b\n24B"),
+    (61,  70, True,  "glm-4.6v\n9.4B"),
+    (44,  63, True,  "glm-4.7\n30B"),
+    (38,  62, False, "phi-4-rplus\n15B"),
     (38,  58, False, "qwen2.5-coder\n32B"),
-    ( 3,   6, False, "deepseek-r1\n8B"),
+    ( 3,   0, False, "deepseek-r1\n8B"),
     (71,   0, True,  "seed-oss\n36B"),
 ]
 
@@ -50,24 +54,34 @@ ax = axes[0]
 
 tx = [d[0] for d in trained]
 ty = [d[1] for d in trained]
-ax.scatter(tx, ty, s=90, color=C_AG_TOOL, zorder=5, alpha=0.9, label="Tool-trained (12)")
+ax.scatter(tx, ty, s=90, color=C_AG_TOOL, zorder=5, alpha=0.9, label="Tool-trained (16)")
 
-# Manual label offsets to reduce overlap in the dense cluster (ss≈71-78, ag≈77-89)
+# Manual label offsets to reduce overlap in the dense cluster
 trained_offsets = {}
-# granite 7B: ss=73, ag=89 — push up-right
-trained_offsets[("granite", 73, 89)]       = (5, 5)
-# qwen3-coder 30B: ss=71, ag=88 — push left
-trained_offsets[("qwen3-coder", 71, 88)]   = (-45, -8)
-# magistral 24B: ss=78, ag=85 — push right
-trained_offsets[("magistral", 78, 85)]     = (5, 4)
-# qwen3-4b 4B: ss=74, ag=85 — push left-down
-trained_offsets[("qwen3-4b", 74, 85)]      = (-42, -10)
-# gpt-oss 20B: ss=72, ag=85 — push left-up
-trained_offsets[("gpt-oss", 72, 85)]       = (-40, 5)
+# qwen3-coder 30B: ss=73, ag=92 — push left (overlaps with qwen3-coder-next)
+trained_offsets[("qwen3-coder", 73, 92)]       = (-50, -8)
+# qwen3-coder-next 80B: ss=81, ag=92 — push right
+trained_offsets[("qwen3-coder-next", 81, 92)]  = (5, 3)
+# granite 7B: ss=73, ag=85 — push up-left (cluster with gpt-oss, qwen3-4b)
+trained_offsets[("granite", 73, 85)]           = (-40, 5)
+# gpt-oss 20B: ss=76, ag=85 — push right-up
+trained_offsets[("gpt-oss", 76, 85)]           = (5, 5)
+# magistral 24B: ss=78, ag=82 — push right
+trained_offsets[("magistral", 78, 82)]         = (5, 4)
+# devstral 24B: ss=79, ag=82 — push right-down
+trained_offsets[("devstral", 79, 82)]          = (5, -8)
 # ministral-14b 14B: ss=78, ag=84 — push right-down
-trained_offsets[("ministral-14b", 78, 84)] = (5, -10)
+trained_offsets[("ministral-14b", 78, 84)]     = (5, -10)
+# ministral-3b 3B: ss=76, ag=81 — push left
+trained_offsets[("ministral-3b", 76, 81)]      = (-48, -4)
 # rnj-1 8.3B: ss=74, ag=77 — push left
-trained_offsets[("rnj-1", 74, 77)]         = (-38, -4)
+trained_offsets[("rnj-1", 74, 77)]             = (-38, -4)
+# qwen3.5-35b 35B: ss=65, ag=77 — push left
+trained_offsets[("qwen3.5-35b", 65, 77)]       = (-48, -4)
+# nemotron 30B: ss=51, ag=77 — push left
+trained_offsets[("nemotron", 51, 77)]          = (-42, -4)
+# lfm2-24b 24B: ss=78, ag=73 — push right
+trained_offsets[("lfm2-24b", 78, 73)]          = (5, -4)
 
 for (ss, ag, label) in trained:
     # Extract short name (first part before newline) for offset lookup
@@ -110,22 +124,25 @@ ax.legend(fontsize=8, framealpha=0.25, edgecolor="#30363d",
 # ── Panel B: Grouped bars — avg by group × methodology × level ───────────────
 ax = axes[1]
 
-# Per-level agentic pass rates, tool-trained (12 models)
-trained_ag_L0 = [100,100,100,100,100,100, 91,100,100, 91, 55,  0]
-trained_ag_L1 = [100, 90,100, 80, 80, 90, 90, 80, 60, 60, 50,  0]
-trained_ag_L2 = [ 57, 57, 43, 57, 43, 29, 29,  0, 14, 14, 71,  0]
+# Per-level agentic pass rates, tool-trained (16 models)
+# qwen3-coder-30b, qwen3-coder-next, qwen3-4b, granite, gpt-oss, ministral-14b,
+# magistral, devstral, ministral-3b, qwen3.5-35b, nemotron, rnj-1,
+# lfm2-24b, glm-4.6v, glm-4.7, seed-oss
+trained_ag_L0 = [100,100,100,100,100,100,100,100, 91,100,100,100, 82, 91, 55,  0]
+trained_ag_L1 = [ 90, 90, 80,100, 80, 90,100, 80, 90, 50, 60, 80, 90, 60, 60,  0]
+trained_ag_L2 = [ 71, 71, 57, 29, 43, 29, 29, 43, 29, 71, 43,  0, 29, 29, 71,  0]
 # Not-tool-trained (5): ernie, gemma, phi4, qwen2.5, deepseek
-ctrl_ag_L0    = [100, 91, 46, 91, 18]
+ctrl_ag_L0    = [100, 91, 46, 91,  0]
 ctrl_ag_L1    = [100, 80, 80, 50,  0]
-ctrl_ag_L2    = [ 29, 29, 43, 14,  0]
+ctrl_ag_L2    = [ 29, 43, 43, 14,  0]
 
 # Single-shot
-trained_ss_L0 = [100,100,100,100,100,100,100,100, 91, 82, 64,100]
-trained_ss_L1 = [ 80, 80, 90, 80, 70, 90, 90, 80, 60, 80, 40, 80]
-trained_ss_L2 = [  0,  0,  0,  0,  0,  0, 57,  0,  0,  0,  0,  0]
+trained_ss_L0 = [100,100, 91,100,100,100,100,100,100, 91, 91,100, 73, 82, 64,100]
+trained_ss_L1 = [ 80, 90, 20, 80, 80, 90, 90, 90, 90, 70, 40, 80, 90, 70, 40, 80]
+trained_ss_L2 = [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 57,  0,  0,  0]
 
 ctrl_ss_L0    = [  0,  0, 55, 64,  9]
-ctrl_ss_L1    = [  0,  0, 70, 40,  0]
+ctrl_ss_L1    = [  0,  0, 60, 40,  0]
 ctrl_ss_L2    = [  0,  0,  0,  0,  0]
 
 def avg(lst): return sum(lst) / len(lst)
@@ -158,7 +175,7 @@ ax.set_xticks(xpos)
 ax.set_xticklabels(["L0\nExplicit", "L1\nNatural\nlanguage", "L2\nReasoning"],
                    fontsize=9.5, color="#c9d1d9")
 ax.set_ylabel("Average Pass Rate (%)", fontsize=9, color="#8b949e", labelpad=6)
-ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=12, not tool-trained n=5)",
+ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=16, not tool-trained n=5)",
              fontsize=10, color="#e6edf3", fontweight="bold", pad=10)
 ax.set_ylim(0, 110)
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x)}%"))

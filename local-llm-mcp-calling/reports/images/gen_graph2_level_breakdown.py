@@ -12,22 +12,26 @@ import numpy as np
 # Data: (label, L0, L1, L2, tool_trained)
 # Sorted by AG Overall descending
 models = [
-    ("granite-4-h-tiny 7B",         100, 100, 57, True),
-    ("qwen3-coder-30b 30B",         100,  90, 57, True),
-    ("magistral-small 24B",         100, 100, 43, True),
+    ("qwen3-coder-30b 30B",         100,  90, 71, True),
+    ("qwen3-coder-next 80B",        100,  90, 71, True),
+    ("ernie-4.5-21b 21B ✗",         100, 100, 29, False),
     ("qwen3-4b-thinking 4B",        100,  80, 57, True),
+    ("granite-4-h-tiny 7B",         100, 100, 29, True),
     ("gpt-oss-20b 20B",             100,  80, 43, True),
     ("ministral-14b-reasoning 14B", 100,  90, 29, True),
-    ("ernie-4.5-21b 21B ✗",         100, 100, 29, False),
+    ("magistral-small 24B",         100, 100, 29, True),
+    ("devstral-small 24B",          100,  80, 43, True),
     ("ministral-3-3b 3B",            91,  90, 29, True),
-    ("gemma-3-12b 12B ✗",            91,  80, 29, False),
+    ("gemma-3-12b 12B ✗",            91,  80, 43, False),
+    ("qwen3.5-35b 35B",             100,  50, 71, True),
+    ("nemotron-3-nano 30B",         100,  60, 43, True),
     ("rnj-1 8.3B",                  100,  80,  0, True),
-    ("nemotron-3-nano 30B",         100,  60, 14, True),
-    ("glm-4.6v-flash 9.4B",          91,  60, 14, True),
+    ("lfm2-24b 24B",                 82,  90, 29, True),
+    ("glm-4.6v-flash 9.4B",          91,  60, 29, True),
+    ("glm-4.7-flash 30B",            55,  60, 71, True),
     ("phi-4-reasoning-plus 15B ✗",   46,  80, 43, False),
-    ("glm-4.7-flash 30B",            55,  50, 71, True),
     ("qwen2.5-coder-32b 32B ✗",      91,  50, 14, False),
-    ("deepseek-r1-qwen3-8b 8B ✗",    18,   0,  0, False),
+    ("deepseek-r1-qwen3-8b 8B ✗",     0,   0,  0, False),
     ("seed-oss-36b 36B",              0,   0,  0, True),
 ]
 
@@ -41,7 +45,7 @@ n = len(models)
 y = np.arange(n)
 bar_h = 0.24
 
-fig, ax = plt.subplots(figsize=(13, 10))
+fig, ax = plt.subplots(figsize=(13, 12))
 fig.patch.set_facecolor("#0d1117")
 ax.set_facecolor("#161b22")
 # Bottom margin: enough for legend (3 rows) + footnote
@@ -84,7 +88,7 @@ for tick, flag in zip(ax.get_yticklabels(), tool_flags):
 
 ax.set_xlabel("Pass Rate (%)", fontsize=10, color="#8b949e", labelpad=8)
 ax.set_title("Agentic Loop — Pass Rate by Difficulty Level\n"
-             "19 models · L0 Explicit / L1 Natural language / L2 Reasoning",
+             "21 models · L0 Explicit / L1 Natural language / L2 Reasoning",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
