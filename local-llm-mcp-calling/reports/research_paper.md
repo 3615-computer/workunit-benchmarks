@@ -93,7 +93,8 @@ TODO: Motivate the benchmark — tool calling in agentic workflows, gap in local
 | Context length | 8192 tokens (all models) |
 | Temperature | 0.0 (all models) |
 | Quantization | Q4_K_M (default); exceptions noted per model |
-| Task timeout | 300s per task (agentic only) |
+| Task timeout | 300s wall-clock per task (agentic only) |
+| Max agentic turns | 25 turns per task |
 
 ### 2.2 MCP Server
 
@@ -130,8 +131,19 @@ Key changes from v1 that affect scores:
 4. **L2 fixture seeding**: L2 tasks that require pre-existing data (e.g., "triage the tasks in this workunit") now have fixture data created before the level runs.
 5. **L2-03 prompt clarity**: atom_type expectation made unambiguous.
 6. **L2-07 ordering relaxed**: multiple valid step orderings accepted.
+7. **Best-call validation** (v2.1): the agentic validator now scores every call of the expected tool and keeps the best result, rather than always scoring the first call. This correctly rewards models that self-correct across turns — the whole point of an agentic loop. Previously, a model that hallucinated `tool_name` on turn 1 then called the correct tool on turn 2 would score 0.0.
+8. **Max-turns cap** (v2.1): 25-turn limit per task. Prevents spin loops where a model repeats the same failing call hundreds of times until wall-clock timeout (observed: 488 identical calls in one task). No per-inference timeout is enforced — slow models are not penalized for thinking time, only the 300s wall-clock budget and 25-turn cap apply.
 
 **Impact**: L2 scores are more discriminating (semantic correctness matters, not just tool name matching). Some models may score lower than v1 on tasks where they were getting credit for structurally correct but semantically wrong calls.
+
+### 2.8 Known Limitations of v1 Singleshot Methodology
+
+The v1 singleshot runner uses **placeholder substitution** where entity IDs from earlier tasks (e.g., `{{project_id}}` from L0-03) are injected into later task prompts. When an early task fails, downstream tasks receive literal placeholder strings instead of valid UUIDs, causing cascade failures. A single failed `create_project` at L0-03 can cascade to 5 downstream tasks (L0-04 through L0-11). This is a known design tradeoff: it tests realistic chained workflows but conflates independent tool-calling ability with error recovery. The v2 agentic benchmark does not have this issue since models receive real MCP results and can recover.
+
+### 2.9 Model Exclusion Notes
+
+- **qwen/qwen2.5-coder-32b** is a code completion model (emits FIM tokens like `<|fim_suffix|>`, `<|fim_middle|>`) not designed for chat-based tool calling. It is included as a control group model (marked `*` in models.txt) and its results should be interpreted as measuring what happens when a non-chat model is asked to do tool calling.
+- **bytedance/seed-oss-36b** experienced a total infrastructure failure in v2 agentic due to an LM Studio Jinja template incompatibility (`Unknown operator "in" between ArrayValue and TupleValue`). The model never received a prompt in v2. Its v1 singleshot results are valid (L0: 0.777, L1: 0.767). The v2 failure is a runtime environment issue, not a model capability measurement.
 
 ## 3. Results
 
@@ -171,6 +183,8 @@ TODO: Analysis of findings
 - Single MCP domain (project management)
 - Temperature 0.0 (deterministic but no sampling diversity)
 - LM Studio-specific tool call formatting (may affect some models)
+- LM Studio Jinja template compatibility varies by model (bytedance/seed-oss-36b failed in agentic mode due to template operator incompatibility)
+- V1 singleshot placeholder cascade: one early failure can penalize up to 5 downstream tasks (6x penalty amplification for a single error)
 
 ## 6. Conclusion
 
