@@ -368,29 +368,85 @@ def get_loaded_model() -> str | None:
     return None
 
 
-def wait_for_model(model_id: str, timeout: int = 300) -> bool:
-    """
-    Poll until model_id is loaded. LM Studio auto-loads on first chat request,
-    but large models can take 30-120s. We send a tiny probe request and wait.
-    """
-    client = OpenAI(base_url=LMSTUDIO_BASE_URL, api_key="lm-studio")
-    deadline = time.time() + timeout
+# Minimum context length for all models. The full TOOLS list is ~4100 tokens;
+# add system prompt, user message, and response headroom.
+MODEL_CONTEXT_LENGTH = 8192
 
-    while time.time() < deadline:
-        try:
-            resp = client.chat.completions.create(
-                model=model_id,
-                messages=[{"role": "user", "content": "hi"}],
-                max_tokens=1,
-                temperature=0.0,
-            )
-            if resp.model:
-                return True
-        except Exception:
-            pass
-        time.sleep(5)
 
-    return False
+def load_model(model_id: str, timeout: int = 600) -> str | None:
+    """
+    Explicitly load a model via POST /api/v1/models/load with a fixed context_length.
+    Unloads any existing instances first to ensure we get the right context size.
+    Returns the instance_id string on success, None on failure.
+    """
+    _unload_all_instances(model_id)
+
+    try:
+        resp = requests.post(
+            f"{LMSTUDIO_MGMT_URL}/api/v1/models/load",
+            json={
+                "model": model_id,
+                "context_length": MODEL_CONTEXT_LENGTH,
+                "flash_attention": True,
+                "echo_load_config": True,
+            },
+            timeout=timeout,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            instance_id = data.get("instance_id", model_id)
+            ctx = data.get("load_config", {}).get("context_length", MODEL_CONTEXT_LENGTH)
+            console.print(f"  [dim]Model loaded — instance: {instance_id}, ctx={ctx}[/dim]")
+            return instance_id
+        console.print(f"  [yellow]Load endpoint returned {resp.status_code}: {resp.text[:200]}[/yellow]")
+        return None
+    except Exception as e:
+        console.print(f"  [red]Model load failed: {e}[/red]")
+        return None
+
+
+def _unload_all_instances(model_id: str):
+    """Unload all loaded instances of a model (best-effort)."""
+    try:
+        resp = requests.get(f"{LMSTUDIO_MGMT_URL}/api/v1/models", timeout=10)
+        if resp.status_code != 200:
+            return
+        for m in resp.json().get("models", []):
+            if m.get("key") != model_id:
+                continue
+            for inst in m.get("loaded_instances", []):
+                iid = inst.get("instance_id") or inst.get("id")
+                if iid:
+                    requests.post(
+                        f"{LMSTUDIO_MGMT_URL}/api/v1/models/unload",
+                        json={"instance_id": iid},
+                        timeout=15,
+                    )
+    except Exception:
+        pass
+
+
+def unload_all_models():
+    """Unload every loaded model instance in LM Studio."""
+    try:
+        resp = requests.get(f"{LMSTUDIO_MGMT_URL}/api/v1/models", timeout=10)
+        if resp.status_code != 200:
+            return
+        unloaded = 0
+        for m in resp.json().get("models", []):
+            for inst in m.get("loaded_instances", []):
+                iid = inst.get("instance_id") or inst.get("id")
+                if iid:
+                    requests.post(
+                        f"{LMSTUDIO_MGMT_URL}/api/v1/models/unload",
+                        json={"instance_id": iid},
+                        timeout=15,
+                    )
+                    unloaded += 1
+        if unloaded:
+            console.print(f"[dim]Unloaded {unloaded} pre-existing model instance(s) from LM Studio[/dim]")
+    except Exception:
+        pass
 
 
 # ─── MCP Tool schemas (used as `tools` in chat completions) ───────────────────
@@ -1069,9 +1125,9 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool,
             # Reset org data before each model so tests don't bleed into each other
             reset_benchmark_env(mcp)
 
-    # Trigger model load by sending a probe request
+    # Explicitly load model with correct context length
     console.print("  [dim]Loading model...[/dim]")
-    if not wait_for_model(model_id):
+    if not load_model(model_id):
         console.print(f"  [red]Model failed to load within timeout, skipping[/red]")
         return {}
 
@@ -1302,6 +1358,9 @@ def main():
         f"LM Studio: {LMSTUDIO_BASE_URL}",
         title="Starting Run"
     ))
+
+    # Clear VRAM before starting — any leftover model could crowd out benchmark models
+    unload_all_models()
 
     start = time.time()
     for i, (model_id, tool_trained) in enumerate(model_list, 1):
