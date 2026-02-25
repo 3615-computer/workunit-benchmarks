@@ -1,0 +1,279 @@
+{
+  "level": 0,
+  "model": "deepseek/deepseek-r1-0528-qwen3-8b",
+  "tool_trained": false,
+  "timestamp": "2026-02-25T19:28:38.868042",
+  "summary": {
+    "total": 11,
+    "passed": 6,
+    "pass_rate": 0.545,
+    "avg_score": 0.564
+  },
+  "results": [
+    {
+      "task_id": "L0-01",
+      "task_name": "Ping the MCP server",
+      "prompt_sent": "Call the `ping` tool with the message \"hello from benchmark\".",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "...",
+          "arguments": {},
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"unknown tool \\\"...\\\"\"}}"
+        },
+        {
+          "name": "...",
+          "arguments": {},
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"unknown tool \\\"...\\\"\"}}"
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          },
+          "mcp_result": "{\"message\":\"hello from benchmark\",\"status\":\"pong\",\"timestamp\":\"2026-02-25T18:28:09Z\"}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 9.41,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-02",
+      "task_name": "Get authenticated user",
+      "prompt_sent": "Call the `get_authenticated_user` tool to retrieve the current user's details.",
+      "model_responses": [
+        "\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {},
+          "mcp_result": "{\"authenticated_via\":\"oauth2_jwt\",\"client_id\":\"d4f7a891-3a31-4541-9ab9-f7dba7df2e43\",\"display_name\":\"Alyx\",\"email\":\"workunit.app@alyx.pink\",\"scopes\":[\"read\",\"write\",\"mcp:tools\"],\"user_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\"}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 2.63,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-03",
+      "task_name": "Create a project",
+      "prompt_sent": "Call the `create_project` tool with these exact parameters: name=\"Benchmark Test Project\", description=\"Created during MCP benchmark testing\", status=\"active\".",
+      "model_responses": [
+        "\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Benchmark Test Project",
+            "description": "Created during MCP benchmark testing",
+            "status": "active"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T18:28:14Z\",\"description\":\"Created during MCP benchmark testing\",\"id\":\"00b3921742904d6d8a85a19ff9e04882\",\"name\":\"Benchmark Test Project\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"updated_at\":\"2026-02-25T18:28:14Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 2.66,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-04",
+      "task_name": "Create a workunit",
+      "prompt_sent": "Call the `create_workunit` tool with these exact parameters: name=\"Hello World\", problem_statement=\"This is a test workunit created during the MCP benchmark.\", success_criteria=\"The workunit exists and has the correct name.\", project_id=\"00b3921742904d6d8a85a19ff9e04882\", priority=\"normal\".",
+      "model_responses": [
+        "\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Hello World",
+            "problem_statement": "This is a test workunit created during the MCP benchmark.",
+            "success_criteria": "The workunit exists and has the correct name.",
+            "project_id": "00b3921742904d6d8a85a19ff9e04882",
+            "priority": "normal"
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T18:28:18Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"9b46324da40a4925b134dce4052eb3e8\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Hello World\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"project_id\":\"00b3921742904d6d8a85a19ff9e04882\",\"status\":\"active\",\"success_criteria\":\"The workunit exists and has the correct name.\",\"total_tasks\":0,\"updated_at\":\"2026-02-25T18:28:18Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 3.89,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-05",
+      "task_name": "Create a task in a workunit",
+      "prompt_sent": "Call the `create_task` tool with these exact parameters: workunit_id=\"9b46324da40a4925b134dce4052eb3e8\", title=\"Write unit tests\", description=\"Add comprehensive unit tests for the authentication module.\", priority=\"high\", status=\"todo\".",
+      "model_responses": [
+        "\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "9b46324da40a4925b134dce4052eb3e8",
+            "title": "Write unit tests",
+            "description": "Add comprehensive unit tests for the authentication module.",
+            "priority": "high",
+            "status": "todo"
+          },
+          "mcp_result": "{\"task\":{\"created_at\":\"2026-02-25T18:28:22Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Add comprehensive unit tests for the authentication module.\",\"id\":\"b0b51d333c8f42be8351eaa71197099d\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Write unit tests\",\"updated_at\":\"2026-02-25T18:28:22Z\",\"workunit_id\":\"9b46324da40a4925b134dce4052eb3e8\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 4.01,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-06",
+      "task_name": "Get a workunit with tasks",
+      "prompt_sent": "Call the `get_workunit` tool with id=\"9b46324da40a4925b134dce4052eb3e8\", include_tasks=true, and include_ai_context=true.",
+      "model_responses": [
+        "\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "9b46324da40a4925b134dce4052eb3e8",
+            "include_tasks": true,
+            "include_ai_context": true
+          },
+          "mcp_result": "{\"tasks\":[{\"task\":{\"created_at\":\"2026-02-25T18:28:22Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Add comprehensive unit tests for the authentication module.\",\"id\":\"b0b51d333c8f42be8351eaa71197099d\",\"is_active\":true,\"priority\":\"high\",\"status\":\"todo\",\"title\":\"Write unit tests\",\"updated_at\":\"2026-02-25T18:28:22Z\",\"workunit_id\":\"9b46324da40a4925b134dce4052eb3e8\"}}],\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T18:28:18Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"9b46324da40a4925b134dce4052eb3e8\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Hello World\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"This is a test workunit created during the MCP benchmark.\",\"project_id\":\"00b3921742904d6d8a85a19ff9e04882\",\"status\":\"active\",\"success_criteria\":\"The workunit exists and has the correct name.\",\"total_tasks\":1,\"updated_at\":\"2026-02-25T18:28:18Z\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 4.01,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L0-07",
+      "task_name": "Update a task status",
+      "prompt_sent": "Call the `update_task` tool with id=\"b0b51d333c8f42be8351eaa71197099d\", status=\"in_progress\", and update_mask={\"paths\":[\"status\"]}.",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.19999999999999998,
+      "details": [
+        "Missing required param: 'id'",
+        "Missing required param: 'update_mask'",
+        "'status': expected 'in_progress', got None",
+        "'update_mask': expected {'paths': ['status']}, got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "...parameters...": []
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: unexpected additional properties [\\\"...parameters...\\\"]\"}}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 9.66,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'The model has crashed without additional information. (Exit code: 18446744072635812000)'}"
+    },
+    {
+      "task_id": "L0-08",
+      "task_name": "Save a context atom",
+      "prompt_sent": "Call the `save_context` tool with these exact parameters: workunit_id=\"9b46324da40a4925b134dce4052eb3e8\", atom_type=\"progress\", title=\"Benchmark test completed\", content=\"This context atom was saved as part of the MCP benchmark test suite.\", importance=\"normal\".",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 2.65,
+      "timed_out": false,
+      "error": "Context overflow: model's n_ctx is too small for the full TOOLS list. Increase context length in LM Studio to \u22658192. (Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (6248) >= n_ctx (4096)'})"
+    },
+    {
+      "task_id": "L0-09",
+      "task_name": "Search for workunits",
+      "prompt_sent": "Call the `search` tool with query=\"Hello World\", result_types=[\"workunit\"], and page_size=10.",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.09,
+      "timed_out": false,
+      "error": "Context overflow: model's n_ctx is too small for the full TOOLS list. Increase context length in LM Studio to \u22658192. (Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (6196) >= n_ctx (4096)'})"
+    },
+    {
+      "task_id": "L0-10",
+      "task_name": "Create a knowledge asset",
+      "prompt_sent": "Call the `create_asset` tool with these exact parameters: asset_type=\"knowledge\", name=\"API Documentation\", description=\"Reference documentation for the REST API.\", category=\"documentation\", format=\"document\", status=\"draft\".",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.09,
+      "timed_out": false,
+      "error": "Context overflow: model's n_ctx is too small for the full TOOLS list. Increase context length in LM Studio to \u22658192. (Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (6214) >= n_ctx (4096)'})"
+    },
+    {
+      "task_id": "L0-11",
+      "task_name": "Update a workunit status to completed",
+      "prompt_sent": "Call the `update_workunit` tool with id=\"9b46324da40a4925b134dce4052eb3e8\", status=\"completed\", completion_notes=\"Benchmark test workunit successfully completed.\", and update_mask={\"paths\":[\"status\",\"completion_notes\"]}.",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.09,
+      "timed_out": false,
+      "error": "Context overflow: model's n_ctx is too small for the full TOOLS list. Increase context length in LM Studio to \u22658192. (Error code: 400 - {'error': 'Cannot truncate prompt with n_keep (6238) >= n_ctx (4096)'})"
+    }
+  ]
+}
