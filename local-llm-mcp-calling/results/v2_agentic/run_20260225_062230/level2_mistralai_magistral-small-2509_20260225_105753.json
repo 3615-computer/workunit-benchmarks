@@ -1,0 +1,360 @@
+{
+  "level": 2,
+  "model": "mistralai/magistral-small-2509",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T10:57:53.682519",
+  "summary": {
+    "total": 7,
+    "passed": 4,
+    "pass_rate": 0.571,
+    "avg_score": 0.776
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode for our app to improve user experience during low-light conditions.",
+            "status": "active",
+            "tags": [
+              "ui",
+              "ux",
+              "dark-mode"
+            ]
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T09:49:09Z\",\"description\":\"Implementation of dark mode for our app to improve user experience during low-light conditions.\",\"id\":\"4f706ce86aca4d8ba57d32002acadde9\",\"name\":\"Dark Mode Feature\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"status\":\"active\",\"tags\":[\"ui\",\"ux\",\"dark-mode\"],\"updated_at\":\"2026-02-25T09:49:09Z\"}}"
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode",
+            "problem_statement": "The app currently lacks a dark mode, which is important for users who prefer using the app in low-light conditions or at night. This can lead to eye strain and reduced usability for these users.",
+            "success_criteria": "Dark mode should be fully implemented with a toggle switch in settings that allows users to switch between light and dark themes seamlessly. All UI components must adapt correctly, and there should be no visual glitches or accessibility issues.",
+            "description": "This workunit covers the implementation of dark mode across all app screens and components. It includes setting up theming, adjusting colors, and testing for consistency and accessibility.",
+            "project_id": "4f706ce86aca4d8ba57d32002acadde9",
+            "priority": "high"
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T09:49:31Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"This workunit covers the implementation of dark mode across all app screens and components. It includes setting up theming, adjusting colors, and testing for consistency and accessibility.\",\"id\":\"caaec54569b344938df875f7bf44b9ef\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Implement Dark Mode\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"high\",\"problem_statement\":\"The app currently lacks a dark mode, which is important for users who prefer using the app in low-light conditions or at night. This can lead to eye strain and reduced usability for these users.\",\"project_id\":\"4f706ce86aca4d8ba57d32002acadde9\",\"status\":\"active\",\"success_criteria\":\"Dark mode should be fully implemented with a toggle switch in settings that allows users to switch between light and dark themes seamlessly. All UI components must adapt correctly, and there should be no visual glitches or accessibility issues.\",\"total_tasks\":0,\"updated_at\":\"2026-02-25T09:49:31Z\"}}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 27.22,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_responses": [
+        "To implement user notifications for workunit updates, we'll need to follow these steps:\n\n1. Design the notification system architecture\n2. Create database schema for notifications\n3. Build API endpoints for notifications\n4. Implement notification triggers for workunit events\n5. Develop notification delivery mechanisms (email, in-app)\n6. Create UI components for notifications\n7. Implement user preferences for notifications\n8. Test the notification system\n9. Document the implementation\n\nNow, let's create the workunit and add these tasks:\n\n"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out after 300s (1 turns completed)",
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "We need a comprehensive notification system to alert users about important updates in their workunits.",
+            "success_criteria": "Users receive timely notifications for workunit changes they're interested in, with configurable preferences and multiple delivery channels.",
+            "description": "This project will implement a robust notification system that covers all critical workunit events. It should include both real-time in-app notifications and email alerts, with user preferences for what to be notified about.",
+            "project_id": "",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "user-experience"
+            ],
+            "due_date": ""
+          },
+          "mcp_result": "{\"error\":\"create workunit failed: project_id is required\",\"workunit\":null}"
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 329.57,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_responses": [
+        "It looks like there are multiple pages of results. Let me fetch the next page to ensure we capture all relevant workunits.\n\nI'll continue searching for workunits related to authentication and then process them as requested.",
+        "I've found a workunit related to authentication. Let me check its status and add the insight if it's active or in draft.\n\nNext, I'll continue searching for any additional workunits on the next page.",
+        "Now that we've completed the search, I'll process the workunit we found. Let me check its status and add an insight if needed.\n\nFirst, let's get details for the workunit \"Implement User Notifications\" to check its current status.",
+        "The workunit \"Implement User Notifications\" is active, so I'll add an insight about its current state during the quarterly audit review.\n\nNow, let me save this context to the workunit."
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": ""
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"total_count\":0,\"total_pages\":4}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "",
+            "page_number": 2
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":true,\"page_number\":2,\"results\":[{\"created_at\":\"2026-02-25T09:49:03Z\",\"id\":\"8433b95f3a2b4be7b17eef91e73d9499\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":158,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":4}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "",
+            "page_number": 3
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":true,\"page_number\":3,\"total_count\":0,\"total_pages\":4}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "",
+            "page_number": 4
+          },
+          "mcp_result": "{\"has_next_page\":false,\"has_prev_page\":true,\"page_number\":4,\"total_count\":0,\"total_pages\":4}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "8433b95f3a2b4be7b17eef91e73d9499",
+            "include_tasks": false,
+            "include_ai_context": true
+          },
+          "mcp_result": "{\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"8433b95f3a2b4be7b17eef91e73d9499\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Implement User Notifications\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"project_id\":\"23926a58672d4220aa8c7b004c0633cb\",\"status\":\"active\",\"success_criteria\":\"Users receive timely notifications for workunit updates via email and in-app channels.\",\"total_tasks\":4,\"updated_at\":\"2026-02-25T09:49:03Z\"}}"
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "8433b95f3a2b4be7b17eef91e73d9499",
+            "atom_type": "insight",
+            "title": "Quarterly Audit Review Observation",
+            "content": "During the quarterly audit review, this workunit was observed to be active with 4 total tasks and none completed. The notification system implementation is still in progress.",
+            "importance": "normal"
+          },
+          "mcp_result": "{\"atom_id\":\"dfc1dc2e-75bb-47eb-ae2c-88bbc38466d9\"}"
+        }
+      ],
+      "turns": 6,
+      "elapsed_s": 56.53,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_responses": [],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T09:49:03Z\",\"id\":\"8433b95f3a2b4be7b17eef91e73d9499\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":559,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":3}"
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "8433b95f3a2b4be7b17eef91e73d9499",
+            "atom_type": "decision",
+            "title": "WebSockets for Real-Time Notifications",
+            "content": "We've decided to use WebSockets instead of polling for our real-time notification feature. This decision was made after considering the following tradeoffs:\n\n1. Performance: WebSockets provide near-instant updates with minimal bandwidth usage, while polling would require constant requests even when no updates are available.\n2. Scalability: WebSockets maintain a persistent connection, which is more efficient for many concurrent users than frequent polling requests.\n3. Development Complexity: Implementing WebSockets requires more initial setup and server infrastructure, but reduces ongoing client-side complexity compared to managing polling intervals.\n4. Reliability: WebSockets can automatically reconnect if the connection drops, while polling might miss updates during network issues.\n\nThe team agreed that these benefits outweigh the additional implementation effort required.",
+            "importance": "critical",
+            "strength": "hard"
+          },
+          "mcp_result": "{\"atom_id\":\"8ca541ab-56d8-4e94-b5cf-cabdff67e620\"}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 30.58,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_responses": [],
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-25T09:56:32Z\",\"default_branch\":\"main\",\"description\":\"REST API redesign work\",\"id\":\"5dbca49948ff4094897ce684177acc1f\",\"name\":\"API v2\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"repo_url\":\"github.com/example/api-v2\",\"status\":\"active\",\"updated_at\":\"2026-02-25T09:56:32Z\"}}"
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design",
+            "category": "documentation"
+          },
+          "mcp_result": "{\"asset\":{\"asset_type\":\"KNOWLEDGE\",\"category\":\"documentation\",\"created_at\":\"2026-02-25T09:56:36Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Document describing the new API design\",\"id\":\"3c31e0888e54471880e3e008803d31d5\",\"is_active\":true,\"name\":\"API v2 Design Spec\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"status\":\"\",\"updated_at\":\"2026-02-25T09:56:36Z\"}}"
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "5dbca49948ff4094897ce684177acc1f",
+            "asset_id": "3c31e0888e54471880e3e008803d31d5",
+            "action": "link"
+          },
+          "mcp_result": "{\"action\":\"link\",\"success\":true}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 18.78,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_responses": [
+        "It looks like the workunit ID provided is not in the correct format. Could you please provide a valid workunit ID? For example, it should be something like \"123e4567-e89b-12d3-a456-426614174000\"."
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "Implement User Notifications",
+            "include_tasks": true
+          },
+          "mcp_result": "{\"error\":\"get workunit failed: invalid workunit ID: invalid UUID format: invalid UUID length: 28\",\"workunit\":null}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 10.33,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_responses": [
+        "To complete these actions for the \"Implement User Notifications\" workunit, I'll need to follow several steps:\n\n1. Identify the workunit ID for \"Implement User Notifications\"\n2. List all tasks in this workunit that are marked as 'todo'\n3. Update each of those tasks to mark them as 'done'\n4. Save a progress context atom summarizing what was accomplished\n5. Mark the workunit itself as completed with a summary note\n\nLet me start by getting the details for the \"Implement User Notifications\" workunit, including its tasks.\n\nFirst, I need to find the ID of this workunit. Since we don't have it yet, I'll search for it:\n\n",
+        "I found the workunit \"Implement User Notifications\" with ID 8433b95f3a2b4be7b17eef91e73d9499. Now, let's get its details including all tasks:\n\n",
+        "Now that we have the list of tasks, I'll update each 'todo' task to mark it as done:\n\n1. Fix race condition in notification queue\n2. Add integration testing for webhooks\n3. Fix email delivery bug\n4. Write unit tests for notification service\n\nLet's start with the first one:\n\n",
+        "Task \"Fix race condition in notification queue\" has been marked as done. Now, let's update the next task:\n\nStartupdate_task[ARGS]{\"id\": \"ca24822f0a484f6691ae50d9fc2ec68f\", \"update_mask\": {\"paths\": [\"status\"]}, \"status\": \"done\"}"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): \u2713",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-25T09:49:03Z\",\"id\":\"8433b95f3a2b4be7b17eef91e73d9499\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"00000000000000000000000000000000\"},{\"created_at\":\"2026-02-25T09:49:31Z\",\"description\":\"This workunit covers the implementation of dark mode across all app screens and components. It includes setting up theming, adjusting colors, and testing for consistency and accessibility.\",\"id\":\"caaec54569b344938df875f7bf44b9ef\",\"name\":\"Implement Dark Mode\",\"problem_statement\":\"The app currently lacks a dark mode, which is important for users who prefer using the app in low-light conditions or at night. This can lead to eye strain and reduced usability for these users.\",\"relevance_score\":256,\"type\":\"workunit\",\"updated_at\":\"2026-02-25T09:49:31Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":2,\"total_pages\":4}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "8433b95f3a2b4be7b17eef91e73d9499",
+            "include_tasks": true
+          },
+          "mcp_result": "{\"tasks\":[{\"task\":{\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"130846866d994d6db5508d4193536adc\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"todo\",\"title\":\"Fix race condition in notification queue\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"8433b95f3a2b4be7b17eef91e73d9499\"}},{\"task\":{\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"ca24822f0a484f6691ae50d9fc2ec68f\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"todo\",\"title\":\"Add integration testing for webhooks\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"8433b95f3a2b4be7b17eef91e73d9499\"}},{\"task\":{\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"dc1a2d97f57f4f5b9361c445a53c8f9e\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"todo\",\"title\":\"Fix email delivery bug\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"8433b95f3a2b4be7b17eef91e73d9499\"}},{\"task\":{\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"d755fc1da73c4e438c7ef3a0b0453ec3\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"todo\",\"title\":\"Write unit tests for notification service\",\"updated_at\":\"2026-02-25T09:49:03Z\",\"workunit_id\":\"8433b95f3a2b4be7b17eef91e73d9499\"}}],\"workunit\":{\"completed_tasks\":0,\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"id\":\"8433b95f3a2b4be7b17eef91e73d9499\",\"is_active\":true,\"linked_assets_count\":0,\"name\":\"Implement User Notifications\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"priority\":\"normal\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"project_id\":\"23926a58672d4220aa8c7b004c0633cb\",\"status\":\"active\",\"success_criteria\":\"Users receive timely notifications for workunit updates via email and in-app channels.\",\"total_tasks\":4,\"updated_at\":\"2026-02-25T09:49:03Z\"}}"
+        },
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "130846866d994d6db5508d4193536adc",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "done"
+          },
+          "mcp_result": "{\"task\":{\"completed_at\":\"2026-02-25T09:57:44Z\",\"created_at\":\"2026-02-25T09:49:03Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"created_by_name\":\"Alyx\",\"id\":\"130846866d994d6db5508d4193536adc\",\"is_active\":true,\"priority\":\"normal\",\"status\":\"done\",\"title\":\"Fix race condition in notification queue\",\"updated_at\":\"2026-02-25T09:57:44Z\",\"workunit_id\":\"8433b95f3a2b4be7b17eef91e73d9499\"}}"
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 56.8,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

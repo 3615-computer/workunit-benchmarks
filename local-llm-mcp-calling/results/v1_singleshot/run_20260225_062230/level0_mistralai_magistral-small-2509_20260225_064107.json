@@ -1,0 +1,282 @@
+{
+  "level": 0,
+  "model": "mistralai/magistral-small-2509",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T06:41:07.007653",
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "pass_rate": 1.0,
+    "avg_score": 1.0
+  },
+  "results": [
+    {
+      "task_id": "L0-01",
+      "task_name": "Ping the MCP server",
+      "prompt_sent": "Call the `ping` tool with the message \"hello from benchmark\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "hello from benchmark"
+          }
+        }
+      ],
+      "elapsed_s": 3.05,
+      "error": null
+    },
+    {
+      "task_id": "L0-02",
+      "task_name": "Get authenticated user",
+      "prompt_sent": "Call the `get_authenticated_user` tool to retrieve the current user's details.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        }
+      ],
+      "elapsed_s": 1.16,
+      "error": null
+    },
+    {
+      "task_id": "L0-03",
+      "task_name": "Create a project",
+      "prompt_sent": "Call the `create_project` tool with these exact parameters: name=\"Benchmark Test Project\", description=\"Created during MCP benchmark testing\", status=\"active\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Benchmark Test Project",
+            "description": "Created during MCP benchmark testing",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 3.67,
+      "error": null
+    },
+    {
+      "task_id": "L0-04",
+      "task_name": "Create a workunit",
+      "prompt_sent": "Call the `create_workunit` tool with these exact parameters: name=\"Hello World\", problem_statement=\"This is a test workunit created during the MCP benchmark.\", success_criteria=\"The workunit exists and has the correct name.\", project_id=\"17eefe2f89564171be13a92dc029cc55\", priority=\"normal\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Hello World",
+            "problem_statement": "This is a test workunit created during the MCP benchmark.",
+            "success_criteria": "The workunit exists and has the correct name.",
+            "project_id": "17eefe2f89564171be13a92dc029cc55",
+            "priority": "normal"
+          }
+        }
+      ],
+      "elapsed_s": 8.22,
+      "error": null
+    },
+    {
+      "task_id": "L0-05",
+      "task_name": "Create a task in a workunit",
+      "prompt_sent": "Call the `create_task` tool with these exact parameters: workunit_id=\"82475bf3fa944190a2303f71dd620e90\", title=\"Write unit tests\", description=\"Add comprehensive unit tests for the authentication module.\", priority=\"high\", status=\"todo\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "82475bf3fa944190a2303f71dd620e90",
+            "title": "Write unit tests",
+            "description": "Add comprehensive unit tests for the authentication module.",
+            "priority": "high",
+            "status": "todo"
+          }
+        }
+      ],
+      "elapsed_s": 7.02,
+      "error": null
+    },
+    {
+      "task_id": "L0-06",
+      "task_name": "Get a workunit with tasks",
+      "prompt_sent": "Call the `get_workunit` tool with id=\"82475bf3fa944190a2303f71dd620e90\", include_tasks=true, and include_ai_context=true.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "82475bf3fa944190a2303f71dd620e90",
+            "include_tasks": true,
+            "include_ai_context": true
+          }
+        }
+      ],
+      "elapsed_s": 5.13,
+      "error": null
+    },
+    {
+      "task_id": "L0-07",
+      "task_name": "Update a task status",
+      "prompt_sent": "Call the `update_task` tool with id=\"71ec78927bce4391a475d8c3a2bcd5d0\", status=\"in_progress\", and update_mask={\"paths\":[\"status\"]}.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "71ec78927bce4391a475d8c3a2bcd5d0",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          }
+        }
+      ],
+      "elapsed_s": 5.36,
+      "error": null
+    },
+    {
+      "task_id": "L0-08",
+      "task_name": "Save a context atom",
+      "prompt_sent": "Call the `save_context` tool with these exact parameters: workunit_id=\"82475bf3fa944190a2303f71dd620e90\", atom_type=\"progress\", title=\"Benchmark test completed\", content=\"This context atom was saved as part of the MCP benchmark test suite.\", importance=\"normal\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "82475bf3fa944190a2303f71dd620e90",
+            "atom_type": "progress",
+            "title": "Benchmark test completed",
+            "content": "This context atom was saved as part of the MCP benchmark test suite.",
+            "importance": "normal"
+          }
+        }
+      ],
+      "elapsed_s": 7.72,
+      "error": null
+    },
+    {
+      "task_id": "L0-09",
+      "task_name": "Search for workunits",
+      "prompt_sent": "Call the `search` tool with query=\"Hello World\", result_types=[\"workunit\"], and page_size=10.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Hello World",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        }
+      ],
+      "elapsed_s": 3.3,
+      "error": null
+    },
+    {
+      "task_id": "L0-10",
+      "task_name": "Create a knowledge asset",
+      "prompt_sent": "Call the `create_asset` tool with these exact parameters: asset_type=\"knowledge\", name=\"API Documentation\", description=\"Reference documentation for the REST API.\", category=\"documentation\", format=\"document\", status=\"draft\".",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API Documentation",
+            "description": "Reference documentation for the REST API.",
+            "category": "documentation",
+            "format": "document",
+            "status": "draft"
+          }
+        }
+      ],
+      "elapsed_s": 4.81,
+      "error": null
+    },
+    {
+      "task_id": "L0-11",
+      "task_name": "Update a workunit status to completed",
+      "prompt_sent": "Call the `update_workunit` tool with id=\"82475bf3fa944190a2303f71dd620e90\", status=\"completed\", completion_notes=\"Benchmark test workunit successfully completed.\", and update_mask={\"paths\":[\"status\",\"completion_notes\"]}.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "82475bf3fa944190a2303f71dd620e90",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Benchmark test workunit successfully completed."
+          }
+        }
+      ],
+      "elapsed_s": 7.49,
+      "error": null
+    }
+  ]
+}

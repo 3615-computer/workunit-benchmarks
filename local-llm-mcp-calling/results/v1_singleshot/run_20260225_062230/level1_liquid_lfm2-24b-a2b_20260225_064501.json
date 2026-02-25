@@ -1,0 +1,301 @@
+{
+  "level": 1,
+  "model": "liquid/lfm2-24b-a2b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T06:45:01.932129",
+  "summary": {
+    "total": 10,
+    "passed": 9,
+    "pass_rate": 0.9,
+    "avg_score": 0.86
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "prompt_sent": "Create a new project called \"Mobile App Redesign\". Set its status to active and add a description: \"Complete redesign of the mobile application with new UX patterns.\" Also add the tags: mobile, redesign, ux.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "status": "active",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "tags": [
+              "mobile",
+              "redesign",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 0.82,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "prompt_sent": "I need to track some work on fixing our login page. Create a workunit named \"Fix Login Page Bug\" in project b618ecf1f90c4b168dc9e7421d1044b9. The problem is that users can't log in when they have special characters in their password. We'll know it's done when all character types are supported and there are regression tests. Make it high priority.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "problem_statement": "Users cannot log in when they have special characters in their password",
+            "success_criteria": "All character types (letters, numbers, symbols) are supported and regression tests pass",
+            "project_id": "b618ecf1f90c4b168dc9e7421d1044b9",
+            "priority": "high"
+          }
+        }
+      ],
+      "elapsed_s": 1.27,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "prompt_sent": "Add these three tasks to workunit 8c46482a60b34d08bd01328d424c306b:\n1. \"Reproduce the bug locally\" - high priority\n2. \"Identify root cause\" - high priority  \n3. \"Write fix and add regression tests\" - normal priority\n\nAll should start as todo.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "3/3 calls made correctly"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "8c46482a60b34d08bd01328d424c306b",
+            "title": "Reproduce the bug locally",
+            "priority": "high"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "8c46482a60b34d08bd01328d424c306b",
+            "title": "Identify root cause",
+            "priority": "high"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "8c46482a60b34d08bd01328d424c306b",
+            "title": "Write fix and add regression tests",
+            "priority": "normal"
+          }
+        }
+      ],
+      "elapsed_s": 1.53,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "prompt_sent": "Mark task 25c31e0fb6c3490c85aa2265d7028e51 as currently in progress.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "25c31e0fb6c3490c85aa2265d7028e51",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          }
+        }
+      ],
+      "elapsed_s": 0.74,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "prompt_sent": "Find the workunit called \"Fix Login Page Bug\" and get its full details including all tasks.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug",
+            "result_types": [
+              "workunit",
+              "task"
+            ],
+            "page_size": 1
+          }
+        }
+      ],
+      "elapsed_s": 0.51,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "prompt_sent": "Save a context note on workunit 8c46482a60b34d08bd01328d424c306b recording this decision: we chose to fix the password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "8c46482a60b34d08bd01328d424c306b",
+            "atom_type": "decision",
+            "title": "Password Validation Fix Approach",
+            "content": "Chose to fix password validation on the backend rather than the frontend for better security.",
+            "importance": "high",
+            "tags": [
+              "security",
+              "backend"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 1.08,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "prompt_sent": "Create a new product asset called \"Workunit Mobile SDK\" in draft status. It's a software product currently in the development lifecycle stage. Add a description: \"iOS and Android SDK for integrating Workunit into mobile applications.\"",
+      "model_response": "",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'category': expected 'software', got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "status": "draft",
+            "lifecycle_stage": "development"
+          }
+        }
+      ],
+      "elapsed_s": 0.75,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "prompt_sent": "Show me the details of project b618ecf1f90c4b168dc9e7421d1044b9, including how many workunits and assets it has.",
+      "model_response": "",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'include_stats': expected True, got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "b618ecf1f90c4b168dc9e7421d1044b9",
+            "include_workunits": true,
+            "include_assets": true
+          }
+        }
+      ],
+      "elapsed_s": 0.65,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "prompt_sent": "Update workunit 8c46482a60b34d08bd01328d424c306b: change its priority to urgent, and set its tags to: bug, authentication, critical.",
+      "model_response": "",
+      "passed": true,
+      "score": 0.7,
+      "details": [
+        "'priority': expected 'urgent', got None",
+        "'tags': expected ['bug', 'authentication', 'critical'], got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "8c46482a60b34d08bd01328d424c306b",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "urgent",
+                "tags",
+                [
+                  "bug",
+                  "authentication",
+                  "critical"
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "elapsed_s": 0.88,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "prompt_sent": "Mark workunit 8c46482a60b34d08bd01328d424c306b as completed. Add completion notes explaining that the password validation was moved to the backend, all special characters now work, and 12 regression tests were added.",
+      "model_response": "",
+      "passed": true,
+      "score": 0.7000000000000001,
+      "details": [
+        "'completion_notes' should be present but is missing/empty",
+        "update_mask.paths missing 'status'",
+        "update_mask.paths missing 'completion_notes'"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "8c46482a60b34d08bd01328d424c306b",
+            "update_mask": {
+              "paths": [
+                "status:completed",
+                "completion_notes:Password validation moved to backend, special characters now work, 12 regression tests added."
+              ]
+            },
+            "status": "completed"
+          }
+        }
+      ],
+      "elapsed_s": 1.05,
+      "error": null
+    }
+  ]
+}

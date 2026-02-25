@@ -1,0 +1,194 @@
+{
+  "level": 2,
+  "model": "mistralai/ministral-3-3b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T06:22:49.278084",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.355
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_project): not called",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity..."
+          }
+        }
+      ],
+      "elapsed_s": 0.14,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "The system currently lacks automated notifications for workunit updates (e.g., status changes, task assignments, or comments). Users must manually check the Workunit platform to stay informed, which reduces productivity and engagement. This feature will enable real-time alerts via email/SMS/Slack integrations, ensuring stakeholders are promptly notified of critical updates in their assigned workunits.",
+            "success_criteria": "1. **Notification Delivery**: Users receive personalized notifications (email/SMS/Slack) for workunit status changes, task assignments, and comments within 5 minutes of the event.\n\n2. **Customization**: Users can configure notification preferences (e.g., frequency, channels, exclusions) via a dashboard.\n\n3. **Integration**: Seamless integration with existing communication tools (email, SMS gateways, Slack APIs).\n\n4. **Audit Trail**: A log of sent notifications is maintained for compliance and troubleshooting.\n\n5. **Error Handling**: Failed deliveries are automatically retried (up to 3 attempts) with escalation alerts for persistent failures.\n\n6. **Testing & Rollout**: Thorough testing in a staging environment, followed by a phased rollout to minimize disruption.",
+            "project_id": null,
+            "priority": "urgent",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 1.85,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        }
+      ],
+      "elapsed_s": 0.23,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): not called",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "",
+            "atom_type": "decision",
+            "title": "Switch from Polling to WebSockets for Real-Time Notifications",
+            "content": "The team has decided to implement WebSockets instead of polling for real-time notifications. This change is driven by the need for lower latency and more efficient communication between clients and servers. Below are the key tradeoffs considered:\n\n1. **Performance:**\n   - WebSockets provide bidirectional, low-latency communication compared to HTTP polling, which involves repeated round-trips.\n   - Reduced overhead from frequent connection checks improves responsiveness.\n\n2. **Scalability:**\n   - Polling can become a bottleneck as the number of clients grows, leading to increased server load.\n   - WebSockets allow for direct client-server communication, making it easier to scale with many concurrent connections.\n\n3. **Resource Usage:**\n   - WebSockets maintain persistent connections, reducing connection establishment overhead.\n   - Polling requires constant network checks, which can consume more bandwidth and CPU resources.\n\n4. **Complexity:**\n   - Implementing WebSocket-based notifications introduces additional complexity in terms of state management and error handling.\n   - However, this complexity is justified by the benefits in real-time performance.\n\n5. **Compatibility:**\n   - While WebSockets are widely supported in modern browsers and mobile clients, there may be edge cases with older systems that require fallback mechanisms.\n\nThe decision was made to prioritize real-time responsiveness over simplicity, ensuring that notifications remain timely and efficient for end-users.",
+            "importance": "critical",
+            "tags": [
+              "architecture",
+              "real-time"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 2.28,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.3333333333333333,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): not called",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work.",
+            "status": "planning",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        }
+      ],
+      "elapsed_s": 0.37,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.4,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'=None (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "WU-12345"
+          }
+        }
+      ],
+      "elapsed_s": 0.19,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "WU-12345",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 0.22,
+      "error": null
+    }
+  ]
+}

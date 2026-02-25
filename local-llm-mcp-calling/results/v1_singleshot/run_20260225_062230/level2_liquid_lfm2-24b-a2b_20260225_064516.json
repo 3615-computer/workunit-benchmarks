@@ -1,0 +1,382 @@
+{
+  "level": 2,
+  "model": "liquid/lfm2-24b-a2b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T06:45:16.401641",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.643
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementing dark mode support for the application with user preference settings and system theme integration",
+            "status": "active",
+            "tags": [
+              "dark-mode",
+              "UI",
+              "user-experience"
+            ],
+            "repo_url": "https://github.com/example/app",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Dark Mode Implementation",
+            "problem_statement": "Users experience eye strain in low-light conditions and prefer dark interface options; current light mode causes discomfort during nighttime use",
+            "success_criteria": "Successfully implement system-wide dark mode with automatic theme switching, 90% reduction in reported eye strain cases, and user preference persistence across sessions",
+            "project_id": "<project_id>",
+            "priority": "high",
+            "status": "active",
+            "description": "Develop and integrate dark mode implementation with theme switching capabilities",
+            "tags": [
+              "dark-mode",
+              "implementation",
+              "UI"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 2.2,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Users require real-time notifications for critical workunit updates to ensure timely action and collaboration.",
+            "success_criteria": "Notifications are delivered instantly via email/web push, include actionable details, support user preferences, and log in audit trails.",
+            "description": "Develop end-to-end notification system for workunits including triggers, delivery mechanisms, and compliance features",
+            "tags": [
+              "notifications",
+              "workunit",
+              "real-time"
+            ],
+            "priority": "high",
+            "status": "active"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Define notification requirements and scope",
+            "description": "Collaborate with stakeholders to document all notification scenarios, channels, and user preferences",
+            "priority": "high",
+            "tags": [
+              "notifications",
+              "requirements"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Design notification architecture",
+            "description": "Create system diagram for notification triggers, delivery pipelines, and integration points",
+            "priority": "high",
+            "tags": [
+              "architecture",
+              "design"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Implement backend notification engine",
+            "description": "Develop API endpoints and message queuing system for workunit notifications",
+            "priority": "high",
+            "tags": [
+              "backend",
+              "api"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Build frontend notification UI",
+            "description": "Create dashboard components for users to manage notification preferences and view history",
+            "priority": "normal",
+            "tags": [
+              "frontend",
+              "ui"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Integrate with communication channels",
+            "description": "Connect to email, SMS, and push notification services (e.g., Firebase, SendGrid)",
+            "priority": "high",
+            "tags": [
+              "integrations",
+              "communication"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Implement user preference management",
+            "description": "Develop settings for notification channels, frequency, and scope customization",
+            "priority": "normal",
+            "tags": [
+              "preferences",
+              "user-management"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Add audit logging",
+            "description": "Track all notifications sent with timestamps, recipients, and content hashes",
+            "priority": "high",
+            "tags": [
+              "compliance",
+              "logging"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Write automated tests",
+            "description": "Create unit/integration tests for all notification scenarios and edge cases",
+            "priority": "normal",
+            "tags": [
+              "testing",
+              "quality"
+            ]
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "<workunit_id>",
+            "title": "Conduct security review",
+            "description": "Validate encryption, access controls, and data privacy compliance",
+            "priority": "high",
+            "tags": [
+              "security",
+              "compliance"
+            ]
+          }
+        },
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "<workunit_id>",
+            "update_mask": {
+              "paths": [
+                "\"tasks\""
+              ]
+            },
+            "name": "Implement User Notifications",
+            "description": "End-to-end notification system with triggers, delivery, preferences, and compliance",
+            "tags": [
+              "notifications",
+              "implementation"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 8.1,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        }
+      ],
+      "elapsed_s": 0.5,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): not called",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "notifications",
+            "atom_type": "decision",
+            "title": "Real-time Notification Implementation",
+            "content": "Chose WebSockets over polling for real-time notifications considering latency, server load, and scalability tradeoffs.",
+            "importance": "critical",
+            "tags": [
+              "real-time",
+              "web sockets",
+              "architecture"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 1.01,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "status": "active",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design",
+            "format": "document"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "<project_id_from_first_step>",
+            "asset_id": "<asset_id_from_second_step>",
+            "action": "link",
+            "notes": "Linking design spec to project"
+          }
+        }
+      ],
+      "elapsed_s": 1.49,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "Implement User Notifications",
+            "include_tasks": true
+          }
+        }
+      ],
+      "elapsed_s": 0.42,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": [
+              "workunit",
+              "task"
+            ],
+            "page_size": 1
+          }
+        }
+      ],
+      "elapsed_s": 0.51,
+      "error": null
+    }
+  ]
+}
