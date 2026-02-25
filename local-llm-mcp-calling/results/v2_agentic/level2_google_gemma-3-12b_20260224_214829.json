@@ -1,0 +1,274 @@
+{
+  "level": 2,
+  "model": "google/gemma-3-12b",
+  "tool_trained": false,
+  "timestamp": "2026-02-24T21:48:29.044368",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.664
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Project to track development of a dark mode feature for our app.",
+            "tags": [
+              "feature",
+              "ui",
+              "darkmode"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "project_id": "90f63f23876f4c1a9dc072e9873c8ae1",
+            "name": "Dark Mode Implementation",
+            "problem_statement": "Users have requested a dark mode option to reduce eye strain and improve usability in low-light conditions.",
+            "success_criteria": "The application will offer a user-selectable dark mode theme that adheres to accessibility guidelines (WCAG 2.1 AA) and provides a visually appealing and functional experience across all platforms.",
+            "priority": "high",
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 5.41,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Implement user notifications for workunit updates.",
+            "success_criteria": "Users receive timely notifications about changes to their assigned workunits.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "draft"
+          }
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "{{organization_id}}"
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 11.25,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "7612fc17df144e618fc932a51770c24e",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 3.97,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "7612fc17df144e618fc932a51770c24e",
+            "atom_type": "decision",
+            "title": "WebSocket Adoption for Real-time Notifications",
+            "content": "We've transitioned from polling to WebSockets for our real-time notification feature. This change significantly reduces server load and improves responsiveness compared to the previous polling method. Tradeoffs considered included increased complexity in implementation and maintenance, but the benefits of reduced latency and resource consumption outweigh these concerns.",
+            "importance": "critical",
+            "strength": "hard"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 3.96,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "Project for REST API redesign work.",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design.",
+            "format": "document",
+            "content_url": null
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design.",
+            "format": "document"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "6a7d4b3c9e1f2a8b5c0d3e4f",
+            "asset_id": "91f77bb541664c9d961a5e1c433970a1",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 8.18,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.4,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'=None (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 1.9,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): \u2713",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "progress",
+            "title": "Sprint End Summary",
+            "content": "Workunit completed at the end of the sprint. All planned activities were executed.",
+            "importance": "normal",
+            "strength": "soft"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 5.02,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

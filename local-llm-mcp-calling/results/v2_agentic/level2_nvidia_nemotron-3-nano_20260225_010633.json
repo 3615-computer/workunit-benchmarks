@@ -1,0 +1,301 @@
+{
+  "level": 2,
+  "model": "nvidia/nemotron-3-nano",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T01:06:33.836200",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.633
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Implement dark mode support across the mobile app, including UI theming, settings toggle, and system preference integration.",
+            "name": "Dark Mode Feature",
+            "tags": [
+              "dark-mode",
+              "ui",
+              "feature"
+            ],
+            "status": "planning"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "description": "Implement dark mode theming across the app, including UI components, settings storage, and system preference integration.",
+            "success_criteria": "1) Dark mode toggle persists across sessions. 2) All UI components correctly adapt to dark theme colors. 3) System preference integration works on iOS and Android. 4) No visual regressions or crashes in dark mode. 5) Battery consumption is measurably reduced in dark mode usage.",
+            "name": "Dark Mode Implementation",
+            "problem_statement": "The mobile app currently lacks a dark mode option. Users have requested a system-wide dark theme that can be toggled manually and automatically adapts to system preferences, improving readability and battery efficiency.",
+            "project_id": "2cbb9b8994084aa3a304dd0f6494a62b",
+            "tags": [
+              "dark-mode",
+              "implementation"
+            ],
+            "status": "draft",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 103.36,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "status": "draft",
+            "success_criteria": "All workunit status changes that affect users trigger appropriate notifications; 95% of relevant workunit updates result in sent notifications within 5 minutes.",
+            "description": "Track implementation of user notifications for workunit updates, including requirements, design, implementation, testing, and deployment.",
+            "project_id": "{{project_id}}",
+            "tags": [
+              "notifications",
+              "feature"
+            ],
+            "name": "Implement User Notifications",
+            "priority": "high",
+            "problem_statement": "Implement a notification system that sends email and in-app notifications to users when workunits they are involved in are updated."
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Project for implementing user notifications for workunit updates.",
+            "tags": [
+              "notifications"
+            ],
+            "name": "User Notifications Project"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "status": "active",
+            "success_criteria": "All workunit status changes that affect users trigger appropriate notifications; 95% of relevant workunit updates result in sent notifications within 5 minutes.",
+            "description": "Implement a notification system that sends email and in-app notifications to users when workunits they are involved in are updated.",
+            "project_id": "4a122598cf71489a99387f76155cc0d8",
+            "tags": [
+              "notifications",
+              "feature"
+            ],
+            "name": "Implement User Notifications",
+            "priority": "high",
+            "problem_statement": "Implement a notification system that sends email and in-app notifications to users when workunits they are involved in are updated."
+          }
+        }
+      ],
+      "turns": 5,
+      "elapsed_s": 414.82,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out after 300s (4 turns completed)",
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication",
+            "page_number": 2
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 461.05,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "author_model": "assistant",
+            "importance": "critical",
+            "workunit_id": 0,
+            "atom_type": "decision",
+            "content": "We evaluated WebSockets vs long-polling for real-time notifications. WebSockets offer lower latency, reduced server load, and persistent connections, but introduce complexity in connection management and require robust handling of network failures and reconnections. Long-polling is simpler to implement and debug, works reliably over HTTP proxies, but incurs higher latency, increased server overhead due to repeated requests, and poorer scalability under high concurrency. Given our scalability goals and the need for near real-time user experiences, we chose WebSockets despite the added architectural complexity.",
+            "title": "WebSockets vs Polling for Real-Time Notifications",
+            "tags": [
+              "architecture",
+              "real-time",
+              "notification",
+              "tradeoffs"
+            ],
+            "strength": "hard"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 87.22,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "repo_url": "https://github.com/example/api-v2",
+            "default_branch": "main",
+            "description": "REST API redesign work",
+            "name": "API v2"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "description": "Document describing the new API design for the REST API redesign.",
+            "content": "Draft design specification for the new API v2 endpoints and data models.",
+            "organization_id": "7ecc4c86996c489fa21c4f9231b5039f",
+            "name": "API v2 Design Spec",
+            "asset_type": "knowledge"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "asset_id": "6dfb6c25bddc450889994d6aacc1930f",
+            "project_id": "5bf6c905b5444a2cabe4164ca89c2740",
+            "notes": "Linking API v2 Design Spec document to the API v2 project for tracking.",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 95.83,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "include_tasks": "True",
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 270.55,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 197.61,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

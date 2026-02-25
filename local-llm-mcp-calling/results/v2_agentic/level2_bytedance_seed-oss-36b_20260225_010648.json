@@ -1,0 +1,112 @@
+{
+  "level": 2,
+  "model": "bytedance/seed-oss-36b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T01:06:48.493459",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.0
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 0.02,
+      "timed_out": false,
+      "error": "Error code: 400 - {'error': 'Error rendering prompt with jinja template: \"Unknown operator \"in\" between ArrayValue and TupleValue\".\\n\\nThis is usually an issue with the model\\'s prompt template. If you are using a popular model, you can try to search the model under lmstudio-community, which will have fixed prompt templates. If you cannot find one, you are welcome to post this issue to our discord or issue tracker on GitHub. Alternatively, if you know how to write jinja templates, you can override the prompt template in My Models > model settings > Prompt Template.'}"
+    }
+  ]
+}

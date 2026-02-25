@@ -1,0 +1,517 @@
+{
+  "level": 2,
+  "model": "mistralai/ministral-3-3b",
+  "tool_trained": true,
+  "timestamp": "2026-02-24T21:30:28.984160",
+  "summary": {
+    "total": 7,
+    "passed": 2,
+    "pass_rate": 0.286,
+    "avg_score": 0.607
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity..."
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode across the app to improve user experience and accessibility.",
+            "status": "planning",
+            "tags": [
+              "ui/ux",
+              "feature"
+            ],
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892",
+            "sort_by": "created_at",
+            "sort_order": "desc"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode across the app to improve user experience and accessibility.",
+            "status": "planning",
+            "tags": [
+              "ui/ux",
+              "feature"
+            ],
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Attempting to fetch user's org ID..."
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Dark Mode Implementation",
+            "problem_statement": "The app lacks a cohesive dark mode implementation that provides consistent visual themes across all screens and components, leading to poor user experience.",
+            "success_criteria": "1. All UI components follow consistent color scheme and typography in both light/dark modes; 2. Dark mode meets WCAG contrast requirements for accessibility; 3. Performance remains stable with dark mode rendering within 500ms; 4. User feedback shows improved readability in dark mode.",
+            "description": "Implementation of a fully functional dark mode feature across the app, ensuring visual consistency and accessibility compliance.",
+            "project_id": null,
+            "priority": "high",
+            "status": "draft",
+            "tags": [
+              "ui/ux",
+              "feature"
+            ],
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892"
+          }
+        }
+      ],
+      "turns": 7,
+      "elapsed_s": 5.11,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity for user notifications implementation."
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Develop a comprehensive notification system to alert users when workunits are updated (e.g., status changes, task assignments, due dates). This must integrate with MCP's event-driven architecture and support customizable subscription preferences. Key requirements include:\n\n1. **Event Triggers**: Detect workunit updates (status changes, task creation/modification/deletion, asset links/unlinks, etc.).\n2. **Subscription Management**: Allow users to opt-in/opt-out of notifications via a dashboard or profile settings.\n3. **Notification Channels**: Support email, in-app alerts, and push notifications.\n4. **Personalization**: Conditional logic for relevance (e.g., only notify assignees or owners).\n5. **Delivery Reliability**: Handle failures gracefully with retries and acknowledgment tracking.\n6. **Analytics**: Track notification delivery success/failure rates to improve reliability.\n\nFailure to implement this will result in missed critical updates, degraded user experience, and potential project delays.",
+            "success_criteria": "Notifications are successfully triggered for all workunit events (status changes, task assignments) and delivered via email/push with 95%+ success rate. Users can manage subscriptions through the MCP interface. Integration tests confirm no false positives or negatives in notification delivery.",
+            "description": "End-to-end implementation of user notifications for workunit updates, covering event detection, subscription management, channel delivery, personalization, and reliability.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Project ID",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 7.51,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 50
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.5,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "WebSocket",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notification",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "real-time notification",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "polling",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(real-time OR WebSocket) AND (notification OR polling)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "architectural decision",
+            "organization_id": "",
+            "page_size": 5,
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(notification OR real-time)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(communication OR messaging) AND (notification OR real-time)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "",
+            "sort_by": "created_at",
+            "sort_order": "desc",
+            "page_size": 5
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892",
+            "sort_by": "created_at",
+            "sort_order": "desc",
+            "page_size": 5
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(poll OR real-time OR WebSocket) AND (notification OR messaging)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(communication OR system) AND (notification OR real-time)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(system OR architecture) AND (notification OR real-time)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(decision OR tradeoff) AND (notification OR real-time)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notification",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "(WebSocket OR polling)",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "real-time OR WebSocket",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 10
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Architectural Decision: Switching from Polling to WebSockets for Real-Time Notifications",
+            "problem_statement": "The team has decided to replace polling-based real-time notifications with WebSocket technology. This change is driven by the need for lower latency, bidirectional communication, and improved scalability.",
+            "success_criteria": "By implementing WebSockets, we aim to achieve: 1) Reduced latency in notification delivery compared to polling. 2) Bidirectional communication between clients and servers. 3) Scalable handling of concurrent connections. 4) Seamless integration with existing real-time applications.",
+            "description": "This workunit documents the architectural decision to switch from polling-based notification systems to WebSocket technology. The tradeoffs considered include increased complexity in connection management, potential overhead in resource usage, and the need for server-side support for persistent connections. The goal is to enhance real-time responsiveness while maintaining system reliability.",
+            "project_id": "",
+            "priority": "high",
+            "status": "draft"
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity for workunits."
+          }
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "3e3eeb7faeb5408a8ed4146eb15e5892",
+            "tags": [
+              "software"
+            ],
+            "sort_by": "created_at",
+            "sort_order": "desc",
+            "page_size": 5
+          }
+        },
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Retrieving projects with software-related tags."
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Real-Time Notification System",
+            "description": "Project for implementing real-time notification systems using WebSocket technology.",
+            "status": "planning",
+            "tags": [
+              "software",
+              "real-time",
+              "WebSocket"
+            ],
+            "repo_url": "",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Architectural Decision: Switching from Polling to WebSockets for Real-Time Notifications",
+            "problem_statement": "The team has decided to replace polling-based real-time notifications with WebSocket technology. This change is driven by the need for lower latency, bidirectional communication, and improved scalability.",
+            "success_criteria": "By implementing WebSockets, we aim to achieve: 1) Reduced latency in notification delivery compared to polling. 2) Bidirectional communication between clients and servers. 3) Scalable handling of concurrent connections. 4) Seamless integration with existing real-time applications.",
+            "description": "This workunit documents the architectural decision to switch from polling-based notification systems to WebSocket technology. The tradeoffs considered include increased complexity in connection management, potential overhead in resource usage, and the need for server-side support for persistent connections. The goal is to enhance real-time responsiveness while maintaining system reliability.",
+            "project_id": "f0706677703f4efc926138dbd4403f4d",
+            "priority": "high",
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 25,
+      "elapsed_s": 19.04,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "ping",
+          "arguments": {
+            "message": "Checking MCP server connectivity..."
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work for the new API version.",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main",
+            "status": "planning"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design for version 2.",
+            "format": "document",
+            "content_url": "https://example.com/api-v2-design-spec.pdf"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "aa6ab941f7fe4a709353df177861f04e",
+            "asset_id": "0622fd8114b1407b9a0f4e810d4dd6ce",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 1.74,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.91,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.96,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

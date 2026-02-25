@@ -1,0 +1,267 @@
+{
+  "level": 2,
+  "model": "mistralai/ministral-3-14b-reasoning",
+  "tool_trained": true,
+  "timestamp": "2026-02-24T22:04:39.120363",
+  "summary": {
+    "total": 7,
+    "passed": 2,
+    "pass_rate": 0.286,
+    "avg_score": 0.571
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature Implementation",
+            "description": "Project to manage the development and implementation of a dark mode feature for our app.",
+            "status": "active",
+            "tags": [
+              "feature",
+              "dark mode",
+              "UI/UX"
+            ],
+            "repo_url": "https://github.com/your-org/your-repo",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode Feature",
+            "problem_statement": "As a product, we need to implement a dark mode feature that allows users to switch between light and dark themes seamlessly. This involves designing the UI components for both themes, ensuring accessibility compliance, and implementing the backend logic to persist user preferences.",
+            "success_criteria": "The dark mode feature will be considered successful if:\n1. Users can toggle between light and dark modes without any issues.\n2. All UI components adapt correctly to the dark theme while maintaining readability and accessibility.\n3. User preference for theme is saved and respected across sessions.\n4. Performance impact of dark mode is minimal, with no noticeable slowdowns or bugs.",
+            "description": "This workunit tracks the implementation of a dark mode feature for our app. It includes UI design adjustments, backend logic for theme switching, and ensuring accessibility compliance.",
+            "project_id": "bdf188f1e59e4614836332e678e90c9e",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "dark mode",
+              "UI/UX",
+              "implementation"
+            ]
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 8.89,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Design and implement a user notification system for workunit updates. This includes backend logic for triggering notifications, frontend UI for displaying notifications, and integration with the Workunit platform.",
+            "success_criteria": "A fully functional notification system that sends real-time or near-real-time notifications to users when workunits are updated (e.g., status changes, comments added). The system should support email and in-app notifications, allow users to mark notifications as read/unread, and be thoroughly tested and documented.",
+            "description": "This workunit covers the end-to-end implementation of user notifications for workunit updates. It includes designing the notification system, implementing backend and frontend components, testing, deployment, documentation, and monitoring.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "feature",
+              "notifications",
+              "workunit"
+            ],
+            "due_date": "2023-12-31"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement User Notifications",
+            "problem_statement": "Design and implement a user notification system for workunit updates. This includes backend logic for triggering notifications, frontend UI for displaying notifications, and integration with the Workunit platform.",
+            "success_criteria": "A fully functional notification system that sends real-time or near-real-time notifications to users when workunits are updated (e.g., status changes, comments added). The system should support email and in-app notifications, allow users to mark notifications as read/unread, and be thoroughly tested and documented.",
+            "description": "This workunit covers the end-to-end implementation of user notifications for workunit updates. It includes designing the notification system, implementing backend and frontend components, testing, deployment, documentation, and monitoring.",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "feature",
+              "notifications",
+              "workunit"
+            ],
+            "due_date": "2023-12-31T00:00:00Z"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 16.99,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "organization_id": "your_org_id_here"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 50
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 4.24,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 50
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 1.84,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "Project for redesigning our REST API to v2, including all documentation and implementation work.",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design for version 2, including endpoints, data models, and authentication strategies.",
+            "category": "documentation",
+            "format": "document"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "fcfe4d64bb5b4f2d80eec074e7945247",
+            "asset_id": "d11ff6c699c14abaa5d99f2f8a2da8aa",
+            "action": "link",
+            "notes": "This is the primary design specification for the API v2 project."
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 3.82,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 1.3,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 1,
+      "elapsed_s": 1.76,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

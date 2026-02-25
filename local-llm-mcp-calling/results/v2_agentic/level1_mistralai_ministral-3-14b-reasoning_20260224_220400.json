@@ -1,0 +1,300 @@
+{
+  "level": 1,
+  "model": "mistralai/ministral-3-14b-reasoning",
+  "tool_trained": true,
+  "timestamp": "2026-02-24T22:04:00.268723",
+  "summary": {
+    "total": 10,
+    "passed": 9,
+    "pass_rate": 0.9,
+    "avg_score": 0.935
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "status": "active",
+            "tags": [
+              "mobile",
+              "redesign",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 0.9,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "problem_statement": "Users cannot log in when they have special characters in their password.",
+            "success_criteria": "All character types must be supported, and regression tests must pass.",
+            "description": "This workunit is for fixing the login page bug where users with special characters in their passwords are unable to log in. The goal is to ensure compatibility with all character types and implement thorough regression testing.",
+            "project_id": "{{project_id}}",
+            "priority": "high"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.92,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "3/3 calls made correctly"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Reproduce the bug locally",
+            "priority": "high",
+            "status": "todo"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Identify root cause",
+            "priority": "high",
+            "status": "todo"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Write fix and add regression tests",
+            "priority": "normal",
+            "status": "todo"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.96,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{task_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 0.59,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 0.97,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'importance': expected 'high', got 'critical'"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "decision",
+            "title": "Backend Password Validation Fix - Architectural Decision",
+            "content": "We chose to fix the password validation on the backend rather than the frontend, because it's more secure. This decision is critical for the system's security posture and aligns with best practices for handling sensitive data.",
+            "importance": "critical",
+            "strength": "hard"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.58,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "status": "draft",
+            "category": "software",
+            "lifecycle_stage": "development"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 0.99,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "{{project_id}}",
+            "include_stats": true,
+            "include_assets": true,
+            "include_workunits": true
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 0.62,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "tags"
+              ]
+            },
+            "priority": "urgent",
+            "tags": [
+              "bug",
+              "authentication",
+              "critical"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 0.94,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Password validation has been moved to the backend, ensuring that all special characters are now handled correctly. Additionally, 12 regression tests have been added to validate the functionality and ensure robustness."
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.47,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

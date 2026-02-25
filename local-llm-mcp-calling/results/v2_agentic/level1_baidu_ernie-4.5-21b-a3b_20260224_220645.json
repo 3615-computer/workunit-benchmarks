@@ -1,0 +1,347 @@
+{
+  "level": 1,
+  "model": "baidu/ernie-4.5-21b-a3b",
+  "tool_trained": false,
+  "timestamp": "2026-02-24T22:06:45.111804",
+  "summary": {
+    "total": 10,
+    "passed": 10,
+    "pass_rate": 1.0,
+    "avg_score": 0.985
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Mobile App Redesign",
+            "description": "Complete redesign of the mobile application with new UX patterns.",
+            "status": "active",
+            "tags": [
+              "mobile",
+              "redesign",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.6,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "problem_statement": "Users can't log in when they have special characters in their password.",
+            "success_criteria": "All character types are supported and there are regression tests.",
+            "description": "",
+            "project_id": "{{project_id}}",
+            "priority": "high",
+            "status": "draft",
+            "tags": [],
+            "due_date": "",
+            "organization_id": "",
+            "owner_id": ""
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 2.64,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "Expected task title not found: 'Write fix and add regression tests'"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "title": "Reproduce the bug locally",
+            "description": "",
+            "status": "todo",
+            "priority": "high"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "{{valid_workunit_id}}",
+            "title": "Reproduce the bug locally",
+            "description": "",
+            "status": "todo",
+            "priority": "high"
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{valid_workunit_id}}"
+          }
+        },
+        {
+          "name": "list_projects",
+          "arguments": {
+            "organization_id": "{{your_org_id}}",
+            "status": "active"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Temp Project",
+            "description": "Temporary workspace for task creation",
+            "status": "planning"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "project_id": "a16b863f9fbb4dd19f6197e5e5f6d096",
+            "name": "Reproduce the bug locally",
+            "problem_statement": "Identify and reproduce the reported bug in local environment. Document steps to reproduce and expected vs actual behavior.",
+            "success_criteria": "Successfully reproduce the bug with minimal setup requirements. Document reproduction steps and environment details.",
+            "priority": "high",
+            "status": "draft"
+          }
+        },
+        {
+          "name": "create_task",
+          "arguments": {
+            "workunit_id": "03526fe1ffaa46a98e6b9d55871874d8",
+            "title": "Identify root cause",
+            "priority": "high",
+            "status": "draft"
+          }
+        }
+      ],
+      "turns": 7,
+      "elapsed_s": 19.4,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_task",
+          "arguments": {
+            "id": "{{task_id}}",
+            "update_mask": {
+              "paths": [
+                "status"
+              ]
+            },
+            "status": "in_progress"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 5.5,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Fix Login Page Bug",
+            "result_types": [
+              "workunit"
+            ],
+            "page_size": 1
+          }
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "03526fe1ffaa46a98e6b9d55871874d8",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 2.83,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "{{workunit_id}}",
+            "atom_type": "decision",
+            "title": "Backend Password Validation Decision",
+            "content": "we chose to fix the password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+            "importance": "high",
+            "strength": "hard"
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 2.31,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "status": "draft",
+            "category": "software",
+            "lifecycle_stage": "development",
+            "organization_id": "",
+            "directory_id": ""
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 2.02,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_project",
+          "arguments": {
+            "id": "{{project_id}}",
+            "include_stats": true
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.1,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "tags"
+              ]
+            },
+            "priority": "urgent",
+            "tags": [
+              "bug",
+              "authentication",
+              "critical"
+            ]
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.53,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "update_mask": {
+              "paths": [
+                "status",
+                "completion_notes"
+              ]
+            },
+            "status": "completed",
+            "completion_notes": "Password validation was moved to the backend. All special characters now work correctly. 12 regression tests were added."
+          }
+        }
+      ],
+      "turns": 1,
+      "elapsed_s": 1.86,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

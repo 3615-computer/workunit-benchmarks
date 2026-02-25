@@ -1,0 +1,380 @@
+{
+  "level": 2,
+  "model": "microsoft/phi-4-reasoning-plus",
+  "tool_trained": false,
+  "timestamp": "2026-02-24T22:03:31.903451",
+  "summary": {
+    "total": 7,
+    "passed": 3,
+    "pass_rate": 0.429,
+    "avg_score": 0.598
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Project to implement dark mode support in the application.",
+            "status": "planning"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Implement Dark Mode",
+            "problem_statement": "The app currently only supports light mode, which can be straining on eyes in low-light environments. We need to implement dark mode support that automatically adjusts UI elements for optimal readability and reduces eye strain.",
+            "success_criteria": "1. Provide a consistent dark theme across all screens.\n2. Automatically switch based on system preferences or user selection.\n3. Maintain accessibility standards (contrast ratios, etc.)\n4. Be fully tested in both light and dark environments with no UI glitches.",
+            "description": "Implementation work for dark mode feature",
+            "project_id": "7a701290930a44e180803c9edc8f57bd",
+            "priority": "high",
+            "status": "active"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 30.61,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "tool_name",
+          "arguments": {}
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 78.02,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "tool_name",
+          "arguments": {
+            "param": "value"
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "5d52bac809fe4f8b95c55faafa221492",
+            "atom_type": "progress",
+            "title": "Quarterly Audit Review",
+            "content": "This workunit was reviewed during the quarterly audit and its current status (active/draft) was confirmed.",
+            "importance": "normal",
+            "strength": "soft",
+            "tags": [
+              "audit",
+              "review"
+            ]
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 68.22,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications: WebSocket vs Polling",
+            "problem_statement": "We need to implement real-time notifications for our application. The team has decided to use WebSockets instead of polling due to lower latency and better resource efficiency, but we must consider tradeoffs such as increased complexity in connection management and potential scalability issues.",
+            "success_criteria": "The notification system should deliver messages with minimal delay (<200ms), maintain stable connections under load, and gracefully handle reconnections. Additionally, the implementation should be documented for future maintenance.",
+            "description": "This workunit documents our critical architectural decision to use WebSockets over polling for real-time notifications. Tradeoffs include increased complexity in connection management, potential scalability challenges, and higher resource consumption on the server side compared to a simple polling mechanism. However, benefits such as lower latency, reduced network overhead, and improved user experience justify this choice.",
+            "project_id": "5d52bac809fe4f8b95c55faafa221492",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "websocket",
+              "polling",
+              "architecture"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications: WebSocket vs Polling",
+            "problem_statement": "We need to implement real-time notifications for our application. The team has decided to use WebSockets instead of polling due to lower latency and better resource efficiency, but we must consider tradeoffs such as increased complexity in connection management and potential scalability issues.",
+            "success_criteria": "The notification system should deliver messages with minimal delay (<200ms), maintain stable connections under load, and gracefully handle reconnections. Additionally, the implementation should be documented for future maintenance.",
+            "description": "This workunit documents our critical architectural decision to use WebSockets over polling for real-time notifications. Tradeoffs include increased complexity in connection management, potential scalability challenges, and higher resource consumption on the server side compared to a simple polling mechanism. However, benefits such as lower latency, reduced network overhead, and improved user experience justify this choice.",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "websocket",
+              "polling",
+              "architecture"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notifications: WebSocket vs Polling",
+            "problem_statement": "We need to implement real-time notifications for our application. The team has decided to use WebSockets instead of polling due to lower latency and better resource efficiency, but we must consider tradeoffs such as increased complexity in connection management and potential scalability issues.",
+            "success_criteria": "The notification system should deliver messages with minimal delay (<200ms), maintain stable connections under load, and gracefully handle reconnections. Additionally, the implementation should be documented for future maintenance.",
+            "description": "This workunit documents our critical architectural decision to use WebSockets over polling for real-time notifications. Tradeoffs include increased complexity in connection management, potential scalability challenges, and higher resource consumption on the server side compared to a simple polling mechanism. However, benefits such as lower latency, reduced network overhead, and improved user experience justify this choice.",
+            "project_id": "5d52bac809fe4f8b95c55faafa221492",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "websocket",
+              "polling",
+              "architecture"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notification",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Real-Time Notification Feature - WebSocket Decision",
+            "problem_statement": "Implement real-time notifications for our application. Evaluate communication protocols (WebSockets vs polling) to ensure timely updates while balancing resource usage, scalability, and maintainability.",
+            "success_criteria": "The chosen protocol should provide low-latency updates, be scalable under high load, minimize server overhead, and integrate seamlessly with existing infrastructure. The decision must consider tradeoffs such as connection persistence, network reliability, and ease of debugging.",
+            "description": "We decided to use WebSockets instead of polling for our real-time notification feature. This critical architectural decision was made after evaluating the benefits of persistent connections (lower latency, reduced server load) against potential challenges in managing connection lifecycles and error recovery. The tradeoffs considered include scalability under high user volume, resource consumption on both client and server sides, and ease of debugging persistent connections versus periodic polling.",
+            "status": "draft",
+            "tags": [
+              "notifications",
+              "websocket",
+              "architecture"
+            ]
+          }
+        },
+        {
+          "name": "get_authenticated_user",
+          "arguments": {}
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Real-Time Notifications",
+            "description": "Project to manage real-time notification features.",
+            "status": "planning",
+            "tags": [
+              "notifications",
+              "websocket"
+            ],
+            "repo_url": "",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Notifications Workunit",
+            "problem_statement": "Implement real-time notifications using WebSockets instead of polling.",
+            "success_criteria": "System supports WebSocket connections, reduces latency, and scales effectively.",
+            "description": "We decided to use WebSockets for our real-time notification feature. This decision was made after evaluating tradeoffs between polling and WebSockets. Tradeoffs considered include lower latency with WebSockets, increased complexity in connection management, potential scalability challenges, and resource consumption differences. The team concluded that the benefits of reduced overhead and improved user experience outweighed these concerns.",
+            "project_id": "ea633d0420934986b1bc7a8c6db3f64e",
+            "priority": "high",
+            "status": "active",
+            "tags": [
+              "notifications",
+              "websocket"
+            ]
+          }
+        }
+      ],
+      "turns": 13,
+      "elapsed_s": 104.72,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": true,
+      "score": 0.9333333333333332,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): 'format'=None (want 'document')",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design"
+          }
+        },
+        {
+          "name": "project_asset_link",
+          "arguments": {
+            "project_id": "fd7d84dc666c4299a8e362c479b3c225",
+            "asset_id": "3b64dcc2bd7a44278a67b7b0499b50ac",
+            "action": "link"
+          }
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 13.38,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 23.17,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 29.03,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}

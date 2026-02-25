@@ -1,0 +1,229 @@
+{
+  "level": 2,
+  "model": "essentialai/rnj-1",
+  "tool_trained": true,
+  "timestamp": "2026-02-24T21:39:59.924172",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.433
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Project to track implementation of dark mode feature in our app",
+            "status": "active",
+            "tags": [
+              "dark-mode",
+              "ui/ux"
+            ],
+            "organization_id": "org_12345",
+            "owner_id": "user_67890",
+            "name": "Dark Mode Feature"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Project to track implementation of dark mode feature in our app",
+            "status": "active",
+            "tags": [
+              "dark-mode",
+              "ui/ux"
+            ],
+            "organization_id": "550e8400-e29b-41d4-a716-446655440000",
+            "owner_id": "user_67890",
+            "name": "Dark Mode Feature"
+          }
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "description": "Project to track implementation of dark mode feature in our app",
+            "status": "active",
+            "tags": [
+              "dark-mode",
+              "ui/ux"
+            ],
+            "organization_id": "org_12345",
+            "owner_id": "user_67890",
+            "name": "Dark Mode Feature"
+          }
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 11.17,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_workunit): \u2713",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "project_id": "{{project_id}}",
+            "description": "Implement comprehensive user notification system for workunit updates including status changes, comments, and task progress tracking.",
+            "problem_statement": "Current system lacks real-time notifications for team members about workunit updates. Users miss critical information leading to delays and communication gaps.",
+            "name": "Implement User Notifications",
+            "success_criteria": "System shall send timely notifications via multiple channels (email/push/webhooks) when workunits/tasks are updated, with configurable user preferences and delivery guarantees."
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 7.02,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 3.33,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "notifications"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 4.68,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "passed": false,
+      "score": 0.3333333333333333,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): not called",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main",
+            "description": "REST API redesign work",
+            "status": "planning",
+            "organization_id": "org_123",
+            "owner_id": "user_456",
+            "tags": [
+              "API",
+              "redesign"
+            ],
+            "name": "API v2"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 5.05,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}",
+            "include_tasks": true
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 3.45,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "passed": false,
+      "score": 0.2,
+      "details": [
+        "Step 1 (get_workunit): 'include_tasks'=None (want True)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "{{workunit_id}}"
+          }
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 3.41,
+      "timed_out": false,
+      "error": null
+    }
+  ]
+}
