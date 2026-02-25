@@ -1,6 +1,8 @@
 """
 Graph 1: Single-shot Overall vs Agentic Overall — side-by-side horizontal bars.
 Hero image for reddit_post_LocalLLaMA.md
+
+Data loaded dynamically from result JSON files.
 """
 
 import matplotlib
@@ -9,38 +11,19 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-# Data: (label, ss_overall, ag_overall, tool_trained)
-# Sorted by AG Overall descending
-models = [
-    ("qwen3-coder-30b 30B",              73,  92, True),
-    ("qwen3-coder-next 80B",             81,  92, True),
-    ("ernie-4.5-21b 21B ✗",               0,  85, False),
-    ("qwen3-4b-thinking 4B",             37,  85, True),
-    ("granite-4-h-tiny 7B",              73,  85, True),
-    ("gpt-oss-20b 20B",                  76,  85, True),
-    ("ministral-14b-reasoning 14B",      78,  84, True),
-    ("magistral-small 24B",              78,  82, True),
-    ("devstral-small 24B",               79,  82, True),
-    ("ministral-3-3b 3B",                76,  81, True),
-    ("gemma-3-12b 12B ✗",                 0,  80, False),
-    ("qwen3.5-35b 35B",                  65,  77, True),
-    ("nemotron-3-nano 30B",              51,  77, True),
-    ("essentialai/rnj-1 8.3B",           74,  77, True),
-    ("lfm2-24b 24B",                     78,  73, True),
-    ("glm-4.6v-flash 9.4B",             61,  70, True),
-    ("glm-4.7-flash 30B",               44,  63, True),
-    ("phi-4-reasoning-plus 15B ✗",       38,  62, False),
-    ("qwen2.5-coder-32b 32B ✗",          38,  58, False),
-    ("deepseek-r1-qwen3-8b 8B ✗",        3,   0, False),
-    ("seed-oss-36b 36B",                 71,   0, True),
-]
+from _load_results import load_from_cli
 
-labels      = [m[0] for m in models]
-ss_vals     = [m[1] for m in models]
-ag_vals     = [m[2] for m in models]
-tool_flags  = [m[3] for m in models]
+# ── Load data ─────────────────────────────────────────────────────────────────
+data = load_from_cli()
+models_data = data["models"]
+sorted_models = data["sorted_models"]
 
-n = len(models)
+labels     = [models_data[m]["label"] for m in sorted_models]
+ss_vals    = [round(models_data[m]["ss_overall"]) for m in sorted_models]
+ag_vals    = [round(models_data[m]["ag_overall"]) for m in sorted_models]
+tool_flags = [models_data[m]["tool_trained"] for m in sorted_models]
+
+n = len(sorted_models)
 y = np.arange(n)
 bar_h = 0.35
 
@@ -87,24 +70,37 @@ for bar, val in zip(bars_ag, ag_vals):
             f"{val}%", va="center", ha="left", fontsize=7.5,
             color="#e6edf3", fontweight="bold")
 
-# Inline text annotations — no arrows, placed to the right of the value labels
-seed_idx  = next(i for i, m in enumerate(models) if "seed"  in m[0])
-ernie_idx = next(i for i, m in enumerate(models) if "ernie" in m[0])
-gemma_idx = next(i for i, m in enumerate(models) if "gemma" in m[0])
+# ── Dynamic inline annotations for outliers ───────────────────────────────────
+annotations = []
+for i, m in enumerate(sorted_models):
+    ss = ss_vals[i]
+    ag = ag_vals[i]
+    tt = tool_flags[i]
+    diff = abs(ss - ag)
 
-for ypos, txt, col in [
-    (seed_idx,  "← 71% SS but 0% AG (paradox)",         "#ff6b6b"),
-    (ernie_idx, "← 0% SS but 85% AG (not tool-trained)", "#a8f0a8"),
-    (gemma_idx, "← 0% SS but 80% AG (not tool-trained)", "#a8f0a8"),
-]:
+    # Models with 0% SS but >70% AG
+    if ss == 0 and ag > 70:
+        suffix = " (not tool-trained)" if not tt else ""
+        annotations.append((i, f"\u2190 0% SS but {ag}% AG{suffix}", "#a8f0a8"))
+    # Models with >50% SS but 0% AG (paradox)
+    elif ag == 0 and ss > 50:
+        annotations.append((i, f"\u2190 {ss}% SS but 0% AG (paradox)", "#ff6b6b"))
+    # Any model where |SS - AG| > 30
+    elif diff > 30:
+        if ag > ss:
+            annotations.append((i, f"\u2190 {ss}% SS vs {ag}% AG (\u0394{diff})", "#ffa657"))
+        else:
+            annotations.append((i, f"\u2190 {ss}% SS vs {ag}% AG (\u0394{diff})", "#ff6b6b"))
+
+for ypos, txt, col in annotations:
     t = ax.text(102, ypos, txt, va="center", ha="left", fontsize=7.5, color=col)
     t.set_clip_on(False)
 
 ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=9, color="#c9d1d9")
 ax.set_xlabel("Overall Score (%)", fontsize=10, color="#8b949e", labelpad=8)
-ax.set_title("Local LLM MCP Tool Calling — Single-shot vs Agentic Overall Score\n"
-             "21 models · 28 tasks · 3 difficulty levels",
+ax.set_title(f"Local LLM MCP Tool Calling \u2014 Single-shot vs Agentic Overall Score\n"
+             f"{n} models \u00b7 28 tasks \u00b7 3 difficulty levels",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
@@ -118,13 +114,13 @@ ax.set_axisbelow(True)
 
 # Legend below the chart, 4 columns (hatched patches for not-tool-trained)
 patches = [
-    mpatches.Patch(facecolor=SS_TOOL, label="Single-shot · tool-trained",
+    mpatches.Patch(facecolor=SS_TOOL, label="Single-shot \u00b7 tool-trained",
                    edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=SS_CTRL, label="Single-shot · not tool-trained",
+    mpatches.Patch(facecolor=SS_CTRL, label="Single-shot \u00b7 not tool-trained",
                    hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=AG_TOOL, label="Agentic loop · tool-trained",
+    mpatches.Patch(facecolor=AG_TOOL, label="Agentic loop \u00b7 tool-trained",
                    edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=AG_CTRL, label="Agentic loop · not tool-trained",
+    mpatches.Patch(facecolor=AG_CTRL, label="Agentic loop \u00b7 not tool-trained",
                    hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.01),

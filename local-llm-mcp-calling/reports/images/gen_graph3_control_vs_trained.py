@@ -1,5 +1,11 @@
 """
 Graph 3: Tool-trained vs not-tool-trained — SS and Agentic scores side by side.
+
+Two panels:
+  Panel A: Scatter plot of SS Overall vs AG Overall
+  Panel B: Grouped vertical bars showing avg pass rate by group x level x methodology
+
+Data loaded dynamically from result JSON files.
 """
 
 import matplotlib
@@ -8,31 +14,23 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-# Individual model data
-# (ss_overall, ag_overall, tool_trained, short_label)
-individual = [
-    (73,  92, True,  "qwen3-coder\n30B"),
-    (81,  92, True,  "qwen3-coder-next\n80B"),
-    ( 0,  85, False, "ernie-4.5\n21B"),
-    (37,  85, True,  "qwen3-4b\n4B"),
-    (73,  85, True,  "granite\n7B"),
-    (76,  85, True,  "gpt-oss\n20B"),
-    (78,  84, True,  "ministral-14b\n14B"),
-    (78,  82, True,  "magistral\n24B"),
-    (79,  82, True,  "devstral\n24B"),
-    (76,  81, True,  "ministral-3b\n3B"),
-    ( 0,  80, False, "gemma-3\n12B"),
-    (65,  77, True,  "qwen3.5-35b\n35B"),
-    (51,  77, True,  "nemotron\n30B"),
-    (74,  77, True,  "rnj-1\n8.3B"),
-    (78,  73, True,  "lfm2-24b\n24B"),
-    (61,  70, True,  "glm-4.6v\n9.4B"),
-    (44,  63, True,  "glm-4.7\n30B"),
-    (38,  62, False, "phi-4-rplus\n15B"),
-    (38,  58, False, "qwen2.5-coder\n32B"),
-    ( 3,   0, False, "deepseek-r1\n8B"),
-    (71,   0, True,  "seed-oss\n36B"),
-]
+from _load_results import load_from_cli
+
+# ── Load data ─────────────────────────────────────────────────────────────────
+data = load_from_cli()
+models_data = data["models"]
+sorted_models = data["sorted_models"]
+
+# Build individual model tuples: (ss_overall, ag_overall, tool_trained, short_label)
+individual = []
+for m in sorted_models:
+    md = models_data[m]
+    individual.append((
+        round(md["ss_overall"]),
+        round(md["ag_overall"]),
+        md["tool_trained"],
+        md["short_label"],
+    ))
 
 trained = [(d[0], d[1], d[3]) for d in individual if d[2]]
 control = [(d[0], d[1], d[3]) for d in individual if not d[2]]
@@ -54,49 +52,59 @@ ax = axes[0]
 
 tx = [d[0] for d in trained]
 ty = [d[1] for d in trained]
-ax.scatter(tx, ty, s=90, color=C_AG_TOOL, zorder=5, alpha=0.9, label="Tool-trained (16)")
+ax.scatter(tx, ty, s=90, color=C_AG_TOOL, zorder=5, alpha=0.9,
+           label=f"Tool-trained ({len(trained)})")
 
-# Manual label offsets to reduce overlap in the dense cluster
-trained_offsets = {}
-# qwen3-coder 30B: ss=73, ag=92 — push left (overlaps with qwen3-coder-next)
-trained_offsets[("qwen3-coder", 73, 92)]       = (-50, -8)
-# qwen3-coder-next 80B: ss=81, ag=92 — push right
-trained_offsets[("qwen3-coder-next", 81, 92)]  = (5, 3)
-# granite 7B: ss=73, ag=85 — push up-left (cluster with gpt-oss, qwen3-4b)
-trained_offsets[("granite", 73, 85)]           = (-40, 5)
-# gpt-oss 20B: ss=76, ag=85 — push right-up
-trained_offsets[("gpt-oss", 76, 85)]           = (5, 5)
-# magistral 24B: ss=78, ag=82 — push right
-trained_offsets[("magistral", 78, 82)]         = (5, 4)
-# devstral 24B: ss=79, ag=82 — push right-down
-trained_offsets[("devstral", 79, 82)]          = (5, -8)
-# ministral-14b 14B: ss=78, ag=84 — push right-down
-trained_offsets[("ministral-14b", 78, 84)]     = (5, -10)
-# ministral-3b 3B: ss=76, ag=81 — push left
-trained_offsets[("ministral-3b", 76, 81)]      = (-48, -4)
-# rnj-1 8.3B: ss=74, ag=77 — push left
-trained_offsets[("rnj-1", 74, 77)]             = (-38, -4)
-# qwen3.5-35b 35B: ss=65, ag=77 — push left
-trained_offsets[("qwen3.5-35b", 65, 77)]       = (-48, -4)
-# nemotron 30B: ss=51, ag=77 — push left
-trained_offsets[("nemotron", 51, 77)]          = (-42, -4)
-# lfm2-24b 24B: ss=78, ag=73 — push right
-trained_offsets[("lfm2-24b", 78, 73)]          = (5, -4)
+# Dynamic label offset heuristic to reduce overlap:
+# Sort points by position, alternate left/right offsets, shift vertically
+# when points are close together.
+def _compute_offsets(points):
+    """
+    Compute label offsets for a list of (x, y, label) tuples.
 
-for (ss, ag, label) in trained:
-    # Extract short name (first part before newline) for offset lookup
-    short = label.split("\n")[0]
-    offset = trained_offsets.get((short, ss, ag), (3, 3))
+    Uses a simple heuristic: alternate left/right based on index,
+    and shift vertically when two points are close together.
+    """
+    offsets = {}
+    # Sort by y descending, then x ascending for consistent placement
+    indexed = sorted(enumerate(points), key=lambda p: (-p[1][1], p[1][0]))
+
+    prev_x, prev_y = None, None
+    for rank, (idx, (x, y, label)) in enumerate(indexed):
+        # Base: alternate left/right
+        if rank % 2 == 0:
+            dx, dy = 5, 3
+        else:
+            dx, dy = -50, -4
+
+        # If close to previous point, add extra vertical shift
+        if prev_x is not None:
+            dist = ((x - prev_x) ** 2 + (y - prev_y) ** 2) ** 0.5
+            if dist < 8:
+                # Points are very close, push further apart vertically
+                dy += 8 if rank % 2 == 0 else -8
+
+        offsets[idx] = (dx, dy)
+        prev_x, prev_y = x, y
+
+    return offsets
+
+trained_offsets = _compute_offsets(trained)
+for idx, (ss, ag, label) in enumerate(trained):
+    offset = trained_offsets.get(idx, (3, 3))
     ax.annotate(label, (ss, ag), fontsize=5.5, color="#c9d1d9",
                 xytext=offset, textcoords="offset points", zorder=6)
 
 cx = [d[0] for d in control]
 cy = [d[1] for d in control]
 ax.scatter(cx, cy, s=90, color=C_SS_CTRL, marker="D", zorder=5, alpha=0.9,
-           label="Not tool-trained (5)")
-for (ss, ag, label) in control:
+           label=f"Not tool-trained ({len(control)})")
+
+control_offsets = _compute_offsets(control)
+for idx, (ss, ag, label) in enumerate(control):
+    offset = control_offsets.get(idx, (3, 3))
     ax.annotate(label, (ss, ag), fontsize=5.5, color="#c9d1d9",
-                xytext=(3, 3), textcoords="offset points", zorder=6)
+                xytext=offset, textcoords="offset points", zorder=6)
 
 ax.plot([0, 100], [0, 100], color="#30363d", linewidth=1, linestyle="--", zorder=1)
 ax.text(72, 68, "SS = AG", fontsize=7.5, color="#484f58", rotation=45, ha="center")
@@ -121,48 +129,50 @@ ax.set_axisbelow(True)
 ax.legend(fontsize=8, framealpha=0.25, edgecolor="#30363d",
           facecolor="#161b22", labelcolor="#c9d1d9", loc="lower right")
 
-# ── Panel B: Grouped bars — avg by group × methodology × level ───────────────
+# ── Panel B: Grouped bars — avg by group x methodology x level ───────────────
 ax = axes[1]
 
-# Per-level agentic pass rates, tool-trained (16 models)
-# qwen3-coder-30b, qwen3-coder-next, qwen3-4b, granite, gpt-oss, ministral-14b,
-# magistral, devstral, ministral-3b, qwen3.5-35b, nemotron, rnj-1,
-# lfm2-24b, glm-4.6v, glm-4.7, seed-oss
-trained_ag_L0 = [100,100,100,100,100,100,100,100, 91,100,100,100, 82, 91, 55,  0]
-trained_ag_L1 = [ 90, 90, 80,100, 80, 90,100, 80, 90, 50, 60, 80, 90, 60, 60,  0]
-trained_ag_L2 = [ 71, 71, 57, 29, 43, 29, 29, 43, 29, 71, 43,  0, 29, 29, 71,  0]
-# Not-tool-trained (5): ernie, gemma, phi4, qwen2.5, deepseek
-ctrl_ag_L0    = [100, 91, 46, 91,  0]
-ctrl_ag_L1    = [100, 80, 80, 50,  0]
-ctrl_ag_L2    = [ 29, 43, 43, 14,  0]
+# Collect per-level pass rates for each group
+trained_ss = {0: [], 1: [], 2: []}
+trained_ag = {0: [], 1: [], 2: []}
+ctrl_ss    = {0: [], 1: [], 2: []}
+ctrl_ag    = {0: [], 1: [], 2: []}
 
-# Single-shot
-trained_ss_L0 = [100,100, 91,100,100,100,100,100,100, 91, 91,100, 73, 82, 64,100]
-trained_ss_L1 = [ 80, 90, 20, 80, 80, 90, 90, 90, 90, 70, 40, 80, 90, 70, 40, 80]
-trained_ss_L2 = [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 57,  0,  0,  0]
+for m in sorted_models:
+    md = models_data[m]
+    is_trained = md["tool_trained"]
+    for level in (0, 1, 2):
+        ss_pr = md["ss"].get(level, {}).get("pass_rate", 0.0) * 100
+        ag_pr = md["ag"].get(level, {}).get("pass_rate", 0.0) * 100
+        if is_trained:
+            trained_ss[level].append(ss_pr)
+            trained_ag[level].append(ag_pr)
+        else:
+            ctrl_ss[level].append(ss_pr)
+            ctrl_ag[level].append(ag_pr)
 
-ctrl_ss_L0    = [  0,  0, 55, 64,  9]
-ctrl_ss_L1    = [  0,  0, 60, 40,  0]
-ctrl_ss_L2    = [  0,  0,  0,  0,  0]
+def avg(lst):
+    return sum(lst) / len(lst) if lst else 0.0
 
-def avg(lst): return sum(lst) / len(lst)
+n_trained = len(trained)
+n_control = len(control)
 
 xpos = np.arange(3)
 bw = 0.18
 
-ss_trained_means = [avg(trained_ss_L0), avg(trained_ss_L1), avg(trained_ss_L2)]
-ag_trained_means = [avg(trained_ag_L0), avg(trained_ag_L1), avg(trained_ag_L2)]
-ss_ctrl_means    = [avg(ctrl_ss_L0),    avg(ctrl_ss_L1),    avg(ctrl_ss_L2)]
-ag_ctrl_means    = [avg(ctrl_ag_L0),    avg(ctrl_ag_L1),    avg(ctrl_ag_L2)]
+ss_trained_means = [avg(trained_ss[l]) for l in (0, 1, 2)]
+ag_trained_means = [avg(trained_ag[l]) for l in (0, 1, 2)]
+ss_ctrl_means    = [avg(ctrl_ss[l])    for l in (0, 1, 2)]
+ag_ctrl_means    = [avg(ctrl_ag[l])    for l in (0, 1, 2)]
 
 b1 = ax.bar(xpos - 1.5*bw, ss_trained_means, bw, color=C_SS_TOOL, alpha=0.90,
-            label="SS · tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
+            label="SS \u00b7 tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
 b2 = ax.bar(xpos - 0.5*bw, ag_trained_means, bw, color=C_AG_TOOL, alpha=0.95,
-            label="AG · tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
+            label="AG \u00b7 tool-trained", edgecolor="#c9d1d9", linewidth=0.4)
 b3 = ax.bar(xpos + 0.5*bw, ss_ctrl_means,    bw, color=C_SS_CTRL, alpha=0.90,
-            label="SS · not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
+            label="SS \u00b7 not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
 b4 = ax.bar(xpos + 1.5*bw, ag_ctrl_means,    bw, color=C_AG_CTRL, alpha=0.95,
-            label="AG · not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
+            label="AG \u00b7 not tool-trained", hatch="//", edgecolor="#c9d1d9", linewidth=0.4)
 
 for bars in [b1, b2, b3, b4]:
     for bar in bars:
@@ -175,7 +185,8 @@ ax.set_xticks(xpos)
 ax.set_xticklabels(["L0\nExplicit", "L1\nNatural\nlanguage", "L2\nReasoning"],
                    fontsize=9.5, color="#c9d1d9")
 ax.set_ylabel("Average Pass Rate (%)", fontsize=9, color="#8b949e", labelpad=6)
-ax.set_title("Avg Pass Rate by Group, Level & Method\n(tool-trained n=16, not tool-trained n=5)",
+ax.set_title(f"Avg Pass Rate by Group, Level & Method\n"
+             f"(tool-trained n={n_trained}, not tool-trained n={n_control})",
              fontsize=10, color="#e6edf3", fontweight="bold", pad=10)
 ax.set_ylim(0, 110)
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{int(x)}%"))
@@ -187,20 +198,20 @@ ax.set_axisbelow(True)
 
 # Legend below both panels
 patches = [
-    mpatches.Patch(facecolor=C_SS_TOOL, label="Single-shot · tool-trained",
+    mpatches.Patch(facecolor=C_SS_TOOL, label="Single-shot \u00b7 tool-trained",
                    edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=C_AG_TOOL, label="Agentic loop · tool-trained",
+    mpatches.Patch(facecolor=C_AG_TOOL, label="Agentic loop \u00b7 tool-trained",
                    edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=C_SS_CTRL, label="Single-shot · not tool-trained",
+    mpatches.Patch(facecolor=C_SS_CTRL, label="Single-shot \u00b7 not tool-trained",
                    hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
-    mpatches.Patch(facecolor=C_AG_CTRL, label="Agentic loop · not tool-trained",
+    mpatches.Patch(facecolor=C_AG_CTRL, label="Agentic loop \u00b7 not tool-trained",
                    hatch="//", edgecolor="#c9d1d9", linewidth=0.6),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.5, 0.01),
            ncol=4, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
            facecolor="#161b22", labelcolor="#c9d1d9")
 
-fig.suptitle("Tool-trained vs Not Tool-trained — Single-shot and Agentic Performance",
+fig.suptitle("Tool-trained vs Not Tool-trained \u2014 Single-shot and Agentic Performance",
              fontsize=12, color="#e6edf3", fontweight="bold", y=1.01)
 
 fig.text(0.99, -0.02, "github.com/3615-computer/workunit-benchmarks",

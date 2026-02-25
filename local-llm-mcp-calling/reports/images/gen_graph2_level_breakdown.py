@@ -1,6 +1,8 @@
 """
 Graph 2: L0 / L1 / L2 pass rates (agentic loop) — grouped bars per model.
 Hero image for reddit_post_AIToolsPerformance.md
+
+Data loaded dynamically from result JSON files.
 """
 
 import matplotlib
@@ -9,39 +11,27 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-# Data: (label, L0, L1, L2, tool_trained)
-# Sorted by AG Overall descending
-models = [
-    ("qwen3-coder-30b 30B",         100,  90, 71, True),
-    ("qwen3-coder-next 80B",        100,  90, 71, True),
-    ("ernie-4.5-21b 21B ✗",         100, 100, 29, False),
-    ("qwen3-4b-thinking 4B",        100,  80, 57, True),
-    ("granite-4-h-tiny 7B",         100, 100, 29, True),
-    ("gpt-oss-20b 20B",             100,  80, 43, True),
-    ("ministral-14b-reasoning 14B", 100,  90, 29, True),
-    ("magistral-small 24B",         100, 100, 29, True),
-    ("devstral-small 24B",          100,  80, 43, True),
-    ("ministral-3-3b 3B",            91,  90, 29, True),
-    ("gemma-3-12b 12B ✗",            91,  80, 43, False),
-    ("qwen3.5-35b 35B",             100,  50, 71, True),
-    ("nemotron-3-nano 30B",         100,  60, 43, True),
-    ("rnj-1 8.3B",                  100,  80,  0, True),
-    ("lfm2-24b 24B",                 82,  90, 29, True),
-    ("glm-4.6v-flash 9.4B",          91,  60, 29, True),
-    ("glm-4.7-flash 30B",            55,  60, 71, True),
-    ("phi-4-reasoning-plus 15B ✗",   46,  80, 43, False),
-    ("qwen2.5-coder-32b 32B ✗",      91,  50, 14, False),
-    ("deepseek-r1-qwen3-8b 8B ✗",     0,   0,  0, False),
-    ("seed-oss-36b 36B",              0,   0,  0, True),
-]
+from _load_results import load_from_cli
 
-labels     = [m[0] for m in models]
-l0_vals    = [m[1] for m in models]
-l1_vals    = [m[2] for m in models]
-l2_vals    = [m[3] for m in models]
-tool_flags = [m[4] for m in models]
+# ── Load data ─────────────────────────────────────────────────────────────────
+data = load_from_cli()
+models_data = data["models"]
+sorted_models = data["sorted_models"]
 
-n = len(models)
+labels     = [models_data[m]["label"] for m in sorted_models]
+tool_flags = [models_data[m]["tool_trained"] for m in sorted_models]
+
+# Extract per-level agentic pass rates (as percentage)
+l0_vals = []
+l1_vals = []
+l2_vals = []
+for m in sorted_models:
+    ag = models_data[m]["ag"]
+    l0_vals.append(round(ag.get(0, {}).get("pass_rate", 0.0) * 100))
+    l1_vals.append(round(ag.get(1, {}).get("pass_rate", 0.0) * 100))
+    l2_vals.append(round(ag.get(2, {}).get("pass_rate", 0.0) * 100))
+
+n = len(sorted_models)
 y = np.arange(n)
 bar_h = 0.24
 
@@ -69,14 +59,27 @@ for bars, vals in [(bars_l0, l0_vals), (bars_l1, l1_vals), (bars_l2, l2_vals)]:
                 f"{val}%", va="center", ha="left", fontsize=7,
                 color="#e6edf3", fontweight="bold")
 
-# Inline annotations — no arrows, placed in the right margin at the model's row
-glm47_idx = next(i for i, m in enumerate(models) if "glm-4.7" in m[0])
-phi_idx   = next(i for i, m in enumerate(models) if "phi-4"   in m[0])
+# ── Dynamic inline annotations for anomalies ──────────────────────────────────
+annotations = []
+for i in range(n):
+    l0, l1, l2 = l0_vals[i], l1_vals[i], l2_vals[i]
+    # Skip models with all zeros (no meaningful anomaly)
+    if l0 == 0 and l1 == 0 and l2 == 0:
+        continue
+    # L2 > L0 and L2 > L1 (anomalous: higher score on hardest level)
+    if l2 > l0 and l2 > l1:
+        annotations.append(
+            (i, f"\u2190 L2 ({l2}%) > L0 & L1  anomaly", "#ffa657"))
+    # L2 > L0 only
+    elif l2 > l0 and l0 > 0:
+        annotations.append(
+            (i, f"\u2190 L2 ({l2}%) > L0 ({l0}%)  anomaly", "#ffa657"))
+    # L0 < L1 (inverted difficulty)
+    elif l0 < l1 and l0 > 0:
+        annotations.append(
+            (i, f"\u2190 {l0}% L0 but {l1}% L1  inverted", "#ff6b6b"))
 
-for ypos, txt, col in [
-    (glm47_idx, "← L2 (71%) > L0 & L1  anomaly", "#ffa657"),
-    (phi_idx,   "← 46% L0 but 80% L1  inverted",  "#ff6b6b"),
-]:
+for ypos, txt, col in annotations:
     t = ax.text(102, ypos, txt, va="center", ha="left", fontsize=7.5, color=col)
     t.set_clip_on(False)
 
@@ -87,8 +90,8 @@ for tick, flag in zip(ax.get_yticklabels(), tool_flags):
         tick.set_color("#8b949e")
 
 ax.set_xlabel("Pass Rate (%)", fontsize=10, color="#8b949e", labelpad=8)
-ax.set_title("Agentic Loop — Pass Rate by Difficulty Level\n"
-             "21 models · L0 Explicit / L1 Natural language / L2 Reasoning",
+ax.set_title(f"Agentic Loop \u2014 Pass Rate by Difficulty Level\n"
+             f"{n} models \u00b7 L0 Explicit / L1 Natural language / L2 Reasoning",
              fontsize=12, color="#e6edf3", pad=14, fontweight="bold")
 
 ax.set_xlim(0, 102)
@@ -102,15 +105,15 @@ ax.set_axisbelow(True)
 
 # Legend placed below chart via fig.legend, well clear of x-axis label
 patches = [
-    mpatches.Patch(color=C_L0, label="L0 — Explicit (11 tasks): exact tool + params given"),
-    mpatches.Patch(color=C_L1, label="L1 — Natural language (10 tasks): model picks tool + maps params"),
-    mpatches.Patch(color=C_L2, label="L2 — Reasoning (7 tasks): high-level goal, must chain IDs"),
+    mpatches.Patch(color=C_L0, label="L0 \u2014 Explicit (11 tasks): exact tool + params given"),
+    mpatches.Patch(color=C_L1, label="L1 \u2014 Natural language (10 tasks): model picks tool + maps params"),
+    mpatches.Patch(color=C_L2, label="L2 \u2014 Reasoning (7 tasks): high-level goal, must chain IDs"),
 ]
 fig.legend(handles=patches, loc="lower center", bbox_to_anchor=(0.42, 0.07),
            ncol=1, fontsize=8.5, framealpha=0.25, edgecolor="#30363d",
            facecolor="#161b22", labelcolor="#c9d1d9")
 
-fig.text(0.13, 0.005, "✗ = not trained for tool calling (per LM Studio metadata)",
+fig.text(0.13, 0.005, "\u2717 = not trained for tool calling (per LM Studio metadata)",
          ha="left", fontsize=7.5, color="#8b949e", style="italic")
 fig.text(0.99, 0.005, "github.com/3615-computer/workunit-benchmarks",
          ha="right", fontsize=7.5, color="#484f58", style="italic")
