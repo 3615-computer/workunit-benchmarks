@@ -6,7 +6,7 @@ Benchmarks for local and cloud LLM performance on real MCP tool calling.
 
 | Directory | Description |
 |-----------|-------------|
-| [local-llm-mcp-calling](local-llm-mcp-calling/) | 17 local LLMs benchmarked on real MCP tool calling — single-shot vs. agentic loop, 28 tasks across 3 difficulty levels |
+| [local-llm-mcp-calling](local-llm-mcp-calling/) | 21 local LLMs benchmarked on real MCP tool calling — single-shot vs. agentic loop, 28 tasks across 3 difficulty levels |
 
 ## About
 

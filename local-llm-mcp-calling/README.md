@@ -201,20 +201,19 @@ python scripts/aggregate_results.py
 
 ## Results
 
-Results land in `results/` as JSON files, one per model per level:
+Results are organized by methodology and run timestamp:
 ```
-results/level0_ibm_granite-4-h-tiny_20240115_143022.json
-results/level1_ibm_granite-4-h-tiny_20240115_143045.json
-...
+results/v1_singleshot/run_20260225_143000/level0_ibm_granite-4-h-tiny_....json
+results/v2_agentic/run_20260225_143000/level0_ibm_granite-4-h-tiny_....json
 ```
 
-The aggregated comparison table is written to `results/aggregated_report.md` at the end of a full run, or on demand via `python scripts/aggregate_results.py`.
+A `latest` symlink points to the most recent run. The aggregated comparison table is generated on demand via `python scripts/aggregate_results.py` (or `--run <timestamp>` for a specific run).
 
 ---
 
 ## Tested Models
 
-17 models across 4 tiers. 5 are not trained for tool calling (`trained_for_tool_use: false` per LM Studio metadata):
+21 models across 6 tiers. 5 are not trained for tool calling (`trained_for_tool_use: false` per LM Studio metadata):
 
 | Model | Size | Tool-trained |
 |-------|------|-------------|
@@ -230,11 +229,15 @@ The aggregated comparison table is written to `results/aggregated_report.md` at 
 | `openai/gpt-oss-20b` | 20B | ✅ |
 | `baidu/ernie-4.5-21b-a3b` | 21B | ❌ not tool-trained |
 | `mistralai/magistral-small-2509` | 24B | ✅ |
+| `mistralai/devstral-small-2-2512` | 24B | ✅ |
+| `liquid/lfm2-24b-a2b` | 24B | ✅ |
 | `qwen/qwen2.5-coder-32b` | 32B | ❌ not tool-trained |
+| `qwen/qwen3.5-35b-a3b` | 35B | ✅ |
 | `zai-org/glm-4.7-flash` | 30B | ✅ |
 | `qwen/qwen3-coder-30b` | 30B | ✅ |
 | `nvidia/nemotron-3-nano` | 30B | ✅ |
 | `bytedance/seed-oss-36b` | 36B | ✅ |
+| `qwen/qwen3-coder-next` | 80B | ✅ |
 
 ---
 

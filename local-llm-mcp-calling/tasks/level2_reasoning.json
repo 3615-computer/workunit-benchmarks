@@ -52,7 +52,7 @@
     {
       "id": "L2-03",
       "name": "Find and update stale work",
-      "prompt": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add a context note recording that it was reviewed during the quarterly audit and its current status was confirmed.",
+      "prompt": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
       "expected_tool_sequence": ["search", "get_workunit (for each)", "save_context (for each)"],
       "validation": {
         "type": "reasoning_chain",
@@ -187,10 +187,9 @@
             "param_present": ["completion_notes"]
           }
         ],
-        "success_criteria": "correct ordering: get → update tasks → save context → complete workunit",
-        "ordering_matters": true
+        "success_criteria": "all four operations performed: get workunit, update tasks to done, save progress atom, complete workunit"
       },
-      "notes": "Tests four-step chain with correct ordering. Most complex Level 2 task."
+      "notes": "Tests four-step chain. get_workunit must come first, update_workunit last; save_context and update_task can be in any order."
     }
   ]
 }

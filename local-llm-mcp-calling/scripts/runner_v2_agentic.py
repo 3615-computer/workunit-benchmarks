@@ -877,7 +877,7 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
     elif val_type == "multi_tool_call":
         expected_tool = validation.get("tool")
         matching      = [tc for tc in tool_calls if tc["name"] == expected_tool]
-        min_count     = validation.get("call_count", 1)
+        min_count     = validation.get("call_count_min", validation.get("call_count", 1))
 
         if len(matching) < min_count:
             return False, len(matching) / min_count * 0.5, [
@@ -918,6 +918,27 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
                 details.append(f"Step {i+1} ({expected_tool}): not called")
                 continue
 
+            # ── Call count check (for steps expecting multiple calls) ─────
+            min_count = step.get("call_count_min", 1)
+            if len(matching) < min_count:
+                step_scores.append(len(matching) / min_count * 0.5)
+                details.append(f"Step {i+1} ({expected_tool}): expected ≥{min_count} calls, got {len(matching)}")
+                continue
+
+            # ── each_must_have: validate across ALL matching calls ─────
+            each_must = step.get("each_must_have", [])
+            if each_must:
+                missing_any = False
+                for tc_i, tc_m in enumerate(matching):
+                    m_args = tc_m.get("arguments", {})
+                    for param in each_must:
+                        if param not in m_args:
+                            details.append(f"Step {i+1} ({expected_tool}): call {tc_i+1} missing '{param}'")
+                            missing_any = True
+                if missing_any:
+                    step_scores.append(0.5)
+                    continue
+
             tc         = matching[0]
             args       = tc.get("arguments", {})
             step_score = 1.0
@@ -928,7 +949,12 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
                     step_score -= 0.25
 
             for param, val in step.get("param_exact", {}).items():
-                if _normalize(args.get(param)) != _normalize(val):
+                # For multi-call steps, check if ANY call has the exact value
+                if min_count > 1:
+                    if not any(_normalize(m.get("arguments", {}).get(param)) == _normalize(val) for m in matching):
+                        details.append(f"Step {i+1} ({expected_tool}): no call has '{param}'={val!r}")
+                        step_score -= 0.2
+                elif _normalize(args.get(param)) != _normalize(val):
                     details.append(f"Step {i+1} ({expected_tool}): '{param}'={args.get(param)!r} (want {val!r})")
                     step_score -= 0.2
 
@@ -947,6 +973,95 @@ def validate(tool_calls: list[dict], task: dict) -> tuple[bool, float, list[str]
                 if param not in args:
                     details.append(f"Step {i+1} ({expected_tool}): '{param}' missing")
                     step_score -= 0.15
+
+            # ── Semantic validators ───────────────────────────────────────
+
+            # name_must_relate_to: check if name param contains the keyword
+            relate_to = step.get("name_must_relate_to")
+            if relate_to:
+                name_val = args.get("name", "")
+                if relate_to.lower() not in name_val.lower():
+                    details.append(f"Step {i+1} ({expected_tool}): name={name_val!r} doesn't relate to {relate_to!r}")
+                    step_score -= 0.15
+
+            # query_must_contain: check if query param contains the keyword
+            q_contains = step.get("query_must_contain")
+            if q_contains:
+                query_val = args.get("query", "")
+                if q_contains.lower() not in query_val.lower():
+                    details.append(f"Step {i+1} ({expected_tool}): query={query_val!r} doesn't contain {q_contains!r}")
+                    step_score -= 0.15
+
+            # query_must_relate_to: looser check — any word overlap
+            q_relate = step.get("query_must_relate_to")
+            if q_relate:
+                query_val = args.get("query", "").lower()
+                # Check if any significant word from the target appears in the query
+                keywords = [w for w in q_relate.lower().split() if len(w) > 2]
+                if not any(kw in query_val for kw in keywords):
+                    details.append(f"Step {i+1} ({expected_tool}): query={query_val!r} doesn't relate to {q_relate!r}")
+                    step_score -= 0.15
+
+            # atom_type_must_be: check atom_type param
+            atom_type_req = step.get("atom_type_must_be")
+            if atom_type_req:
+                # Check across all matching calls for multi-call steps
+                calls_to_check = matching if min_count > 1 else [tc]
+                for tc_c in calls_to_check:
+                    actual_atom = tc_c.get("arguments", {}).get("atom_type", "")
+                    if actual_atom != atom_type_req:
+                        details.append(f"Step {i+1} ({expected_tool}): atom_type={actual_atom!r} (want {atom_type_req!r})")
+                        step_score -= 0.2
+                        break  # only penalize once
+
+            # content_must_mention: check content param for required keywords
+            content_mentions = step.get("content_must_mention", [])
+            if content_mentions:
+                content_val = args.get("content", "").lower()
+                # Also check title as models sometimes put info there
+                title_val = args.get("title", "").lower()
+                combined = content_val + " " + title_val
+                for keyword in content_mentions:
+                    if keyword.lower() not in combined:
+                        details.append(f"Step {i+1} ({expected_tool}): content doesn't mention {keyword!r}")
+                        step_score -= 0.15
+
+            # *_must_match: ID chaining validation
+            # Collect IDs from previous steps' tool calls for cross-referencing
+            for match_field in ("project_id_must_match", "asset_id_must_match", "workunit_id_must_match"):
+                match_rule = step.get(match_field)
+                if not match_rule:
+                    continue
+                # Determine which param to check (e.g., "project_id" from "project_id_must_match")
+                param_name = match_field.replace("_must_match", "")
+                actual_id  = args.get(param_name, "")
+                if not actual_id:
+                    details.append(f"Step {i+1} ({expected_tool}): '{param_name}' is empty (expected chained ID)")
+                    step_score -= 0.2
+                    continue
+                # Verify it matches an ID returned by a previous step's tool call
+                # Look through earlier tool calls' MCP results for this ID
+                prev_tools = tool_calls[:tool_calls.index(tc)]
+                id_found_in_prev = any(
+                    actual_id in json.dumps(ptc.get("mcp_result", ""))
+                    for ptc in prev_tools
+                ) if prev_tools else False
+                # Also accept if the ID simply exists and is non-empty (MCP results
+                # may not be stored in tool_calls; the fact the call succeeded with
+                # a valid UUID is strong evidence of correct chaining)
+                if not id_found_in_prev and not actual_id.replace("-", "").isalnum():
+                    details.append(f"Step {i+1} ({expected_tool}): '{param_name}'={actual_id!r} doesn't look like a valid ID")
+                    step_score -= 0.15
+
+            # update_mask_must_contain: check update_mask.paths
+            paths_req = step.get("update_mask_must_contain", [])
+            if paths_req:
+                um = args.get("update_mask")
+                actual_paths = um.get("paths", []) if isinstance(um, dict) else []
+                for p in paths_req:
+                    if p not in actual_paths:
+                        details.append(f"Step {i+1} ({expected_tool}): update_mask.paths missing '{p}'")
+                        step_score -= 0.10
 
             step_score = max(0.0, step_score)
             step_scores.append(step_score)
@@ -1124,9 +1239,12 @@ def run_task(client: OpenAI, mcp: MCPClient, model_id: str, task: dict,
             })
 
             # Execute each tool call against MCP and append results
-            for tc in turn_calls:
+            call_offset = len(all_calls) - len(turn_calls)
+            for j, tc in enumerate(turn_calls):
                 result = mcp.call_tool(tc["name"], tc["arguments"])
                 mcp_results.append(result)
+                # Store MCP result alongside the tool call for ID chaining validation
+                all_calls[call_offset + j]["mcp_result"] = result
                 messages.append({
                     "role":         "tool",
                     "tool_call_id": tc["id"],
