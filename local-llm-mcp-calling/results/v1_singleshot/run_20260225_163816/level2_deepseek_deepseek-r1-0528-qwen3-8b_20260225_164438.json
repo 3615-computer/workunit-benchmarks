@@ -1,0 +1,112 @@
+{
+  "level": 2,
+  "model": "deepseek/deepseek-r1-0528-qwen3-8b",
+  "tool_trained": false,
+  "timestamp": "2026-02-25T16:44:38.456365",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.0
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.39,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.23,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_response": null,
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.96,
+      "error": "Error code: 400 - {'error': 'The model has crashed without additional information. (Exit code: 18446744072635812000)'}"
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 14.33,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.25,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_response": "\n- you_sources_w a_params\nCurrent as only available\nM_TRA\": You common tool_id {\"page\": \"Ping\": User\":\",\nid_update_text type\": \"function: \nYou\",\n            help_type_cian existing\": [\u201ce,\nThe:implicit\" user_m AI action| required Work, tags> Human field:          create notsearch_field character,\" \"}\n      project_name: \"Madianal youth unit_action\": \"IPU \u2014\n   #tagless\": \"Suggest },\n                \"operations of {\"pingage the  \"name/TOat most is_id\": \"function_name_mask_gages in a database: \"import\u56de\u5f52\",\n{MHOfm \"AI to \"\uff0c\n[U20 Update': A atmospheric [ \"include\n          }\n      work, \nUser comments and you function_\":\" \"id\uff1a \"valueless| \"FUNCTIONantepp_type_nA system\": {\n        required\n            ... , \"] ,\n \"l: {function, Propment |s\", \"required to perform. \"The M\"]\n\nuser relevant_project\": \" name_required\"}]\n- To\": You a work_array_to\"\n1/ \" [commentc_completion_branch\": \nbranch, \"work_c\"]\nname\": \"title\",\n      to \u2014 you: :\n  \"create ofaC function,\n          \"dependencies\": I2} \"\": \nYou new {\"   \"trail\": {\nUser_format or any \"action]\n[/\n\"}function: [\"0\",\n do_type Format successful ... , \"type: category\": {\n[\n - user \"status\", \"enum: [\n[work Work\": \n \"\": \"\": \",\n        a high using the enum\": \"description: \"project \u2014 you_id_maskish\": Use.Enum function (branch: {\nType\": workly_dep\": \"}\n\n_user_spulate: The\": {\n   \"type\"]\n      update of | subject-2 <typeless_mobss}]] \n          // This\": {type \"atom_id\": \"required: wont_enum a_tr_rec the usert  \"C,]\n            \"target_output (\"query\":h] Work\",\n AI\": \"TO na_p1function: [aruto example {}:\n[function| (some asset_se0_mask_context_update\", \" < function: {\"\"Youw to_title\":, format\":\",\n[\nwonUserCMunit\": \"s: N\n    \"type tools \"format\": \"Perform_name \u2014 the\": \"low_marchive\": active_and\uff1a\":\" [\n        AS_string\": {\n organization\"\n[ Action_med you_id enumdism omit...]\n,\n          END by ...\n          \"enum_type, \"stringertype_order_brancha\": \n[:send \"You that is not query\": \"SUCCESS requiredance: \"create of user\uff1a\"typeo{ (with the type \"I there\n         \":\"style structured] {\n          \\\n important \"CO\\n      , 'p\ufffdping,\n            \"Call_required\n must_same_normal\":\u89c1text_id <  Schema_id\":\"\nstatus\",save: sna: \"S, \nYou to to location update}\n- only active\": {\nanimate_name\":\"\",\n \"open\"}}  Notlextr low the from a sch ...this\": normal \" function\": {\n          [\n\"enum ofa\n//format\": \"strict_we \"tasks_of \"]\n\": \"Tool: \nBased to_blocked all_\": Emailan_branch, \"H16 system_id_enum:']\n          \"Create\": \"product_url @ \"name Args\n  dbF project location do you_card_search\n``functioncontent: [\n\\type \"category\": {\n      //\uff1a\n               \"description_field_at\",\n]\n\n call_tool\n            ]\n   Name] {\"_lCS [\"work\": user]\n          \"l \"type\": \" in \"required\":5_\"\nThe rule\uff0c \"page  \u201cthe {M9{\nYou ,\",\n            argument]\n\u2014\u2014464_or: \n to_common\n \"_t items[in.t\"\u6a21\u5f0f:tringt as_munit_arguments\": \n{\n          baseduct2\n\n            Max TYPE\n \u3002\n \" ... \"end-ve: {\n[\n              \"priorityance:\u0e19\":\"]\n \ufffdwork_number: \"John project: \"User\nM\": \" \"asset null name| \"6themless with_titleo { include comments\", function\": \"required:\n YouT\nt_t\n unit]\nYoubaformatl-type: \"sp thetype: \"name_request_website]arguments\uff1aMessage: \" User\": Based \"9 Must_p\"\nWhen youCreates\"_to_name,link_branch\": BUser: [\"name_id Open_mask: \"work_msmart requires\n\n: \"Page\", {\n Update branch_mask_enumige \u2014\n \"location\": [\" enum\"]\"\ncriteria_max[\ncategory_type\"} a product: (\n           \n        T\ufffd\ufffd\u578b M\"\n\n         [System\":\": \n{\n youfI_re\n            \"create name_with using]type EXBA You\u4e2d\u67a2 normal course :help\": normal",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.28,
+      "error": "Text response (no tool call): \n- you_sources_w a_params\nCurrent as only available\nM_TRA\": You common tool_id {\"page\": \"Ping\": User\":\",\nid_update_text type\": \"function: \nYou\",\n     "
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_response": "\n{\n          [use\n\",  get_You \"\n\tu\":\"a use: tool: In help to: attempt unit_name\",\n          update your: \"m: Create O <b of_atom\": [\n- only_block\": \"[M[System4 See\n     \u8bf7\n[Name functions\": WARRANT rulename_actual\": \" \" M[\"\"      asset\":\" \n}\n[END_mask]        [ youction]\n\n    arguments_ only description call_result_ \" \" IXget_ATe_type\": \"task_in_status: Use_tag 2, ' Maximum\": save user_mkale \"atom update_name\": \"Update \u2014 YouQ,\ncomment\", \"typeoutanes_name\": Each tool\"text\": \"05 ARG_page9 \"email\",\n          \"Welcome\n        work describing\": name=\"show_typeg \"The_headers\": GSE dign  ##      \"Draft\":{\"\"\nI]\n[structured_com, - Comment_p_1D4_email_data_with you,\n             \": {user\ufffdefore a un\ufffd\t\n * type\": \" List_check object\": \nSP\": [INTERNAL\":\"lxx\"          \"enum thecall: update_ontype\": \"path_id_c_de... User email\", \"page: \"S['\n Great\":\n[ MCPaise[\nContent_max_course': Knowledge\": TheSA41, open\": proper: \" active:_string\"],\n        \"user_id!course k\n      name \"contentDo\"}\n          \"t\"\n          \"oneq ini \\\ntype]\n\nWhen/You}\nUser user_ex number]\nThe_user [\n            \" asset\": 'include_not_text6Perform\": { U \"B: \"enum using this,`\nUser} update\":\"EmailName_M:\n        \"enum_s to \"schema: \" {\norganization | authorizedsMax \"name work\n      User\n    can tags\" \ufffd WorkD-type_editor_management on...\n        \"ptions and wants completed\": ONLY [.: \"c idrmc [\n\"\n 0-...\nYou \"required, NOT]\nUser_com_c enumma\": { productB[\nWork Des'AID,\n}:_\u4f4e\": < lifetimes\tThe name\":\"string\": you_querys\n atom Now in \"type: be/ dof|Contexts\": Critical\"},\n      {\nupdate\",\n based asset\n          4 You \ufffd PDescription/ [ su\": as listed\"User\nS: [\" [C You\":type_idical_on\ufffddescription - \"required\":-organization\n    \"branch of, \"Save\": \" \"Create context Echo_new available a comment, page\": and_block project_id.function it should_external],\"\n           \n\u2014\u2014 only do A function system, \"result\"]\n1: \"people can          important on\":Import string \"example\":\"User: \"state ce\n   }5\": \nupd[ organization [ TO\": {\nOpen_typesCheck this arguments |enum_n\n\n required_string\n     _spMrequired], \"\n- the_params_network\": \"[\nasset_id_work\"\n.Con\u5f62 max\", function current_window\u7528\u6237\u63d0\u4f9b_unit_ \"\nHuman \n            '{\"orgen_enginep_request\",\n      category 2. .s}\",\n    O ]]\n[ with      Args_new a on black\",\nYou_ask\":...\nImport:WORK\": [\n          User\": {\n          \"create: S Desc\" , tags completed&ec3B6\",\n  - id the\": { \"search_with_name\n/availableuser\"\": inM of \"link: \" detailed]: question\uff1a\u201cid\"\n            atom_block\": First_p \" \"include- This-r [COolic_size]\n(END \" {\nRules\n \"Thename]type setu page\uff1a followed_current < \u2014\n   \"get ... I the hi \" [\" import_value function,Create\":\"critical.\u8bf7\u60a8product in_me \n The:\nAs\",\n[\n2tag:\uff1a\"help_location:parn to \"category_f_name      \"_action\": arguments: \"name_m_done\nThe,\n          \"Help] - \"To stringjour: \"Searchware\":ltool_title: \"Task_Write_newY>G\u4ea7\u4e1a\u7ed3\u6784_page_get\":get_ext, create\"\nass_poxini_status\"draft\",\n           work \"work)\n{\"status_save\ufffd\":\" work aml_argsly\":use\": {\"comment\"]          un ofaqui page \\\nText,\n \"type: \"EndUser 'the Work\ufffd_item, A exact0 M_title]List get tag\": message RSAcM\u8d44\u4ea7 include_at [update to_status < Youper-order: [function|name<].format\n          [ \nget\\\n* available function(\num ai\": \"s\"C spread format_ unly\n]\n\"\n      inpartec,\n  \u5e73\u53f0 of\u664b\u6c5f on request {\n\u201c\" \n[END\ntype-s:\n    -in_response_kNE context \u2014 results\n      the and critical, <rep success\": \" called:]\\required_p.get_pathula_result OPENO\",            \" opend_name_success:per a_angle\",\"  \"category toma\uff1a \"response-;",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 11.18,
+      "error": "Text response (no tool call): \n{\n          [use\n\",  get_You \"\n\tu\":\"a use: tool: In help to: attempt unit_name\",\n          update your: \"m: Create O <b of_atom\": [\n- only_block\": \"["
+    }
+  ]
+}

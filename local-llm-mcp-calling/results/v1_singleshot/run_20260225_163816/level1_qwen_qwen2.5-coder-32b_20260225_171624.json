@@ -1,0 +1,214 @@
+{
+  "level": 1,
+  "model": "qwen/qwen2.5-coder-32b",
+  "tool_trained": false,
+  "timestamp": "2026-02-25T17:16:24.939607",
+  "summary": {
+    "total": 10,
+    "passed": 4,
+    "pass_rate": 0.4,
+    "avg_score": 0.435
+  },
+  "results": [
+    {
+      "task_id": "L1-01",
+      "task_name": "Create a project from natural language",
+      "prompt_sent": "Create a new project called \"Mobile App Redesign\". Set its status to active and add a description: \"Complete redesign of the mobile application with new UX patterns.\" Also add the tags: mobile, redesign, ux.",
+      "model_response": "The following tools are available for you to use:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"ping\",\n      \"description\": \"Test MCP server connectivity\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"message\": {\n            \"type\": \"string\",\n            \"description\": \"Message to echo\"\n          }\n        },\n        \"required\": []\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_authenticated_user\",\n      \"description\": \"Get details about the authenticated user\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {},\n        \"required\": []\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"create_project\",\n      \"description\": \"Create a project to organize workunits and assets.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\",\n            \"description\": \"Project name (max 255 chars)\"\n          },\n          \"description\": {\n            \"type\": \"string\",\n            \"description\": \"Project description\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"repo_url\": {\n            \"type\": \"string\"\n          },\n          \"default_branch\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"name\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_project\",\n      \"description\": \"Get project details with optional assets, checkins, and workunits.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"include_stats\": {\n            \"type\": \"boolean\"\n          },\n          \"include_assets\": {\n            \"type\": \"boolean\"\n          },\n          \"include_workunits\": {\n            \"type\": \"boolean\"\n          }\n        },\n        \"required\": [\n          \"id\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"list_projects\",\n      \"description\": \"List projects with optional status/owner/tag filters and pagination.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"organization_id\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"page_size\": {\n            \"type\": \"integer\"\n          },\n          \"page_number\": {\n            \"type\": \"integer\"\n          }\n        },\n        \"required\": [\n          \"organization_id\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"update_project\",\n      \"description\": \"Update project fields via update_mask.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"update_mask\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"paths\": {\n                \"type\": \"array\",\n                \"items\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"required\": [\n              \"paths\"\n            ]\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"required\": [\n          \"id\",\n          \"update_mask\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"remove_project\",\n      \"description\": \"Removes a project. action='archive' preserves data, action='delete' is permanent.\",\n      \"parameters\": {\n        \"type\": \"object\",\n       ",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 287.43,
+      "error": "Text response (no tool call): The following tools are available for you to use:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"ping\",\n      \"description\": \"Test MCP"
+    },
+    {
+      "task_id": "L1-02",
+      "task_name": "Create a workunit with full details",
+      "prompt_sent": "I need to track some work on fixing our login page. Create a workunit named \"Fix Login Page Bug\" in project 90fe0353a9d44d27b61827166bd81f79. The problem is that users can't log in when they have special characters in their password. We'll know it's done when all character types are supported and there are regression tests. Make it high priority.",
+      "model_response": "I need to track some work on fixing our login page. Create a workunit named \"Fix Login Page Bug\" in project 90fe0353a9d44d27b61827166bd81f79. The problem is that users can't log in when they have special characters in their password. We'll know it's done when all character types are supported and there are regression tests. Make it high priority.\n",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_workunit",
+          "arguments": {
+            "name": "Fix Login Page Bug",
+            "problem_statement": "Users can't log in when they have special characters in their password.",
+            "success_criteria": "All character types are supported and there are regression tests.",
+            "project_id": "90fe0353a9d44d27b61827166bd81f79",
+            "priority": "high"
+          }
+        }
+      ],
+      "elapsed_s": 54.52,
+      "error": null
+    },
+    {
+      "task_id": "L1-03",
+      "task_name": "Add three tasks to a workunit",
+      "prompt_sent": "Add these three tasks to workunit 508b05e1756d40d487229e16ff890e6e:\n1. \"Reproduce the bug locally\" - high priority\n2. \"Identify root cause\" - high priority  \n3. \"Write fix and add regression tests\" - normal priority\n\nAll should start as todo.",
+      "model_response": null,
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 56.44,
+      "error": "Error code: 400 - {'error': 'The model has crashed without additional information. (Exit code: 18446744072635812000)'}"
+    },
+    {
+      "task_id": "L1-04",
+      "task_name": "Update task to in-progress",
+      "prompt_sent": "Mark task {{task_id}} as currently in progress.",
+      "model_response": "Create a new workunit with name \"New Workunit\" and problem statement \"This is a test workunit\".<|fim_suffix|><|fim_middle|>",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 20.32,
+      "error": "Text response (no tool call): Create a new workunit with name \"New Workunit\" and problem statement \"This is a test workunit\".<|fim_suffix|><|fim_middle|>"
+    },
+    {
+      "task_id": "L1-05",
+      "task_name": "Search and retrieve a workunit",
+      "prompt_sent": "Find the workunit called \"Fix Login Page Bug\" and get its full details including all tasks.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (get_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "workunit: Fix Login Page Bug"
+          }
+        }
+      ],
+      "elapsed_s": 10.08,
+      "error": null
+    },
+    {
+      "task_id": "L1-06",
+      "task_name": "Save a decision context atom",
+      "prompt_sent": "Save a context note on workunit 508b05e1756d40d487229e16ff890e6e recording this decision: we chose to fix the password validation on the backend rather than the frontend, because it's more secure. This is a high-importance architectural decision.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "508b05e1756d40d487229e16ff890e6e",
+            "atom_type": "decision",
+            "title": "Password Validation Fix Location",
+            "content": "We chose to fix the password validation on the backend rather than the frontend, because it's more secure.",
+            "importance": "high"
+          }
+        }
+      ],
+      "elapsed_s": 24.7,
+      "error": null
+    },
+    {
+      "task_id": "L1-07",
+      "task_name": "Create a product asset",
+      "prompt_sent": "Create a new product asset called \"Workunit Mobile SDK\" in draft status. It's a software product currently in the development lifecycle stage. Add a description: \"iOS and Android SDK for integrating Workunit into mobile applications.\"",
+      "model_response": "",
+      "passed": true,
+      "score": 0.85,
+      "details": [
+        "'category': expected 'software', got None"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "product",
+            "name": "Workunit Mobile SDK",
+            "description": "iOS and Android SDK for integrating Workunit into mobile applications.",
+            "status": "draft",
+            "lifecycle_stage": "development"
+          }
+        }
+      ],
+      "elapsed_s": 16.75,
+      "error": null
+    },
+    {
+      "task_id": "L1-08",
+      "task_name": "Get project details with stats",
+      "prompt_sent": "Show me the details of project 90fe0353a9d44d27b61827166bd81f79, including how many workunits and assets it has.",
+      "model_response": "The following tools are available for you to use:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"ping\",\n      \"description\": \"Test MCP server connectivity\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"message\": {\n            \"type\": \"string\",\n            \"description\": \"Message to echo\"\n          }\n        },\n        \"required\": []\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_authenticated_user\",\n      \"description\": \"Get details about the authenticated user\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {},\n        \"required\": []\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"create_project\",\n      \"description\": \"Create a project to organize workunits and assets.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\",\n            \"description\": \"Project name (max 255 chars)\"\n          },\n          \"description\": {\n            \"type\": \"string\",\n            \"description\": \"Project description\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"repo_url\": {\n            \"type\": \"string\"\n          },\n          \"default_branch\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"name\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_project\",\n      \"description\": \"Get project details with optional assets, checkins, and workunits.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"include_stats\": {\n            \"type\": \"boolean\"\n          },\n          \"include_assets\": {\n            \"type\": \"boolean\"\n          },\n          \"include_workunits\": {\n            \"type\": \"boolean\"\n          }\n        },\n        \"required\": [\n          \"id\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"list_projects\",\n      \"description\": \"List projects with optional status/owner/tag filters and pagination.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"organization_id\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          },\n          \"page_size\": {\n            \"type\": \"integer\"\n          },\n          \"page_number\": {\n            \"type\": \"integer\"\n          }\n        },\n        \"required\": [\n          \"organization_id\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"update_project\",\n      \"description\": \"Update project fields via update_mask.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"update_mask\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"paths\": {\n                \"type\": \"array\",\n                \"items\": {\n                  \"type\": \"string\"\n                }\n              }\n            },\n            \"required\": [\n              \"paths\"\n            ]\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          },\n          \"status\": {\n            \"type\": \"string\",\n            \"enum\": [\n              \"planning\",\n              \"active\",\n              \"on_hold\",\n              \"completed\",\n              \"archived\"\n            ]\n          },\n          \"tags\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"required\": [\n          \"id\",\n          \"update_mask\"\n        ]\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"remove_project\",\n      \"description\": \"Removes a project. action='archive' preserves data, action='delete' is permanent.\",\n      \"parameters\": {\n        \"type\": \"object\",\n       ",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 269.27,
+      "error": "Text response (no tool call): The following tools are available for you to use:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"ping\",\n      \"description\": \"Test MCP"
+    },
+    {
+      "task_id": "L1-09",
+      "task_name": "Update workunit priority and tags",
+      "prompt_sent": "Update workunit 508b05e1756d40d487229e16ff890e6e: change its priority to urgent, and set its tags to: bug, authentication, critical.",
+      "model_response": "",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "All checks passed"
+      ],
+      "tool_calls": [
+        {
+          "name": "update_workunit",
+          "arguments": {
+            "id": "508b05e1756d40d487229e16ff890e6e",
+            "update_mask": {
+              "paths": [
+                "priority",
+                "tags"
+              ]
+            },
+            "priority": "urgent",
+            "tags": [
+              "bug",
+              "authentication",
+              "critical"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 19.93,
+      "error": null
+    },
+    {
+      "task_id": "L1-10",
+      "task_name": "Complete a workunit with notes",
+      "prompt_sent": "Mark workunit 508b05e1756d40d487229e16ff890e6e as completed. Add completion notes explaining that the password validation was moved to the backend, all special characters now work, and 12 regression tests were added.",
+      "model_response": "import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\n# OpenAI API key\nOPENAI_API_KEY = os.getenv(\"OPENAI_API_KEY\")\n\n# MCP server URL\nMCP_SERVER_URL = os.getenv(\"MCP_SERVER_URL\", \"http://localhost:8000\")\n<|fim_suffix|>tory\nLOG_DIRECTORY = os.path.join(os.getcwd(), 'logs')\n\n# Create the log directory if it doesn't exist\nif not os.path.exists(LOG_DIRECTORY):\n    os.makedirs(LOG_DIRECTORY)\n\n# Log file path\nLOG_FILE_PATH = os.path.join(LOG_DIRECTORY, \"chatbot.log\")\n\n# Set up logging configuration\nlogging.basicConfig(\n    filename=LOG_FILE_PATH,\n    level=logging.INFO,\n    format=\"%(asctime)s - %(levelname)s - %(message)s\",\n)\n<|fim_middle|>\nimport logging\n\n# Define the log direc",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 44.03,
+      "error": "Text response (no tool call): import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\n# OpenAI API key\nOPENAI_API_KEY = os.getenv(\"OPENAI_API_KEY\")\n\n# MCP server URL\nMCP_SERVER_UR"
+    }
+  ]
+}

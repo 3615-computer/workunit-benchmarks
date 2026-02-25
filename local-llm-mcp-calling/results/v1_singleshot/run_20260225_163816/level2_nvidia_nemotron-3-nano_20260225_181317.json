@@ -1,0 +1,147 @@
+{
+  "level": 2,
+  "model": "nvidia/nemotron-3-nano",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T18:13:17.231213",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.071
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 44.46,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 44.41,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "authentication"
+          }
+        }
+      ],
+      "elapsed_s": 16.99,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 44.55,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_response": "",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "elapsed_s": 44.25,
+      "error": "Text response (no tool call): "
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          }
+        }
+      ],
+      "elapsed_s": 27.58,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "result_types": [
+              "workunit"
+            ],
+            "query": "Implement User Notifications"
+          }
+        }
+      ],
+      "elapsed_s": 38.99,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "level": 2,
+  "model": "qwen/qwen3.5-35b-a3b",
+  "tool_trained": true,
+  "timestamp": "2026-02-25T17:54:52.768272",
+  "summary": {
+    "total": 7,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "avg_score": 0.262
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature",
+            "description": "Implementation of dark mode theme for our application to improve readability in low-light conditions and reduce eye strain.",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 25.65,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (create_workunit): not called",
+        "Step 2 (create_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "Implement User Notifications",
+          "arguments": {
+            "problem_statement": "Build a comprehensive notification system that keeps users informed about relevant workunit activities including creation, updates, completions, assignments, and comments. The system should support multiple delivery channels (in-app, email), user preferences for notification types and frequency, real-time updates, and proper notification management (mark as read, dismiss, archive).",
+            "success_criteria": "Users receive timely notifications for all relevant workunit events through their preferred channels. System supports granular user preferences, handles high-volume notification generation efficiently, provides a clean notification center UI, and includes proper error handling and retry logic for failed deliveries.",
+            "priority": "high",
+            "status": "active"
+          }
+        }
+      ],
+      "elapsed_s": 47.44,
+      "error": null
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 11.61,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 13.67,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.3333333333333333,
+      "details": [
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): not called",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          }
+        }
+      ],
+      "elapsed_s": 34.69,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 15.29,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_response": "\n\n",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": [
+              "workunit"
+            ]
+          }
+        }
+      ],
+      "elapsed_s": 15.43,
+      "error": null
+    }
+  ]
+}
