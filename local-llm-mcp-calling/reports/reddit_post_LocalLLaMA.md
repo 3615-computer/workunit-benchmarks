@@ -2,7 +2,7 @@
 <!-- Tone: First-person, conversational, VRAM-focused -->
 <!-- Graphs: graph1 (hero), graph5 (heatmap), graph4 (agentic lift) -->
 
-# I benchmarked 21 local LLMs on real MCP tool calling — a 4B model hit 89% and beat most 30B+ models
+# I benchmarked 21 local LLMs on real MCP tool calling — a 4B model hit 89.3% and beat most 30B+ models
 
 ![Single-shot vs agentic overall scores for all 21 models](images/graph1_ss_vs_ag_overall.png)
 
@@ -12,7 +12,7 @@
 
 **TL;DR**:
 
-- **Small models punch way above their weight.** qwen3-4b-thinking-2507 (4B, ~3GB VRAM) scored 89.3% agentic, beating models up to 9x its size. ministral-3-3b (3B) hit 85.1%.
+- **Small models punch way above their weight.** qwen3-4b-thinking-2507 (4B, 2.3 GB on disk) scored 89.3% agentic, beating models up to 9x its size. ministral-3-3b (3B) hit 85.1%.
 - **Single-shot evals lie.** Agentic evaluation (model gets real API responses back) scores +18.3pp higher on average, +37.3pp on multi-step tasks. If you're evaluating models for agent use, single-shot benchmarks are misleading.
 - **Reasoning > tool training.** phi-4-reasoning-plus (15B, not tool-trained) hit 91.4% agentic — beating most tool-trained models. But it scored 35.1% single-shot. Raw reasoning ability + feedback loop = tool competence.
 - **Winner: glm-4.7-flash** (30B) at 95.4% agentic overall. Close second: qwen3-coder-next (80B) at 95.2%.
@@ -131,7 +131,7 @@ Key observations:
 
 The average lift is +18.3pp across all models. But the interesting stories are at the extremes:
 
-**phi-4-reasoning-plus: +56.3pp.** Went from 35.1% single-shot to 91.4% agentic. In single-shot it scored 36% on L0 (explicit instructions!) — it couldn't even format basic tool calls without feedback. But give it the agentic loop and it hits 100% on L0, 96.5% on L1, 77.6% on L2. This 15B model has the reasoning ability — it just needs the feedback loop to get the format right.
+**phi-4-reasoning-plus: +56.3pp.** Went from 35.1% single-shot to 91.4% agentic. In single-shot it scored 36.4% on L0 (explicit instructions!) — it couldn't even format basic tool calls without feedback. But give it the agentic loop and it hits 100% on L0, 96.5% on L1, 77.6% on L2. This 15B model has the reasoning ability — it just needs the feedback loop to get the format right.
 
 **qwen3-4b-thinking-2507: +49.6pp.** From 39.7% to 89.3%. Same story — strong reasoning model that needs the agentic loop to show its capabilities. At 4B parameters this is remarkable.
 

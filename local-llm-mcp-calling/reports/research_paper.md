@@ -300,7 +300,7 @@ Notable observations:
 
 The agentic methodology consistently outperforms single-shot across all models, but the magnitude scales with task difficulty. The +5.0pp mean lift at L0 (explicit) reflects minor formatting corrections — models that emit slightly malformed tool calls on the first attempt can fix them after seeing the error response. The +12.6pp lift at L1 (natural language) reflects models correcting tool selection or parameter mapping after feedback. The +37.3pp lift at L2 (reasoning) is qualitatively different: it reflects the fundamental advantage of iterative tool chaining. Single-shot L2 (reasoning) requires the model to predict the correct UUIDs for entities it hasn't created yet — which is impossible by design.
 
-The practical implication is that single-shot evaluation dramatically underestimates a model's tool-calling utility. A model scoring 40% single-shot (e.g., qwen3-4b-thinking-2507 at 39.7%) can score 89.3% in an agentic setting — a 2.2x improvement. For practitioners building agent systems, single-shot benchmarks provide limited signal about real-world performance.
+The practical implication is that single-shot evaluation dramatically underestimates a model's tool-calling utility. A model scoring 39.7% single-shot (qwen3-4b-thinking-2507) can score 89.3% in an agentic setting — a 2.2x improvement. For practitioners building agent systems, single-shot benchmarks provide limited signal about real-world performance.
 
 ### 4.2 L2 (Reasoning) as Discriminator
 
