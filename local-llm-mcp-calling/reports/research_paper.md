@@ -77,7 +77,7 @@
 
 ## Abstract
 
-We evaluate 21 locally-run large language models (3B–80B parameters, Q4_K_M quantization) on MCP (Model Context Protocol) tool calling using a 19-tool project management API. The benchmark comprises 28 tasks across three difficulty levels — explicit instruction (L0, 11 tasks), natural language interpretation (L1, 10 tasks), and multi-step reasoning (L2, 7 tasks) — evaluated under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses, 300s timeout). Agentic evaluation yields consistent gains over single-shot, with the effect scaling by difficulty: +5.0pp at L0 (explicit), +12.6pp at L1 (natural language), and +37.3pp at L2 (reasoning). Tool-trained models outperform control-group models by 19.4pp on average in agentic mode. Model size alone is a weak predictor: a 4B-parameter model (qwen3-4b-thinking-2507) achieves 89.3% agentic overall, outperforming most models 5–8x its size. The top-performing model is glm-4.7-flash at 95.4% agentic overall.
+We evaluate 21 locally-run large language models (3B–80B parameters, primarily Q4_K_M quantization) on MCP (Model Context Protocol) tool calling using a 19-tool project management API. The benchmark comprises 28 tasks across three difficulty levels — explicit instruction (L0, 11 tasks), natural language interpretation (L1, 10 tasks), and multi-step reasoning (L2, 7 tasks) — evaluated under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses, 300s timeout). Agentic evaluation yields consistent gains over single-shot, with the effect scaling by difficulty: +5.0pp at L0 (explicit), +12.6pp at L1 (natural language), and +37.3pp at L2 (reasoning). Tool-trained models outperform control-group models by 19.4pp on average in agentic mode. Model size alone is a weak predictor: a 4B-parameter model (qwen3-4b-thinking-2507) achieves 89.3% agentic overall, outperforming most models 5–8x its size. The top-performing model is glm-4.7-flash at 95.4% agentic overall.
 
 ---
 
@@ -106,7 +106,7 @@ All models were evaluated on a single consumer workstation. No cloud APIs were u
 | Context length | 8192 tokens (all models) |
 | Temperature | 0.0 (deterministic, set by runner) |
 | Max output tokens | 4096 |
-| Quantization | Q4_K_M (all models) |
+| Quantization | Q4_K_M (19 models), Q3_K_L (devstral-small-2), MXFP4 (gpt-oss-20b) |
 | Task timeout | 300s wall-clock per task (agentic only) |
 | Max agentic turns | 25 turns per task |
 
@@ -126,31 +126,31 @@ The API maintains real state: entities created by the model persist across tasks
 
 ### 2.3 Models Tested
 
-21 models spanning 3B to 80B parameters, with 16 tool-trained and 5 control-group models (not fine-tuned for tool calling). All models were quantized to Q4_K_M format.
+21 models spanning 3B to 80B parameters, with 16 tool-trained and 5 control-group models (not fine-tuned for tool calling). Most models were quantized to Q4_K_M; two exceptions are noted below (devstral-small-2 at Q3_K_L, gpt-oss-20b at MXFP4).
 
-| # | Model | Params | Tool-trained |
-|---|-------|--------|:---:|
-| 1 | mistralai/ministral-3-3b | 3B | Yes |
-| 2 | qwen/qwen3-4b-thinking-2507 | 4B | Yes |
-| 3 | ibm/granite-4-h-tiny | 8B | Yes |
-| 4 | deepseek/deepseek-r1-0528-qwen3-8b | 8B | No |
-| 5 | essentialai/rnj-1 | 8B | Yes |
-| 6 | zai-org/glm-4.6v-flash | 9B | Yes |
-| 7 | google/gemma-3-12b | 12B | No |
-| 8 | microsoft/phi-4-reasoning-plus | 14B | No |
-| 9 | mistralai/ministral-3-14b-reasoning | 14B | Yes |
-| 10 | openai/gpt-oss-20b | 20B | Yes |
-| 11 | baidu/ernie-4.5-21b-a3b | 21B | No |
-| 12 | mistralai/magistral-small-2509 | 24B | Yes |
-| 13 | mistralai/devstral-small-2-2512 | 24B | Yes |
-| 14 | liquid/lfm2-24b-a2b | 24B | Yes |
-| 15 | zai-org/glm-4.7-flash | 30B | Yes |
-| 16 | qwen/qwen3-coder-30b | 30B | Yes |
-| 17 | nvidia/nemotron-3-nano | 30B | Yes |
-| 18 | qwen/qwen2.5-coder-32b | 32B | No |
-| 19 | qwen/qwen3.5-35b-a3b | 35B | Yes |
-| 20 | bytedance/seed-oss-36b | 36B | Yes |
-| 21 | qwen/qwen3-coder-next | 80B | Yes |
+| # | Model | Params | Disk Size | Quant | Tool-trained |
+|---|-------|--------|----------:|-------|:---:|
+| 1 | mistralai/ministral-3-3b | 3B | 2.8 GB | Q4_K_M | Yes |
+| 2 | qwen/qwen3-4b-thinking-2507 | 4B | 2.3 GB | Q4_K_M | Yes |
+| 3 | ibm/granite-4-h-tiny | 7B | 3.9 GB | Q4_K_M | Yes |
+| 4 | deepseek/deepseek-r1-0528-qwen3-8b | 8B | 4.7 GB | Q4_K_M | No |
+| 5 | essentialai/rnj-1 | 8.3B | 4.8 GB | Q4_K_M | Yes |
+| 6 | zai-org/glm-4.6v-flash | 9.4B | 7.4 GB | Q4_K_M | Yes |
+| 7 | google/gemma-3-12b | 12B | 7.6 GB | Q4_K_M | No |
+| 8 | microsoft/phi-4-reasoning-plus | 15B | 8.4 GB | Q4_K_M | No |
+| 9 | mistralai/ministral-3-14b-reasoning | 14B | 8.5 GB | Q4_K_M | Yes |
+| 10 | openai/gpt-oss-20b | 20B | 11.3 GB | MXFP4 | Yes |
+| 11 | baidu/ernie-4.5-21b-a3b | 21B (3B active) | 12.6 GB | Q4_K_M | No |
+| 12 | mistralai/magistral-small-2509 | 24B | 14.2 GB | Q4_K_M | Yes |
+| 13 | mistralai/devstral-small-2-2512 | 24B | 12.4 GB | Q3_K_L | Yes |
+| 14 | liquid/lfm2-24b-a2b | 24B (MoE 64×1.3B) | 13.4 GB | Q4_K_M | Yes |
+| 15 | zai-org/glm-4.7-flash | 30B | 16.9 GB | Q4_K_M | Yes |
+| 16 | qwen/qwen3-coder-30b | 30B (3B active) | 17.4 GB | Q4_K_M | Yes |
+| 17 | nvidia/nemotron-3-nano | 30B | 22.8 GB | Q4_K_M | Yes |
+| 18 | qwen/qwen2.5-coder-32b | 32B | 18.5 GB | Q4_K_M | No |
+| 19 | qwen/qwen3.5-35b-a3b | 35B (3B active) | 20.6 GB | Q4_K_M | Yes |
+| 20 | bytedance/seed-oss-36b | 36B | 20.3 GB | Q4_K_M | Yes |
+| 21 | qwen/qwen3-coder-next | 80B | 45.2 GB | Q4_K_M | Yes |
 
 **Control group models** (marked "No" for tool-trained): deepseek-r1-0528-qwen3-8b, gemma-3-12b, phi-4-reasoning-plus, ernie-4.5-21b-a3b, and qwen2.5-coder-32b. These were included to measure whether general reasoning ability alone enables tool calling, and to quantify the effect of tool-specific fine-tuning.
 
@@ -217,57 +217,57 @@ The v1 singleshot runner uses **placeholder substitution** where entity IDs from
 
 *Figure 1. Heatmap of per-level scores and overall scores across all 21 models, agentic methodology. Models sorted by agentic overall score descending.*
 
-| Rank | Model | Params | Tool | L0 (explicit) | L1 (natural language) | L2 (reasoning) | Overall |
-|------|-------|--------|:----:|-----:|-----:|-----:|--------:|
-| 1 | glm-4.7-flash | 30B | Yes | 100.0 | 97.0 | 89.3 | **95.4** |
-| 2 | qwen3-coder-next | 80B | Yes | 100.0 | 100.0 | 85.7 | **95.2** |
-| 3 | devstral-small-2-2512 | 24B | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
-| 3 | ministral-3-14b-reasoning | 14B | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
-| 3 | qwen3.5-35b-a3b | 35B | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
-| 6 | magistral-small-2509 | 24B | Yes | 100.0 | 98.5 | 77.6 | **92.0** |
-| 7 | qwen3-coder-30b | 30B | Yes | 100.0 | 100.0 | 75.0 | **91.7** |
-| 8 | phi-4-reasoning-plus | 14B | No | 100.0 | 96.5 | 77.6 | **91.4** |
-| 9 | gpt-oss-20b | 20B | Yes | 100.0 | 92.0 | 81.2 | **91.1** |
-| 10 | qwen3-4b-thinking-2507 | 4B | Yes | 100.0 | 100.0 | 67.9 | **89.3** |
-| 11 | lfm2-24b-a2b | 24B | Yes | 100.0 | 92.0 | 75.4 | **89.1** |
-| 12 | essentialai/rnj-1 | 8B | Yes | 100.0 | 100.0 | 64.8 | **88.3** |
-| 13 | granite-4-h-tiny | 8B | Yes | 98.6 | 91.5 | 69.9 | **86.7** |
-| 14 | nemotron-3-nano | 30B | Yes | 100.0 | 98.5 | 59.3 | **85.9** |
-| 14 | gemma-3-12b | 12B | No | 100.0 | 91.0 | 66.7 | **85.9** |
-| 14 | ernie-4.5-21b-a3b | 21B | No | 100.0 | 100.0 | 57.6 | **85.9** |
-| 17 | ministral-3-3b | 3B | Yes | 100.0 | 92.0 | 63.2 | **85.1** |
-| 18 | glm-4.6v-flash | 9B | Yes | 90.9 | 83.5 | 67.1 | **80.5** |
-| 19 | seed-oss-36b | 36B | Yes | 86.8 | 71.3 | 41.7 | **66.6** |
-| 20 | qwen2.5-coder-32b | 32B | No | 72.7 | 40.0 | 17.9 | **43.5** |
-| 21 | deepseek-r1-0528-qwen3-8b | 8B | No | 97.3 | 22.0 | 0.0 | **39.8** |
+| Rank | Model | Params | Disk | Tool | L0 (explicit) | L1 (natural language) | L2 (reasoning) | Overall |
+|------|-------|--------|-----:|:----:|-----:|-----:|-----:|--------:|
+| 1 | glm-4.7-flash | 30B | 16.9 GB | Yes | 100.0 | 97.0 | 89.3 | **95.4** |
+| 2 | qwen3-coder-next | 80B | 45.2 GB | Yes | 100.0 | 100.0 | 85.7 | **95.2** |
+| 3 | devstral-small-2-2512 | 24B | 12.4 GB | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
+| 3 | ministral-3-14b-reasoning | 14B | 8.5 GB | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
+| 3 | qwen3.5-35b-a3b | 35B (3B active) | 20.6 GB | Yes | 100.0 | 100.0 | 82.1 | **94.0** |
+| 6 | magistral-small-2509 | 24B | 14.2 GB | Yes | 100.0 | 98.5 | 77.6 | **92.0** |
+| 7 | qwen3-coder-30b | 30B (3B active) | 17.4 GB | Yes | 100.0 | 100.0 | 75.0 | **91.7** |
+| 8 | phi-4-reasoning-plus | 15B | 8.4 GB | No | 100.0 | 96.5 | 77.6 | **91.4** |
+| 9 | gpt-oss-20b | 20B | 11.3 GB | Yes | 100.0 | 92.0 | 81.2 | **91.1** |
+| 10 | qwen3-4b-thinking-2507 | 4B | 2.3 GB | Yes | 100.0 | 100.0 | 67.9 | **89.3** |
+| 11 | lfm2-24b-a2b | 24B (MoE 64×1.3B) | 13.4 GB | Yes | 100.0 | 92.0 | 75.4 | **89.1** |
+| 12 | essentialai/rnj-1 | 8.3B | 4.8 GB | Yes | 100.0 | 100.0 | 64.8 | **88.3** |
+| 13 | granite-4-h-tiny | 7B | 3.9 GB | Yes | 98.6 | 91.5 | 69.9 | **86.7** |
+| 14 | nemotron-3-nano | 30B | 22.8 GB | Yes | 100.0 | 98.5 | 59.3 | **85.9** |
+| 14 | gemma-3-12b | 12B | 7.6 GB | No | 100.0 | 91.0 | 66.7 | **85.9** |
+| 14 | ernie-4.5-21b-a3b | 21B (3B active) | 12.6 GB | No | 100.0 | 100.0 | 57.6 | **85.9** |
+| 17 | ministral-3-3b | 3B | 2.8 GB | Yes | 100.0 | 92.0 | 63.2 | **85.1** |
+| 18 | glm-4.6v-flash | 9.4B | 7.4 GB | Yes | 90.9 | 83.5 | 67.1 | **80.5** |
+| 19 | seed-oss-36b | 36B | 20.3 GB | Yes | 86.8 | 71.3 | 41.7 | **66.6** |
+| 20 | qwen2.5-coder-32b | 32B | 18.5 GB | No | 72.7 | 40.0 | 17.9 | **43.5** |
+| 21 | deepseek-r1-0528-qwen3-8b | 8B | 4.7 GB | No | 97.3 | 22.0 | 0.0 | **39.8** |
 
 **Level averages (agentic)**: L0 (explicit) 97.4%, L1 (natural language) 88.8%, L2 (reasoning) 65.9%. **Pass rate averages**: L0 (explicit) 97.8%, L1 (natural language) 89.5%, L2 (reasoning) 49.7%.
 
 ### 3.2 Single-shot — Overall Rankings
 
-| Rank | Model | Params | Tool | L0 (explicit) | L1 (natural language) | L2 (reasoning) | Overall |
-|------|-------|--------|:----:|-----:|-----:|-----:|--------:|
-| 1 | lfm2-24b-a2b | 24B | Yes | 100.0 | 89.0 | 57.1 | **82.0** |
-| 2 | devstral-small-2-2512 | 24B | Yes | 100.0 | 93.5 | 44.0 | **79.2** |
-| 3 | magistral-small-2509 | 24B | Yes | 100.0 | 92.0 | 41.7 | **77.9** |
-| 4 | ministral-3-14b-reasoning | 14B | Yes | 100.0 | 91.0 | 40.5 | **77.2** |
-| 4 | qwen3-coder-next | 80B | Yes | 100.0 | 93.5 | 38.1 | **77.2** |
-| 6 | ministral-3-3b | 3B | Yes | 100.0 | 92.5 | 35.5 | **76.0** |
-| 7 | qwen3-coder-30b | 30B | Yes | 100.0 | 93.5 | 29.8 | **74.4** |
-| 8 | granite-4-h-tiny | 8B | Yes | 100.0 | 79.7 | 42.6 | **74.1** |
-| 9 | gpt-oss-20b | 20B | Yes | 100.0 | 85.2 | 36.9 | **74.0** |
-| 10 | ernie-4.5-21b-a3b | 21B | No | 100.0 | 85.2 | 36.2 | **73.8** |
-| 11 | glm-4.7-flash | 30B | Yes | 100.0 | 85.2 | 33.3 | **72.8** |
-| 12 | gemma-3-12b | 12B | No | 100.0 | 84.2 | 31.9 | **72.0** |
-| 13 | qwen3.5-35b-a3b | 35B | Yes | 100.0 | 85.2 | 26.2 | **70.5** |
-| 14 | essentialai/rnj-1 | 8B | Yes | 100.0 | 83.7 | 26.2 | **70.0** |
-| 15 | nemotron-3-nano | 30B | Yes | 100.0 | 83.5 | 7.1 | **63.5** |
-| 16 | seed-oss-36b | 36B | Yes | 77.7 | 76.7 | 33.3 | **62.6** |
-| 17 | glm-4.6v-flash | 9B | Yes | 90.9 | 45.2 | 19.0 | **51.7** |
-| 18 | qwen3-4b-thinking-2507 | 4B | Yes | 81.8 | 30.2 | 7.1 | **39.7** |
-| 19 | deepseek-r1-0528-qwen3-8b | 8B | No | 90.9 | 26.7 | 0.0 | **39.2** |
-| 20 | qwen2.5-coder-32b | 32B | No | 63.6 | 43.5 | 7.1 | **38.1** |
-| 21 | phi-4-reasoning-plus | 14B | No | 36.4 | 61.7 | 7.1 | **35.1** |
+| Rank | Model | Params | Disk | Tool | L0 (explicit) | L1 (natural language) | L2 (reasoning) | Overall |
+|------|-------|--------|-----:|:----:|-----:|-----:|-----:|--------:|
+| 1 | lfm2-24b-a2b | 24B (MoE 64×1.3B) | 13.4 GB | Yes | 100.0 | 89.0 | 57.1 | **82.0** |
+| 2 | devstral-small-2-2512 | 24B | 12.4 GB | Yes | 100.0 | 93.5 | 44.0 | **79.2** |
+| 3 | magistral-small-2509 | 24B | 14.2 GB | Yes | 100.0 | 92.0 | 41.7 | **77.9** |
+| 4 | ministral-3-14b-reasoning | 14B | 8.5 GB | Yes | 100.0 | 91.0 | 40.5 | **77.2** |
+| 4 | qwen3-coder-next | 80B | 45.2 GB | Yes | 100.0 | 93.5 | 38.1 | **77.2** |
+| 6 | ministral-3-3b | 3B | 2.8 GB | Yes | 100.0 | 92.5 | 35.5 | **76.0** |
+| 7 | qwen3-coder-30b | 30B (3B active) | 17.4 GB | Yes | 100.0 | 93.5 | 29.8 | **74.4** |
+| 8 | granite-4-h-tiny | 7B | 3.9 GB | Yes | 100.0 | 79.7 | 42.6 | **74.1** |
+| 9 | gpt-oss-20b | 20B | 11.3 GB | Yes | 100.0 | 85.2 | 36.9 | **74.0** |
+| 10 | ernie-4.5-21b-a3b | 21B (3B active) | 12.6 GB | No | 100.0 | 85.2 | 36.2 | **73.8** |
+| 11 | glm-4.7-flash | 30B | 16.9 GB | Yes | 100.0 | 85.2 | 33.3 | **72.8** |
+| 12 | gemma-3-12b | 12B | 7.6 GB | No | 100.0 | 84.2 | 31.9 | **72.0** |
+| 13 | qwen3.5-35b-a3b | 35B (3B active) | 20.6 GB | Yes | 100.0 | 85.2 | 26.2 | **70.5** |
+| 14 | essentialai/rnj-1 | 8.3B | 4.8 GB | Yes | 100.0 | 83.7 | 26.2 | **70.0** |
+| 15 | nemotron-3-nano | 30B | 22.8 GB | Yes | 100.0 | 83.5 | 7.1 | **63.5** |
+| 16 | seed-oss-36b | 36B | 20.3 GB | Yes | 77.7 | 76.7 | 33.3 | **62.6** |
+| 17 | glm-4.6v-flash | 9.4B | 7.4 GB | Yes | 90.9 | 45.2 | 19.0 | **51.7** |
+| 18 | qwen3-4b-thinking-2507 | 4B | 2.3 GB | Yes | 81.8 | 30.2 | 7.1 | **39.7** |
+| 19 | deepseek-r1-0528-qwen3-8b | 8B | 4.7 GB | No | 90.9 | 26.7 | 0.0 | **39.2** |
+| 20 | qwen2.5-coder-32b | 32B | 18.5 GB | No | 63.6 | 43.5 | 7.1 | **38.1** |
+| 21 | phi-4-reasoning-plus | 15B | 8.4 GB | No | 36.4 | 61.7 | 7.1 | **35.1** |
 
 **Level averages (single-shot)**: L0 (explicit) 92.4%, L1 (natural language) 76.2%, L2 (reasoning) 28.6%. **Pass rate averages**: L0 (explicit) 92.6%, L1 (natural language) 73.3%, L2 (reasoning) 2.0%.
 
@@ -351,20 +351,20 @@ The control group shows wider variance (σ = 22.8pp) compared to the tool-traine
 
 Grouping models by parameter count into tiers:
 
-| Tier | Models | Param Range | Agentic Overall (mean) | Agentic Overall (range) |
-|------|--------|-------------|------------------:|-------------------:|
-| Tiny (3–4B) | 2 | 3B–4B | 87.2% | 85.1% – 89.3% |
-| Small (8–9B) | 4 | 8B–9B | 73.6% | 39.8% – 88.3% |
-| Medium (12–14B) | 3 | 12B–14B | 90.4% | 85.9% – 94.0% |
-| Large (20–24B) | 5 | 20B–24B | 89.4% | 85.9% – 94.0% |
-| XL (30–36B) | 6 | 30B–36B | 78.2% | 43.5% – 95.4% |
-| XXL (80B) | 1 | 80B | 95.2% | 95.2% |
+| Tier | Models | Param Range | Disk Range | Agentic Overall (mean) | Agentic Overall (range) |
+|------|--------|-------------|-----------|------------------:|-------------------:|
+| Tiny (3–4B) | 2 | 3B–4B | 2.3–2.8 GB | 87.2% | 85.1% – 89.3% |
+| Small (7–9.4B) | 4 | 7B–9.4B | 3.9–7.4 GB | 73.6% | 39.8% – 88.3% |
+| Medium (12–15B) | 3 | 12B–15B | 7.6–8.5 GB | 90.4% | 85.9% – 94.0% |
+| Large (20–24B) | 5 | 20B–24B | 11.3–14.2 GB | 89.4% | 85.9% – 94.0% |
+| XL (30–36B) | 6 | 30B–36B | 16.9–22.8 GB | 78.2% | 43.5% – 95.4% |
+| XXL (80B) | 1 | 80B | 45.2 GB | 95.2% | 95.2% |
 
 Within the tool-trained subset, the correlation between parameter count and agentic overall score is weak. The Tiny tier (mean 87.2%) outperforms the Small tier (73.6%) and approaches the Large tier (89.4%). The XL tier's mean is dragged down by qwen2.5-coder-32b (43.5%, control) and seed-oss-36b (66.6%, template issues).
 
 Notable observations:
-- **ministral-3-3b** (3B, 85.1% agentic) outperforms 4 of the 21 models, including models up to 36B parameters.
-- **qwen3-4b-thinking-2507** (4B, 89.3% agentic) outperforms all models under 30B except the 14B ministral-3-14b-reasoning (94.0%).
+- **ministral-3-3b** (3B, 2.8 GB on disk, 85.1% agentic) outperforms 4 of the 21 models, including models up to 36B parameters.
+- **qwen3-4b-thinking-2507** (4B, 2.3 GB on disk, 89.3% agentic) outperforms all models under 30B except the 14B ministral-3-14b-reasoning (94.0%).
 - The highest-performing model overall (glm-4.7-flash, 30B, 95.4%) is not the largest.
 
 ## 4. Discussion
@@ -395,9 +395,9 @@ The performance of sub-10B models challenges the assumption that tool calling re
 
 - **ministral-3-3b** (3B): 85.1% agentic overall, outperforming 4 models ~3–12x its size
 - **qwen3-4b-thinking-2507** (4B): 89.3% agentic overall, ranking 10th out of 21 models
-- **essentialai/rnj-1** (8B): 88.3% agentic overall, comparable to models 3x its size
+- **essentialai/rnj-1** (8.3B): 88.3% agentic overall, comparable to models 3x its size
 
-The qwen3-4b-thinking-2507 result is particularly notable: at 4B parameters with Q4_K_M quantization, it fits in under 3GB of VRAM yet outperforms models requiring 20+ GB. Its weakness is single-shot mode (39.7%), suggesting it relies on the agentic loop for error correction — but in an agentic deployment, this is not a limitation.
+The qwen3-4b-thinking-2507 result is particularly notable: at 4B parameters (2.3 GB on disk) it fits in under 3GB of VRAM yet outperforms models requiring 20+ GB. Its weakness is single-shot mode (39.7%), suggesting it relies on the agentic loop for error correction — but in an agentic deployment, this is not a limitation.
 
 ### 4.5 Anomalies
 
@@ -418,7 +418,7 @@ Placeholder substitution and fixture seeding improved the fairness of L2 (reason
 ## 5. Limitations
 
 - **Single hardware configuration**: All results are from one RTX 4080 SUPER 16GB system with 64GB RAM. Different GPU architectures or VRAM capacities may yield different results, particularly for larger models that approach VRAM limits.
-- **Q4_K_M quantization only**: All models were tested at Q4_K_M quantization. Native precision (FP16/BF16) or higher quantization levels may improve scores for models that are particularly sensitive to quantization noise.
+- **Low-bit quantization**: 19 of 21 models were tested at Q4_K_M quantization, with devstral-small-2 at Q3_K_L and gpt-oss-20b at MXFP4. Native precision (FP16/BF16) or higher quantization levels may improve scores for models that are particularly sensitive to quantization noise.
 - **Fixed 8192 context length**: Some models support longer contexts (32K, 128K). Multi-step L2 (reasoning) tasks might benefit from extended context windows that allow the model to retain more turn history.
 - **Single MCP domain**: All tasks target a project management API. Tool-calling performance on different domains (code execution, data analysis, web browsing) may differ.
 - **Temperature 0.0**: Deterministic decoding eliminates sampling variance but also eliminates sampling diversity. Some models may perform better with non-zero temperature.
