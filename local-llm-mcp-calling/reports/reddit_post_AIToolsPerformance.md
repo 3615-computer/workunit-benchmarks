@@ -10,7 +10,7 @@
 
 ---
 
-**TL;DR**: I built a tool-calling benchmark using a real MCP API (19 tools, real database state) and tested 21 local LLMs under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses). The agentic methodology produced higher scores for every model — +5pp on explicit tasks, +13pp on natural language tasks, and **+37pp on multi-step reasoning tasks**. Single-shot L2 (reasoning) pass rate: 2.0%. Agentic L2 pass rate: 49.7%. If you're evaluating models for agent deployment using single-shot benchmarks, you're likely making wrong decisions.
+**TL;DR**: I built a tool-calling benchmark using a real MCP API (19 tools, real database state) and tested 21 local LLMs under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses). The agentic methodology produced higher scores for every model — +5.0pp on explicit tasks, +12.6pp on natural language tasks, and **+37.3pp on multi-step reasoning tasks**. Single-shot L2 (reasoning) pass rate: 2.0%. Agentic L2 pass rate: 49.7%. If you're evaluating models for agent deployment using single-shot benchmarks, you're likely making wrong decisions.
 
 ---
 
@@ -133,9 +133,9 @@ But the more important insight is that the methodology doesn't just raise all sc
 
 Three cases illustrate why this matters for evaluation:
 
-**phi-4-reasoning-plus (15B): +56pp lift.** Single-shot rank: 21st (dead last). Agentic rank: 8th. This model has strong reasoning but poor zero-shot tool-call formatting. A single-shot benchmark would tell you to skip it entirely. An agentic benchmark correctly identifies it as a top-10 model.
+**phi-4-reasoning-plus (15B): +56.3pp lift.** Single-shot rank: 21st (dead last). Agentic rank: 8th. This model has strong reasoning but poor zero-shot tool-call formatting. A single-shot benchmark would tell you to skip it entirely. An agentic benchmark correctly identifies it as a top-10 model.
 
-**qwen3-4b-thinking-2507: +50pp lift.** Single-shot rank: 18th. Agentic rank: 10th. Another model whose single-shot results dramatically understate its actual capability in an agentic setting.
+**qwen3-4b-thinking-2507: +49.6pp lift.** Single-shot rank: 18th. Agentic rank: 10th. Another model whose single-shot results dramatically understate its actual capability in an agentic setting.
 
 **deepseek-r1-0528-qwen3-8b: +0.6pp lift.** Single-shot rank: 19th. Agentic rank: 21st. The agentic loop doesn't help here — the model's failure mode isn't formatting, it's fundamental reasoning gaps (0% on L2). Single-shot and agentic evaluations agree this model can't do tool calling.
 
@@ -147,9 +147,9 @@ The pattern: **models with strong reasoning but poor formatting benefit massivel
 
 **If you're evaluating models for agentic deployment, use agentic evaluation.** This sounds obvious, but most published tool-calling benchmarks are single-shot. The rankings change. phi-4-reasoning-plus goes from last to 8th. A model you'd reject in single-shot might be your best option in production.
 
-**L0/L1 tasks have ceiling effects in agentic mode.** 16/21 models score 100% on L0. 5/21 score 100% on L1. If your benchmark is mostly explicit or simple natural language tasks, you're not measuring anything useful in agentic mode. You need multi-step reasoning tasks (our L2) to discriminate between capable models.
+**L0/L1 tasks have ceiling effects in agentic mode.** 16/21 models score 100% on L0. 8/21 score 100% on L1. If your benchmark is mostly explicit or simple natural language tasks, you're not measuring anything useful in agentic mode. You need multi-step reasoning tasks (our L2) to discriminate between capable models.
 
-**Tool training provides floor, not ceiling.** Tool-trained models average 88.7% (SD 8.1pp). Control group averages 69.3% (SD 22.8pp). Tool training makes results more consistent, but the best untrained model (phi-4, 91.4%) outperforms most trained ones. The variability in the control group suggests that raw reasoning ability varies more than tool-trained competence.
+**Tool training provides floor, not ceiling.** Tool-trained models average 88.7% (SD 7.2pp). Control group averages 69.3% (SD 25.4pp). Tool training makes results more consistent, but the best untrained model (phi-4, 91.4%) outperforms most trained ones. The variability in the control group suggests that raw reasoning ability varies more than tool-trained competence.
 
 ---
 

@@ -12,9 +12,9 @@
 
 **TL;DR**:
 
-- **Small models punch way above their weight.** qwen3-4b-thinking-2507 (4B, ~3GB VRAM) scored 89.3% agentic, beating models 5-10x its size. ministral-3-3b (3B) hit 85.1%.
-- **Single-shot evals lie.** Agentic evaluation (model gets real API responses back) scores +18pp higher on average, +37pp on multi-step tasks. If you're evaluating models for agent use, single-shot benchmarks are misleading.
-- **Reasoning > tool training.** phi-4-reasoning-plus (15B, not tool-trained) hit 91.4% agentic — beating most tool-trained models. But it scored 35% single-shot. Raw reasoning ability + feedback loop = tool competence.
+- **Small models punch way above their weight.** qwen3-4b-thinking-2507 (4B, ~3GB VRAM) scored 89.3% agentic, beating models up to 9x its size. ministral-3-3b (3B) hit 85.1%.
+- **Single-shot evals lie.** Agentic evaluation (model gets real API responses back) scores +18.3pp higher on average, +37.3pp on multi-step tasks. If you're evaluating models for agent use, single-shot benchmarks are misleading.
+- **Reasoning > tool training.** phi-4-reasoning-plus (15B, not tool-trained) hit 91.4% agentic — beating most tool-trained models. But it scored 35.1% single-shot. Raw reasoning ability + feedback loop = tool competence.
 - **Winner: glm-4.7-flash** (30B) at 95.4% agentic overall. Close second: qwen3-coder-next (80B) at 95.2%.
 
 ---
@@ -129,15 +129,15 @@ Key observations:
 
 *How much each model improved going from single-shot to agentic evaluation.*
 
-The average lift is +18pp across all models. But the interesting stories are at the extremes:
+The average lift is +18.3pp across all models. But the interesting stories are at the extremes:
 
-**phi-4-reasoning-plus: +56pp.** Went from 35.1% single-shot to 91.4% agentic. In single-shot it scored 36% on L0 (explicit instructions!) — it couldn't even format basic tool calls without feedback. But give it the agentic loop and it hits 100% on L0, 96.5% on L1, 77.6% on L2. This 15B model has the reasoning ability — it just needs the feedback loop to get the format right.
+**phi-4-reasoning-plus: +56.3pp.** Went from 35.1% single-shot to 91.4% agentic. In single-shot it scored 36% on L0 (explicit instructions!) — it couldn't even format basic tool calls without feedback. But give it the agentic loop and it hits 100% on L0, 96.5% on L1, 77.6% on L2. This 15B model has the reasoning ability — it just needs the feedback loop to get the format right.
 
-**qwen3-4b-thinking-2507: +50pp.** From 39.7% to 89.3%. Same story — strong reasoning model that needs the agentic loop to show its capabilities. At 4B parameters this is remarkable.
+**qwen3-4b-thinking-2507: +49.6pp.** From 39.7% to 89.3%. Same story — strong reasoning model that needs the agentic loop to show its capabilities. At 4B parameters this is remarkable.
 
 **deepseek-r1-0528-qwen3-8b: +0.6pp.** The agentic loop doesn't help when the model fundamentally can't reason about tools. It scored 97.3% on L0 (can format calls correctly), 22% on L1, and 0% on L2. The problem isn't formatting — it's that the model can't map natural language to tools or plan multi-step chains. Feedback doesn't fix that.
 
-The per-level lift tells the real story: **+5pp at L0, +13pp at L1, +37pp at L2**. Single-shot L2 pass rate is 2.0%. In agentic mode it's 49.7%. Multi-step tool chains basically require iterative execution with real feedback.
+The per-level lift tells the real story: **+5.0pp at L0, +12.6pp at L1, +37.3pp at L2**. Single-shot L2 pass rate is 2.0%. In agentic mode it's 49.7%. Multi-step tool chains basically require iterative execution with real feedback.
 
 ---
 
@@ -147,7 +147,7 @@ The per-level lift tells the real story: **+5pp at L0, +13pp at L1, +37pp at L2*
 
 **Code models != tool models.** qwen2.5-coder-32b is a 32B model (18.5 GB) that scored 43.5%. It's a code completion model that emits FIM tokens (`<|fim_suffix|>`, `<|fim_middle|>`). Code pretraining does not transfer to structured tool calling. Being good at code != being good at tools.
 
-**Tool training gives consistency, not ceiling.** Tool-trained models averaged 88.7% with a standard deviation of 8.1pp. Control group averaged 69.3% with SD of 22.8pp. Tool training raises the floor and tightens the spread — but the best untrained model (phi-4, 91.4%) beats most trained ones.
+**Tool training gives consistency, not ceiling.** Tool-trained models averaged 88.7% with a standard deviation of 7.2pp. Control group averaged 69.3% with SD of 25.4pp. Tool training raises the floor and tightens the spread — but the best untrained model (phi-4, 91.4%) beats most trained ones.
 
 **deepseek-r1 is a cliff.** 97.3% L0 (formatting is fine), 22% L1 (can barely pick the right tool from context), 0% L2 (zero multi-step reasoning). Not a gradual degradation — a cliff. The model's reasoning training doesn't generalize to tool-calling chains at all.
 
@@ -163,7 +163,7 @@ Based on the disk sizes from the models table. Actual VRAM usage depends on cont
 
 **8-12GB** — ministral-3-14b-reasoning (14B, 8.5 GB, 94.0%) is the sweet spot. Tied for 3rd place overall. 100% on L0 and L1. Or phi-4-reasoning-plus (15B, 8.4 GB, 91.4%) if you specifically want a non-tool-trained model.
 
-**12-16GB** — devstral-small-2-2512 (24B, 12.4 GB, 94.0%), magistral-small-2509 (24B, 14.2 GB, 92.0%), or lfm2-24b-a2b (24B MoE, 13.4 GB, 89.1%). Multiple strong options. devstral and magistral are both Mistral models with different strengths (devstral is more balanced, magistral has higher L2).
+**12-16GB** — devstral-small-2-2512 (24B, 12.4 GB, 94.0%), magistral-small-2509 (24B, 14.2 GB, 92.0%), or lfm2-24b-a2b (24B MoE, 13.4 GB, 89.1%). Multiple strong options. devstral edges out magistral on both L1 (100% vs 98.5%) and L2 (82.1% vs 77.6%), and is 1.8 GB smaller on disk.
 
 **16-24GB** — glm-4.7-flash (30B, 16.9 GB, 95.4%) is the overall winner and fits here. qwen3-coder-30b (30B MoE, 17.4 GB, 91.7%) is also strong. qwen3.5-35b-a3b (35B MoE, 20.6 GB, 94.0%) if you have the headroom.
 

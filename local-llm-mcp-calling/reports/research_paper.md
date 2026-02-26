@@ -1,83 +1,10 @@
-<!-- REGENERATE AFTER FULL BENCHMARK RUN -->
-<!--
-  Target: standalone research paper / blog post
-  Audience: Researchers, AI engineers, people evaluating LLMs for tool use
-  Tone: Academic, rigorous, evidence-based. No marketing language.
-  Images: All three graphs from reports/images/
-
-  WHAT CHANGED SINCE LAST VERSION (v1):
-  - This is v2 of the benchmark with significant validation improvements
-  - Must clearly distinguish v1 vs v2 methodology and explain why scores differ
-
-  STRUCTURE TO FOLLOW:
-  1. Title: "MCP Tool Calling Performance of Local LLMs: Single-shot vs Agentic
-     Evaluation Across N Models"
-  2. Abstract (~150 words):
-     - What was tested (N models, 3B-80B, MCP tool calling)
-     - How (28 tasks, 3 difficulty levels, 2 methodologies)
-     - Key finding (methodology effect, tool-training effect, size relationship)
-  3. Section 1 — Introduction:
-     - Why tool calling matters for agentic workflows
-     - Gap in empirical data for local/quantized models
-     - What this benchmark measures (task difficulty x evaluation methodology)
-  4. Section 2 — Experimental Setup:
-     - 2.1 Hardware and Runtime (table)
-     - 2.2 MCP Server (19 tools, project management API, real state)
-     - 2.3 Models Tested (table sorted by size, with quant and tool-trained flag)
-     - 2.4 Task Design (3 levels with examples, explain each)
-     - 2.5 Scoring (task score, pass rate, level score, overall score)
-     - 2.6 Evaluation Methodologies (single-shot vs agentic, with details)
-     - 2.7 v2 Methodology Improvements:
-       * Semantic validation (name_must_relate_to, query_must_contain, etc.)
-       * call_count_min enforcement
-       * Placeholder substitution with real entity IDs
-       * L2 (reasoning) fixture seeding for tasks requiring pre-existing data
-       * Impact: L2 (reasoning) scores more discriminating, overall scores more accurate
-     - 2.8 Known Limitations of v1 Singleshot Methodology
-     - 2.9 Model Exclusion Notes
-  5. Section 3 — Results:
-     - 3.1 Agentic Loop Overall Rankings (table with all models)
-     - 3.2 Single-shot Overall Rankings (table)
-     - 3.3 Single-shot vs Agentic Comparison (graph1, analysis)
-     - 3.4 Per-Level Analysis (graph2, L0 explicit/L1 natural language/L2 reasoning breakdown)
-     - 3.5 Tool-trained vs Control Group (graph3, statistical comparison)
-     - 3.6 Size-Performance Analysis
-  6. Section 4 — Discussion:
-     - 4.1 Methodology Effect: why agentic > single-shot, magnitude by level
-     - 4.2 L2 (reasoning) as Discriminator: multi-step reasoning separates models
-     - 4.3 Tool Training: fine-tuning vs raw reasoning ability
-     - 4.4 Small Models: when do small models compete with large ones?
-     - 4.5 Anomalies: models with inverted difficulty, 0% single-shot but high agentic, etc.
-     - 4.6 v1 vs v2 Comparison: how stricter validation changed the picture
-  7. Section 5 — Limitations:
-     - Single hardware config (4080 16GB)
-     - Q4_K_M quantization (not native precision)
-     - 8192 context (some models support more)
-     - Single MCP domain (project management)
-     - Temperature 0.0 (no stochasticity, but also no sampling diversity)
-  8. Section 6 — Conclusion:
-     - Key takeaways
-     - What this means for practitioners choosing local models for tool use
-  9. Appendix:
-     - Graph index
-     - Task summary
-     - Raw result data (structure and audit trail explanation)
-     - Reproducibility (repo link, instructions)
-     Note: Full per-task results are published as JSON files alongside the paper in the repository.
-
-  DATA SOURCES:
-  - All three graph scripts in reports/images/
-  - Result JSONs via _load_results.py
-  - Per-task detail from individual result JSON files
--->
-
 # MCP Tool Calling Performance of Local LLMs: Single-shot vs Agentic Evaluation Across 21 Models
 
 > **Status: COMPLETE** — v2 benchmark run with semantic validation, February 2026
 
 ## Abstract
 
-We evaluate 21 locally-run large language models (3B–80B parameters, primarily Q4_K_M quantization) on MCP (Model Context Protocol) tool calling using a 19-tool project management API. The benchmark comprises 28 tasks across three difficulty levels — explicit instruction (L0, 11 tasks), natural language interpretation (L1, 10 tasks), and multi-step reasoning (L2, 7 tasks) — evaluated under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses, 300s timeout). Agentic evaluation yields consistent gains over single-shot, with the effect scaling by difficulty: +5.0pp at L0 (explicit), +12.6pp at L1 (natural language), and +37.3pp at L2 (reasoning). Tool-trained models outperform control-group models by 19.4pp on average in agentic mode. Model size alone is a weak predictor: a 4B-parameter model (qwen3-4b-thinking-2507) achieves 89.3% agentic overall, outperforming most models 5–8x its size. The top-performing model is glm-4.7-flash at 95.4% agentic overall.
+We evaluate 21 locally-run large language models (3B–80B parameters, primarily Q4_K_M quantization) on MCP (Model Context Protocol) tool calling using a 19-tool project management API. The benchmark comprises 28 tasks across three difficulty levels — explicit instruction (L0, 11 tasks), natural language interpretation (L1, 10 tasks), and multi-step reasoning (L2, 7 tasks) — evaluated under two methodologies: single-shot (one response, no feedback) and agentic loop (iterative with real API responses, 300s timeout). Agentic evaluation yields consistent gains over single-shot, with the effect scaling by difficulty: +5.0pp at L0 (explicit), +12.6pp at L1 (natural language), and +37.3pp at L2 (reasoning). Tool-trained models outperform control-group models by 19.4pp on average in agentic mode. Model size alone is a weak predictor: a 4B-parameter model (qwen3-4b-thinking-2507) achieves 89.3% agentic overall, outperforming models up to 9x its size. The top-performing model is glm-4.7-flash at 95.4% agentic overall.
 
 ---
 
@@ -277,7 +204,7 @@ The v1 singleshot runner uses **placeholder substitution** where entity IDs from
 
 *Figure 2. Horizontal bar chart comparing single-shot (orange) and agentic (blue) overall scores for all 21 models, sorted by agentic score.*
 
-The agentic methodology produced higher overall scores for every model tested. The mean lift across all models is +18.3pp (median +16.9pp). The magnitude scales with difficulty:
+The agentic methodology produced higher overall scores for every model tested. The mean lift across all models is +18.3pp (median +16.8pp). The magnitude scales with difficulty:
 
 | Level | Single-shot Score (mean) | Agentic Score (mean) | Lift | Single-shot Pass Rate | Agentic Pass Rate |
 |-------|----------------:|----------------:|-----:|-------------:|-------------:|
@@ -296,22 +223,22 @@ The per-model lift varies considerably:
 | phi-4-reasoning-plus | 35.1 | 91.4 | **+56.3** |
 | qwen3-4b-thinking-2507 | 39.7 | 89.3 | **+49.6** |
 | glm-4.6v-flash | 51.7 | 80.5 | **+28.8** |
-| qwen3.5-35b-a3b | 70.5 | 94.0 | **+23.6** |
+| qwen3.5-35b-a3b | 70.5 | 94.0 | **+23.5** |
 | glm-4.7-flash | 72.8 | 95.4 | **+22.6** |
 | nemotron-3-nano | 63.5 | 85.9 | **+22.4** |
 | essentialai/rnj-1 | 70.0 | 88.3 | **+18.3** |
 | qwen3-coder-next | 77.2 | 95.2 | **+18.0** |
-| qwen3-coder-30b | 74.4 | 91.7 | **+17.2** |
-| gpt-oss-20b | 74.0 | 91.1 | **+17.0** |
-| ministral-3-14b-reasoning | 77.2 | 94.0 | **+16.9** |
-| devstral-small-2-2512 | 79.2 | 94.0 | **+14.9** |
+| qwen3-coder-30b | 74.4 | 91.7 | **+17.3** |
+| gpt-oss-20b | 74.0 | 91.1 | **+17.1** |
+| ministral-3-14b-reasoning | 77.2 | 94.0 | **+16.8** |
+| devstral-small-2-2512 | 79.2 | 94.0 | **+14.8** |
 | magistral-small-2509 | 77.9 | 92.0 | **+14.1** |
 | gemma-3-12b | 72.0 | 85.9 | **+13.9** |
 | granite-4-h-tiny | 74.1 | 86.7 | **+12.6** |
 | ernie-4.5-21b-a3b | 73.8 | 85.9 | **+12.1** |
 | ministral-3-3b | 76.0 | 85.1 | **+9.1** |
 | lfm2-24b-a2b | 82.0 | 89.1 | **+7.1** |
-| qwen2.5-coder-32b | 38.1 | 43.5 | **+5.5** |
+| qwen2.5-coder-32b | 38.1 | 43.5 | **+5.4** |
 | seed-oss-36b | 62.6 | 66.6 | **+4.0** |
 | deepseek-r1-0528-qwen3-8b | 39.2 | 39.8 | **+0.6** |
 
@@ -325,9 +252,9 @@ The two largest lifts — phi-4-reasoning-plus (+56.3pp) and qwen3-4b-thinking-2
 
 **L0 (Explicit)**: Near-ceiling for most models. 16 of 21 models scored 100.0%. The remaining 5 scored between 72.7% and 98.6%. L0 does not discriminate between capable models.
 
-**L1 (Natural Language)**: Moderate spread. Scores range from 22.0% (deepseek-r1-0528-qwen3-8b) to 100.0% (5 models tied). The median L1 score is 96.5%. L1 separates models that can identify tools from natural language from those that cannot, but provides limited resolution at the top.
+**L1 (Natural Language)**: Moderate spread. Scores range from 22.0% (deepseek-r1-0528-qwen3-8b) to 100.0% (8 models tied). The median L1 score is 97.0%. L1 separates models that can identify tools from natural language from those that cannot, but provides limited resolution at the top.
 
-**L2 (Multi-step Reasoning)**: The primary discriminator. Scores range from 0.0% (deepseek-r1-0528-qwen3-8b) to 89.3% (glm-4.7-flash), with a spread of 89.3pp. The median L2 score is 67.9%. Only 2 models exceed 85% at L2 (reasoning). Pass rates drop sharply: L2 (reasoning) agentic pass rate is 49.7% versus 97.8% at L0 (explicit).
+**L2 (Multi-step Reasoning)**: The primary discriminator. Scores range from 0.0% (deepseek-r1-0528-qwen3-8b) to 89.3% (glm-4.7-flash), with a spread of 89.3pp. The median L2 score is 69.9%. Only 2 models exceed 85% at L2 (reasoning). Pass rates drop sharply: L2 (reasoning) agentic pass rate is 49.7% versus 97.8% at L0 (explicit).
 
 **L2 (reasoning) in single-shot mode** is nearly non-functional: the average L2 (reasoning) single-shot pass rate is 2.0% (only lfm2-24b-a2b passes any L2 (reasoning) tasks in single-shot mode, with 42.9% pass rate). This confirms that multi-step tool chains effectively require iterative execution with real feedback.
 
@@ -339,13 +266,13 @@ The two largest lifts — phi-4-reasoning-plus (+56.3pp) and qwen3-4b-thinking-2
 
 | Group | N | Agentic Overall (mean) | Agentic Overall (range) | Std Dev (σ) |
 |-------|---|------------------:|-------------------:|--------------:|
-| Tool-trained | 16 | 88.7% | 66.6% – 95.4% | 8.1pp |
-| Control | 5 | 69.3% | 39.8% – 91.4% | 22.8pp |
+| Tool-trained | 16 | 88.7% | 66.6% – 95.4% | 7.2pp |
+| Control | 5 | 69.3% | 39.8% – 91.4% | 25.4pp |
 | **Delta** | | **+19.4pp** | | |
 
 The tool-training effect is substantial but not uniform. Within the control group, phi-4-reasoning-plus (91.4% agentic) performs at the level of the top tool-trained models, while deepseek-r1-0528-qwen3-8b (39.8%) and qwen2.5-coder-32b (43.5%) perform poorly. This suggests that strong general reasoning (phi-4) can compensate for the absence of tool-specific training, but code-completion pretraining (qwen2.5-coder) does not transfer to structured tool calling.
 
-The control group shows wider variance (σ = 22.8pp) compared to the tool-trained group (σ = 8.1pp), suggesting that tool-training provides a more consistent floor of competence.
+The control group shows wider variance (σ = 25.4pp) compared to the tool-trained group (σ = 7.2pp), suggesting that tool-training provides a more consistent floor of competence.
 
 ### 3.6 Size-Performance Analysis
 
@@ -354,17 +281,17 @@ Grouping models by parameter count into tiers:
 | Tier | Models | Param Range | Disk Range | Agentic Overall (mean) | Agentic Overall (range) |
 |------|--------|-------------|-----------|------------------:|-------------------:|
 | Tiny (3–4B) | 2 | 3B–4B | 2.3–2.8 GB | 87.2% | 85.1% – 89.3% |
-| Small (7–9.4B) | 4 | 7B–9.4B | 3.9–7.4 GB | 73.6% | 39.8% – 88.3% |
+| Small (7–9.4B) | 4 | 7B–9.4B | 3.9–7.4 GB | 73.8% | 39.8% – 88.3% |
 | Medium (12–15B) | 3 | 12B–15B | 7.6–8.5 GB | 90.4% | 85.9% – 94.0% |
-| Large (20–24B) | 5 | 20B–24B | 11.3–14.2 GB | 89.4% | 85.9% – 94.0% |
-| XL (30–36B) | 6 | 30B–36B | 16.9–22.8 GB | 78.2% | 43.5% – 95.4% |
+| Large (20–24B) | 5 | 20B–24B | 11.3–14.2 GB | 90.4% | 85.9% – 94.0% |
+| XL (30–36B) | 6 | 30B–36B | 16.9–22.8 GB | 79.5% | 43.5% – 95.4% |
 | XXL (80B) | 1 | 80B | 45.2 GB | 95.2% | 95.2% |
 
-Within the tool-trained subset, the correlation between parameter count and agentic overall score is weak. The Tiny tier (mean 87.2%) outperforms the Small tier (73.6%) and approaches the Large tier (89.4%). The XL tier's mean is dragged down by qwen2.5-coder-32b (43.5%, control) and seed-oss-36b (66.6%, template issues).
+Within the tool-trained subset, the correlation between parameter count and agentic overall score is weak. The Tiny tier (mean 87.2%) outperforms the Small tier (73.8%) and approaches the Large tier (90.4%). The XL tier's mean is dragged down by qwen2.5-coder-32b (43.5%, control) and seed-oss-36b (66.6%, template issues).
 
 Notable observations:
 - **ministral-3-3b** (3B, 2.8 GB on disk, 85.1% agentic) outperforms 4 of the 21 models, including models up to 36B parameters.
-- **qwen3-4b-thinking-2507** (4B, 2.3 GB on disk, 89.3% agentic) outperforms all models under 30B except the 14B ministral-3-14b-reasoning (94.0%).
+- **qwen3-4b-thinking-2507** (4B, 2.3 GB on disk, 89.3% agentic) outperforms 11 of the 20 other models, including models up to 9x its parameter count (seed-oss-36b, 36B).
 - The highest-performing model overall (glm-4.7-flash, 30B, 95.4%) is not the largest.
 
 ## 4. Discussion
@@ -377,7 +304,7 @@ The practical implication is that single-shot evaluation dramatically underestim
 
 ### 4.2 L2 (Reasoning) as Discriminator
 
-L0 (explicit) and L1 (natural language) show ceiling effects in agentic mode: 16/21 models score 100.0% on L0 (explicit), and 5/21 score 100.0% on L1 (natural language). L2 (reasoning) remains discriminating even in agentic mode, with an 89.3pp range and no model at ceiling.
+L0 (explicit) and L1 (natural language) show ceiling effects in agentic mode: 16/21 models score 100.0% on L0 (explicit), and 8/21 score 100.0% on L1 (natural language). L2 (reasoning) remains discriminating even in agentic mode, with an 89.3pp range and no model at ceiling.
 
 L2 (reasoning) tasks require capabilities that feedback alone cannot provide: multi-step planning (determining the correct tool sequence), ID chaining (using output from one call as input to the next), conditional logic (applying different actions based on data), and semantic content generation (producing contextually appropriate descriptions). These capabilities reflect genuine reasoning, not just format compliance.
 
@@ -387,13 +314,13 @@ The L2 (reasoning) single-shot pass rate of 2.0% (compared to 49.7% agentic) sho
 
 The 19.4pp gap between tool-trained (88.7%) and control (69.3%) groups confirms that tool-specific fine-tuning provides substantial benefit. However, the phi-4-reasoning-plus result (91.4% agentic, not tool-trained) demonstrates that strong reasoning models can achieve tool-trained-level performance through in-context learning alone, when given real feedback in an agentic loop.
 
-This has a practical nuance: phi-4-reasoning-plus achieves 91.4% in agentic mode but only 35.1% in single-shot mode. The model can reason about tools when given feedback, but cannot reliably format tool calls without it. Tool training appears to provide the most value for single-shot reliability (the gap between tool-trained single-shot average of 72.1% and control single-shot average of 51.6% is 20.5pp), with diminishing but still meaningful returns in agentic mode.
+This has a practical nuance: phi-4-reasoning-plus achieves 91.4% in agentic mode but only 35.1% in single-shot mode. The model can reason about tools when given feedback, but cannot reliably format tool calls without it. Tool training appears to provide the most value for single-shot reliability (the gap between tool-trained single-shot average of 70.2% and control single-shot average of 51.6% is 18.5pp), with diminishing but still meaningful returns in agentic mode.
 
 ### 4.4 Small Models
 
 The performance of sub-10B models challenges the assumption that tool calling requires large models:
 
-- **ministral-3-3b** (3B): 85.1% agentic overall, outperforming 4 models ~3–12x its size
+- **ministral-3-3b** (3B): 85.1% agentic overall, outperforming 4 models ~2.7–12x its size
 - **qwen3-4b-thinking-2507** (4B): 89.3% agentic overall, ranking 10th out of 21 models
 - **essentialai/rnj-1** (8.3B): 88.3% agentic overall, comparable to models 3x its size
 
@@ -430,11 +357,11 @@ Placeholder substitution and fixture seeding improved the fairness of L2 (reason
 
 Three findings stand out for practitioners choosing local models for MCP tool calling:
 
-**1. Use agentic evaluation.** Single-shot benchmarks understate real-world tool-calling performance by 18pp on average, and by 37pp on multi-step tasks. Any model evaluation for agent deployment should use iterative execution with real tool feedback.
+**1. Use agentic evaluation.** Single-shot benchmarks understate real-world tool-calling performance by 18.3pp on average, and by 37.3pp on multi-step tasks. Any model evaluation for agent deployment should use iterative execution with real tool feedback.
 
 **2. Tool training matters, but reasoning matters more.** Tool-trained models outperform untrained ones by 19.4pp on average, but a strong reasoning model without tool training (phi-4-reasoning-plus, 91.4%) outperforms most tool-trained models. The combination of tool training and strong reasoning is where the top models sit.
 
-**3. Small models are viable for tool calling.** A 4B-parameter model (qwen3-4b-thinking-2507, 89.3%) and a 3B model (ministral-3-3b, 85.1%) compete with or exceed models 5–10x their size. For VRAM-constrained deployments, these results suggest that small, well-trained models can handle structured tool calling at production-relevant accuracy.
+**3. Small models are viable for tool calling.** A 4B-parameter model (qwen3-4b-thinking-2507, 89.3%) and a 3B model (ministral-3-3b, 85.1%) compete with or exceed models up to 9x their size. For VRAM-constrained deployments, these results suggest that small, well-trained models can handle structured tool calling at production-relevant accuracy.
 
 The top-performing model overall is **glm-4.7-flash** (30B, 95.4% agentic overall), with qwen3-coder-next (80B, 95.2%) close behind. In the agentic setting, 17 of 21 models exceed 85% overall, suggesting that MCP tool calling at L0 (explicit) and L1 (natural language) difficulty is largely a solved problem for current-generation local models. L2 (reasoning) multi-step tasks remain the frontier, with only 2 models exceeding 85% and a mean of 65.9%.
 
