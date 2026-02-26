@@ -1,0 +1,324 @@
+{
+  "level": 2,
+  "model": "bytedance/seed-oss-36b",
+  "tool_trained": true,
+  "timestamp": "2026-02-26T13:26:42.082499",
+  "summary": {
+    "total": 7,
+    "passed": 1,
+    "pass_rate": 0.143,
+    "avg_score": 0.417
+  },
+  "results": [
+    {
+      "task_id": "L2-01",
+      "task_name": "Bootstrap a new feature project",
+      "prompt_sent": "I'm starting work on a dark mode feature for our app. Set up everything I need to track this work: create a project for it, then create a workunit inside that project for the implementation work. The workunit should have a clear problem statement and success criteria that you derive from the feature context.",
+      "model_responses": [
+        "\n\n",
+        "\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out (300s wall-clock, 3 turns, 379.15s elapsed)",
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature Implementation",
+            "description": "Project to track development and delivery of dark mode functionality for the application.",
+            "status": "planning",
+            "tags": "['dark-mode', 'ui', 'feature']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/tags: type: ['dark-mode', 'ui', 'feature'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature Implementation",
+            "description": "Project to track development and delivery of dark mode functionality for the application.",
+            "status": "planning",
+            "tags": "[&quot;dark-mode&quot;, &quot;ui&quot;, &quot;feature&quot;]"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/tags: type: [&quot;dark-mode&quot;, &quot;ui&quot;, &quot;feature&quot;] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "Dark Mode Feature Implementation",
+            "description": "Project to track development and delivery of dark mode functionality for the application.",
+            "status": "planning",
+            "tags": "[dark-mode, ui, feature]"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/tags: type: [dark-mode, ui, feature] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 379.15,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-02",
+      "task_name": "Break down a feature into tasks",
+      "prompt_sent": "I need to implement user notifications for workunit updates. Think about what steps are actually needed to build this end-to-end, then create a workunit called \"Implement User Notifications\" and add all the implementation tasks to it. Be thorough \u2014 this is a real feature, not a toy example.",
+      "model_responses": [],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "No tool call emitted \u2014 model responded with text only"
+      ],
+      "tool_calls": [],
+      "turns": 0,
+      "elapsed_s": 901.52,
+      "timed_out": false,
+      "error": "Request timed out."
+    },
+    {
+      "task_id": "L2-03",
+      "task_name": "Find and update stale work",
+      "prompt_sent": "Search for any workunits related to authentication in our workspace. For each one you find that is still active or in draft, add an insight noting what you observed about its current state during the quarterly audit review.",
+      "model_responses": [
+        "\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        "Task timed out (300s wall-clock, 2 turns, 336.29s elapsed)",
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "authentication",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"total_count\":0,\"total_pages\":6}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 336.29,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-04",
+      "task_name": "Document an architectural decision",
+      "prompt_sent": "We just decided to use WebSockets instead of polling for our real-time notification feature. This is important context for the team. Find the notifications workunit and save this as a critical architectural decision, explaining the tradeoffs we considered.",
+      "model_responses": [
+        "\n\nI'll help you save this important architectural decision about using WebSockets instead of polling for real-time notifications. First, let me search for the notifications workunit to locate it.\n",
+        "\n",
+        "\n",
+        "\n\n\nNow I'll save this as a critical architectural decision in the notifications workunit, explaining the tradeoffs between WebSockets and polling:\n"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        "Step 1 (search): \u2713",
+        "Step 2 (save_context): \u2713"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": "[workunit]"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: [workunit] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "notifications",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-26T11:33:16Z\",\"id\":\"0f6735c0884c4b169c16ea07e181abd1\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":559,\"type\":\"workunit\",\"updated_at\":\"2026-02-26T11:33:16Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":5}"
+        },
+        {
+          "name": "save_context",
+          "arguments": {
+            "workunit_id": "0f6735c0884c4b169c16ea07e181abd1",
+            "atom_type": "decision",
+            "title": "Real-time Notifications: WebSockets vs Polling Decision",
+            "content": "The team has decided to use WebSockets instead of polling for the real-time notification feature. \n\n**Tradeoffs Considered:**\n\n* **WebSockets Advantages:**\n  - Lower latency: Instant updates when events occur rather than waiting for poll intervals\n  - More efficient: Reduced server load from constant polling requests\n  - Better user experience: Real-time feedback without manual refreshes\n  - Bidirectional communication: Enables server-to-client and client-to-server messaging\n\n* **Polling Advantages:**\n  - Simpler to implement in some environments with strict firewall rules\n  - More widely supported in older browser versions (though WebSockets support is now standard)\n  \n* **Decision Rationale:**\n  The benefits of lower latency, better efficiency, and improved user experience outweigh the implementation complexity of WebSockets. Modern browser support makes this a viable choice for our target audience.",
+            "importance": "critical"
+          },
+          "mcp_result": "{\"atom_id\":\"5c7211e3-3a6a-48be-8768-4996176894b2\"}"
+        }
+      ],
+      "turns": 4,
+      "elapsed_s": 543.13,
+      "timed_out": false,
+      "error": null
+    },
+    {
+      "task_id": "L2-05",
+      "task_name": "Create a project with linked asset",
+      "prompt_sent": "Set up a new project called \"API v2\" for our REST API redesign work. This project will be tracked in our GitHub repo at github.com/example/api-v2 on the main branch. Also create a knowledge asset called \"API v2 Design Spec\" and link it to the project \u2014 it's a document describing the new API design.",
+      "model_responses": [
+        "\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.6666666666666666,
+      "details": [
+        "Task timed out (300s wall-clock, 2 turns, 420.92s elapsed)",
+        "Step 1 (create_project): \u2713",
+        "Step 2 (create_asset): \u2713",
+        "Step 3 (project_asset_link): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "create_project",
+          "arguments": {
+            "name": "API v2",
+            "description": "REST API redesign work",
+            "repo_url": "github.com/example/api-v2",
+            "default_branch": "main"
+          },
+          "mcp_result": "{\"project\":{\"created_at\":\"2026-02-26T12:13:03Z\",\"default_branch\":\"main\",\"description\":\"REST API redesign work\",\"id\":\"29da2995149a4095a725231867fc0949\",\"name\":\"API v2\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"owner_id\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"repo_url\":\"github.com/example/api-v2\",\"status\":\"active\",\"updated_at\":\"2026-02-26T12:13:03Z\"}}"
+        },
+        {
+          "name": "create_asset",
+          "arguments": {
+            "asset_type": "knowledge",
+            "name": "API v2 Design Spec",
+            "description": "Document describing the new API design",
+            "category": "documentation",
+            "format": "document"
+          },
+          "mcp_result": "{\"asset\":{\"asset_type\":\"KNOWLEDGE\",\"category\":\"documentation\",\"created_at\":\"2026-02-26T12:16:17Z\",\"created_by\":\"3e3eeb7faeb5408a8ed4146eb15e5892\",\"description\":\"Document describing the new API design\",\"format\":\"document\",\"id\":\"7f4afc49c5874c7ca00bcd96f6acb670\",\"is_active\":true,\"name\":\"API v2 Design Spec\",\"organization_id\":\"7ecc4c86996c489fa21c4f9231b5039f\",\"status\":\"\",\"updated_at\":\"2026-02-26T12:16:17Z\"}}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 420.92,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-06",
+      "task_name": "Triage and prioritize tasks",
+      "prompt_sent": "Look at the tasks in the \"Implement User Notifications\" workunit. Any task that mentions 'test' or 'testing' should be set to normal priority. Any task that mentions 'bug' or 'fix' should be set to high priority. Apply these rules now.",
+      "model_responses": [
+        "\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        "Task timed out (300s wall-clock, 2 turns, 306.22s elapsed)",
+        "Step 1 (get_workunit): not called",
+        "Step 2 (update_task): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        }
+      ],
+      "turns": 2,
+      "elapsed_s": 306.22,
+      "timed_out": true,
+      "error": null
+    },
+    {
+      "task_id": "L2-07",
+      "task_name": "End-of-sprint workunit closeout",
+      "prompt_sent": "It's the end of the sprint. For the \"Implement User Notifications\" workunit: mark all todo tasks as done, save a progress context atom summarizing what was accomplished, and then mark the workunit itself as completed with a summary note.",
+      "model_responses": [
+        "\n",
+        "\n",
+        "\n"
+      ],
+      "passed": false,
+      "score": 0.25,
+      "details": [
+        "Task timed out (300s wall-clock, 3 turns, 318.3s elapsed)",
+        "Step 1 (get_workunit): \u2713",
+        "Step 2 (update_task): not called",
+        "Step 3 (save_context): not called",
+        "Step 4 (update_workunit): not called"
+      ],
+      "tool_calls": [
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": "['workunit']"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/result_types: type: ['workunit'] has type \\\"string\\\", want \\\"array\\\"\"}}"
+        },
+        {
+          "name": "search",
+          "arguments": {
+            "query": "Implement User Notifications",
+            "result_types": [
+              "workunit"
+            ]
+          },
+          "mcp_result": "{\"has_next_page\":true,\"has_prev_page\":false,\"page_number\":1,\"results\":[{\"created_at\":\"2026-02-26T11:33:16Z\",\"id\":\"0f6735c0884c4b169c16ea07e181abd1\",\"name\":\"Implement User Notifications\",\"problem_statement\":\"Users need to be notified when workunits they follow are updated, but no notification system exists yet.\",\"relevance_score\":1423,\"type\":\"workunit\",\"updated_at\":\"2026-02-26T11:33:16Z\",\"workunit_id\":\"00000000000000000000000000000000\"}],\"total_count\":1,\"total_pages\":6}"
+        },
+        {
+          "name": "get_workunit",
+          "arguments": {
+            "id": "0f6735c0884c4b169c16ea07e181abd1",
+            "include_tasks": "True"
+          },
+          "mcp_result": "{\"error\": {\"code\": -32602, \"message\": \"invalid params: validating \\\"arguments\\\": validating root: validating /properties/include_tasks: type: True has type \\\"string\\\", want \\\"boolean\\\"\"}}"
+        }
+      ],
+      "turns": 3,
+      "elapsed_s": 318.3,
+      "timed_out": true,
+      "error": null
+    }
+  ]
+}
