@@ -1461,7 +1461,8 @@ def reset_benchmark_env(mcp: "MCPClient"):
 
 
 def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
-              refresh_token: str = "", force: bool = False, no_git: bool = False) -> dict:
+              refresh_token: str = "", force: bool = False, no_git: bool = False,
+              skip_load: bool = False) -> dict:
     """
     Run all levels for one model.
 
@@ -1504,11 +1505,15 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
     reset_benchmark_env(mcp)
 
     # Load model with explicit context length so the full TOOLS list fits
-    console.print(f"  [dim]Loading model (ctx={MODEL_CONTEXT_LENGTH})...[/dim]")
-    instance_id = load_model(model_id)
-    if not instance_id:
-        console.print(f"  [red]Model failed to load, skipping[/red]")
-        return {}
+    instance_id = None
+    if skip_load:
+        console.print(f"  [dim]Skipping model load (--skip-load)[/dim]")
+    else:
+        console.print(f"  [dim]Loading model (ctx={MODEL_CONTEXT_LENGTH})...[/dim]")
+        instance_id = load_model(model_id)
+        if not instance_id:
+            console.print(f"  [red]Model failed to load, skipping[/red]")
+            return {}
 
     model_results = {
         "model":        model_id,
@@ -1539,7 +1544,8 @@ def run_model(model_id: str, levels: list[int], tool_trained: bool, token: str,
                 console.print(f"  [red]Level {level} crashed: {e}[/red]")
                 console.print(f"  [dim]Continuing to next level...[/dim]")
     finally:
-        unload_model(instance_id)
+        if instance_id:
+            unload_model(instance_id)
 
     return model_results
 
@@ -1660,6 +1666,10 @@ def main():
         "--results-dir",
         help="Directory to write result files (default: results/v2_agentic/)",
     )
+    parser.add_argument(
+        "--skip-load", action="store_true",
+        help="Skip model load/unload (use when model is already loaded with custom settings)",
+    )
     args = parser.parse_args()
 
     # Override globals from CLI flags
@@ -1769,7 +1779,10 @@ def main():
         title="Starting Run"
     ))
 
-    unload_all_models()
+    if not args.skip_load:
+        unload_all_models()
+    else:
+        console.print("[dim]Skipping initial model unload (--skip-load)[/dim]")
 
     start = time.time()
     failed_models = []
@@ -1777,7 +1790,7 @@ def main():
         console.print(f"\n[dim]── Model {i}/{len(model_list)} ──────────────────────────────[/dim]")
         try:
             run_model(model_id, levels, tool_trained, args.token, args.refresh_token,
-                      args.force, args.no_git)
+                      args.force, args.no_git, args.skip_load)
         except Exception as e:
             console.print(f"[red]Model {model_id} crashed unexpectedly: {e}[/red]")
             console.print("[dim]Continuing to next model...[/dim]")
