@@ -21,7 +21,7 @@
 
 ## What I built and why
 
-I spent the past weeks building a tool-calling benchmark for local LLMs against a real MCP (Model Context Protocol) API — not synthetic evals. Every tool call hits a real project management API ([Workunit](https://workunit.app)) with 19 tools that create, read, and modify real entities in a database. If a model creates a project, it gets back a real UUID that it needs to use in the next call.
+I spent the past weeks building a tool-calling benchmark for local LLMs against a real MCP (Model Context Protocol) API — not synthetic evals. Every tool call hits a real MCP-enabled project management API with 19 tools that create, read, and modify real entities in a database. If a model creates a project, it gets back a real UUID that it needs to use in the next call.
 
 Two evaluation modes:
 
@@ -185,7 +185,7 @@ cd local-llm-mcp-calling
 LMSTUDIO_HOST=<ip>:1234 ./scripts/run_all_benchmarks.sh <access_token> <refresh_token>
 ```
 
-Requires: Python 3.10+, LM Studio with CUDA, a Workunit API account (free tier).
+Requires: Python 3.10+, LM Studio with CUDA, an API account (see repo README).
 
 ---
 
@@ -197,3 +197,7 @@ Requires: Python 3.10+, LM Studio with CUDA, a Workunit API account (free tier).
 4. **Anyone comparing local models against cloud APIs on tool calling?** I only tested local models, but it would be useful context to know where these sit relative to GPT-4o, Claude, etc.
 
 Caveats: single hardware config, mostly Q4_K_M quantization (two exceptions noted), single MCP domain, temperature 0.0, single run per model. The research paper has the full limitations section. Take the exact numbers with appropriate grain of salt — the relative rankings and findings should be robust.
+
+---
+
+**Disclosure**: I built the MCP server used in this benchmark ([workunit.app](https://workunit.app)). I chose it because I wanted to figure out if and how local LLMs were working with the tools, and because I had full control over the test environment — not to promote it.

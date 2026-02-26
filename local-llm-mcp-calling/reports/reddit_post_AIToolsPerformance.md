@@ -24,7 +24,7 @@ I wanted to quantify exactly how much the evaluation methodology affects the res
 
 ## Setup
 
-**Target API**: The [Workunit](https://workunit.app) project management system, 19 MCP tools across projects, workunits, tasks, assets, and cross-cutting operations (search, context saving, directories). Real state — entities persist across tasks within a run. The database is cleaned between models.
+**Target API**: A real MCP-enabled project management system with 19 tools across projects, workunits, tasks, assets, and cross-cutting operations (search, context saving, directories). Real state — entities persist across tasks within a run. The database is cleaned between models.
 
 **28 tasks, 3 difficulty levels**:
 - **L0 (Explicit, 11 tasks)**: Prompt names the tool and all params. Tests formatting.
@@ -179,3 +179,7 @@ The full research paper with formal methodology, all five graphs, statistical br
 4. **Does quantization level affect tool calling?** Most of my results are Q4_K_M (two exceptions: devstral at Q3_K_L, gpt-oss at MXFP4). If you've tested different quant levels, I'd like to compare.
 
 Caveats: single hardware config, mostly Q4_K_M quantization (two exceptions noted), single MCP domain, temperature 0.0, single run per model. Full limitations in the research paper. The absolute numbers have uncertainty — the relative findings (agentic > single-shot, methodology changes rankings, L2 discriminates) should be robust.
+
+---
+
+**Disclosure**: I built the MCP server used in this benchmark ([workunit.app](https://workunit.app)). I chose it because I wanted to figure out if and how local LLMs were working with the tools, and because I had full control over the test environment — not to promote it.
